@@ -7,15 +7,20 @@
 
 // Application Entry Point
 			
-mainloop		
-			// Generate a new Tetris piece
-			call generate_piece generate_piece_ret_addr
+			// Make background black
+			cp 		vga_x2			screen_width
+			cp 		vga_y2			screen_height
+			call 	display_rect 	vga_ret_addr
 			
+mainloop	// Generate a new Tetris piece
+			call generate_piece generate_piece_ret_addr
+	
 			// Check for keyboard or camera input
 			// Move piece based on input
 			// Check if the current piece is touching another, and generate another if true
 			// Check if any rows should be deleted
 			// Restart loop
+			be mainloop num1 num1 
 			halt
 
 //***************************************************************************//
@@ -115,19 +120,19 @@ display_piece	cpfa	vga_x1	piece	num0
 				cpfa	vga_y2	piece	num7
 				
 				call display_rect vga_ret_addr
-				
+								
 				ret generate_piece_ret_addr
 
 // Helper function to generate a random color
 // Output: rand_color
 get_random_color	call	get_random_number rand_num_ret_addr
-					be		set_red 	rand_num 0
-					be		set_orange 	rand_num 1
-					be		set_yellow	rand_num 2
-					be		set_green 	rand_num 3
-					be		set_blue 	rand_num 4
-					be		set_violet 	rand_num 5
-					be		set_purple 	rand_num 6
+					be		set_red 	rand_num num0
+					be		set_orange 	rand_num num1
+					be		set_yellow	rand_num num2
+					be		set_green 	rand_num num3
+					be		set_blue 	rand_num num4
+					be		set_violet 	rand_num num5
+					be		set_purple 	rand_num num6
 					
 set_red				cp 		rand_color 	num10
 set_orange			cp 		rand_color 	num20
