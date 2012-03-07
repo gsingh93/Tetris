@@ -64,7 +64,7 @@ vga_y							.data 0
 
 vga_color_read					.data 0
 
-vga_response
+vga_response					.data 0
 vga_ret_addr					.data 0
 vga_check_response0_ret_addr 	.data 0
 vga_check_response1_ret_addr	.data 0
