@@ -181,7 +181,17 @@ draw_new_image
 check_for_input
 
 // Checks if the user has pressed a relevant key
-check_for_keypress
+check_for_keypress		call	get_keypress	ps2_ret_addr
+						cp	ps2_ascii	char
+						call	determine_move	determine_move_ret_addr
+
+
+						#include keyboard_driver.e
+
+						char	.data	0
+						left	.data	37
+						right	.data	39
+						space	.data	32
 
 // Checks if the user has made a relevant gesture
 check_for_camera_gesture
@@ -190,7 +200,21 @@ check_for_camera_gesture
 							// Set return value
 				
 // Checks to see what possible move should be made based on camera data				
-determine_move
+determine_move					be	leftmove	char	left
+								be	rightmove	char	right
+								be	spacemove	char	space
+	
+
+					leftmove	cp	char	move
+								be	move_valid		left	left
+
+					rightmove	cp	char	move
+								be	move_valid		left	left
+
+					spacemove	cp	char	move
+								be	move_valid		left	left
+								
+					move_valid	call	is_move_valid		is_move_valid_ret_addr	
 
 // Checks to see if move should be made based on time in move region
 is_move_valid
