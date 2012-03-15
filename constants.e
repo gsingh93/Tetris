@@ -201,4 +201,13 @@ num96		.data	96
 num97		.data	97
 num98		.data	98
 num99		.data	99
-num100		.data	100
+num100	.data	100
+num120	.data	120
+num144	.data	144
+num168	.data	168
+num192	.data	192
+num240	.data	240
+num241	.data	241
+num255	.data	255
+num480	.data	480
+num640	.data	640
