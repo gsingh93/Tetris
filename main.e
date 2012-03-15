@@ -16,6 +16,8 @@ mainloop	// Generate a new Tetris piece
 			call generate_piece generate_piece_ret_addr
 	
 			// Check for keyboard or camera input
+			call check_for_input check_for_input_ret_addr
+			
 			// Move piece based on input
 			// Check if the current piece is touching another, and generate another if true
 			// Check if any rows should be deleted
@@ -30,8 +32,8 @@ generate_piece 	call get_random_color 	rand_color_ret_addr
 				call get_random_shape	rand_shape_ret_addr
 				
 				// Debug
-				out 3 rand_color
-				out 4 rand_shape
+				//out 3 rand_color
+				//out 4 rand_shape
 				
 				// Display piece
 				cp vga_color 	rand_color
@@ -178,20 +180,17 @@ draw_new_image
 //***************************************************************************//
 
 // Check for keyboard or user input
-check_for_input
+check_for_input call check_for_keypress check_for_keypress_ret_addr
+				ret check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key
-check_for_keypress		call	get_keypress	ps2_ret_addr
-						cp	ps2_ascii	char
-						call	determine_move	determine_move_ret_addr
-
-
-						#include keyboard_driver.e
-
-						char	.data	0
-						left	.data	37
-						right	.data	39
-						space	.data	32
+check_for_keypress		
+						// Get keypress, if any
+						call	get_keypress	ps2_ret_addr
+						cp		key				ps2_ascii
+						out 3 key
+						call is_move_valid	is_move_valid_ret_addr
+						ret	check_for_keypress_ret_addr
 
 // Checks if the user has made a relevant gesture
 check_for_camera_gesture
@@ -200,24 +199,10 @@ check_for_camera_gesture
 							// Set return value
 				
 // Checks to see what possible move should be made based on camera data				
-determine_move					be	leftmove	char	left
-								be	rightmove	char	right
-								be	spacemove	char	space
-	
-
-					leftmove	cp	char	move
-								be	move_valid		left	left
-
-					rightmove	cp	char	move
-								be	move_valid		left	left
-
-					spacemove	cp	char	move
-								be	move_valid		left	left
-								
-					move_valid	call	is_move_valid		is_move_valid_ret_addr	
+determine_move	
 
 // Checks to see if move should be made based on time in move region
-is_move_valid
+is_move_valid	ret is_move_valid_ret_addr
 							
 //***************************************************************************//
 
@@ -309,10 +294,17 @@ time		.data 0
 mod_op1		.data 0
 mod_op2		.data 7
 mod_result	.data 0
+key		.data	0
+left	.data	37
+right	.data	39
+space	.data	32
 				
 // Return addresses
-generate_piece_ret_addr	.data 0
-rand_num_ret_addr		.data 0
-rand_color_ret_addr		.data 0
-rand_shape_ret_addr		.data 0
-mod_ret_addr			.data 0
+generate_piece_ret_addr		.data 0
+rand_num_ret_addr			.data 0
+rand_color_ret_addr			.data 0
+rand_shape_ret_addr			.data 0
+check_for_input_ret_addr	.data 0
+check_for_keypress_ret_addr	.data 0
+is_move_valid_ret_addr		.data 0
+mod_ret_addr				.data 0
