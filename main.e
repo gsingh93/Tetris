@@ -257,7 +257,8 @@ shift_rows
 
 // Returns mod_result = mod_op1 % mod_op2
 mod			sub mod_result 	mod_op1 mod_op2
-			blt mod			mod_op2 mod_op1
+			blt mod			mod_op1 mod_result
+
 			ret mod_ret_addr
 
 //***************************************************************************//
