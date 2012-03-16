@@ -188,7 +188,7 @@ check_for_keypress
 						// Get keypress, if any
 						call	get_keypress	ps2_ret_addr
 						cp		key				ps2_ascii
-						out 3 key
+						out 3 key		
 						call is_move_valid	is_move_valid_ret_addr
 						ret	check_for_keypress_ret_addr
 
