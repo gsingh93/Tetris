@@ -32,28 +32,25 @@ generate_piece 	call get_random_color 	rand_color_ret_addr
 				call get_random_shape	rand_shape_ret_addr
 				
 				// Debug
-				out 3 rand_color
+				//out 3 rand_color
 				out 4 rand_shape
 				
 				// Display piece
 				cp vga_color 	rand_color
-				be draw_piece1 	rand_color num0
-				be draw_piece2 	rand_color num1
-				be draw_piece3 	rand_color num2
-				be draw_piece4 	rand_color num3
-				be draw_piece5 	rand_color num4
-				be draw_piece6 	rand_color num5
-				be draw_piece7 	rand_color num6
+debug			be draw_piece1 	rand_shape num0
+				be draw_piece2 	rand_shape num1
+				be draw_piece3 	rand_shape num2
+				be draw_piece4 	rand_shape num3
+				be draw_piece5 	rand_shape num4
+				be draw_piece6 	rand_shape num5
+				be draw_piece7 	rand_shape num6
 
 // Piece1 is a square
 draw_piece1	cpta	num96		piece	num0
 			cpta	num0		piece	num1
 			cpta	num144		piece	num2
 			cpta	num48		piece	num3
-			cpta	num0		piece	num4
-			cpta	num0		piece	num5
-			cpta	num0		piece	num6
-			cpta 	num0		piece	num7
+
 			be	display_piece	num1	num1
 
 // Piece2 is a L
@@ -150,14 +147,21 @@ get_random_color	call	get_random_number rand_num_ret_addr
 					be		set_purple 	rand_num num6
 					
 set_red				cp 		rand_color 	num10
+					be		ret			num1 	num1
 set_orange			cp 		rand_color 	num20
+					be		ret			num1 	num1
 set_yellow			cp		rand_color 	num30
+					be		ret			num1 	num1
 set_green			cp 		rand_color 	num40
+					be		ret			num1 	num1
 set_blue			cp 		rand_color 	num50
+					be		ret			num1 	num1
 set_violet			cp 		rand_color 	num60
+					be		ret			num1 	num1
 set_purple			cp 		rand_color 	num70
+					be		ret			num1 	num1
 
-					ret rand_color_ret_addr
+ret					ret rand_color_ret_addr
 					
 // Helper function to get a random shape
 // Output: rand_shape
@@ -168,6 +172,7 @@ get_random_shape	call	get_random_number 	rand_num_ret_addr
 // Applies an algorithm to generate a random number between 0 and 6
 // Output: rand_num
 get_random_number	in 		5 			time				// Gets the clock time
+					out		3			time
 					cp 		rand_num	time
 					blt		skip_mod	rand_num			num7
 					cp		mod_op1		rand_num
@@ -278,8 +283,9 @@ shift_rows
 // Utility Functions
 
 // Returns mod_result = mod_op1 % mod_op2
-mod			sub mod_result 	mod_op1 mod_op2
-			blt mod			mod_op1 mod_result
+mod			cp 	mod_result	mod_op1
+mod_loop	sub mod_result 	mod_result mod_op2
+			blt mod_loop	mod_op2 mod_result
 
 			ret mod_ret_addr
 
