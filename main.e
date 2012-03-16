@@ -32,8 +32,8 @@ generate_piece 	call get_random_color 	rand_color_ret_addr
 				call get_random_shape	rand_shape_ret_addr
 				
 				// Debug
-				//out 3 rand_color
-				//out 4 rand_shape
+				out 3 rand_color
+				out 4 rand_shape
 				
 				// Display piece
 				cp vga_color 	rand_color
@@ -45,69 +45,82 @@ generate_piece 	call get_random_color 	rand_color_ret_addr
 				be draw_piece6 	rand_color num5
 				be draw_piece7 	rand_color num6
 
-				// TODO: Get correct coords
 // Piece1 is a square
-draw_piece1		cpta	num0	piece	num0
-				cpta	num0	piece	num1
-				cpta	num50	piece	num2
-				cpta	num50	piece	num3
-				cpta	num0	piece	num4
-				cpta	num0	piece	num5
-				cpta	num0	piece	num6
+draw_piece1	cpta	num96		piece	num0
+			cpta	num0		piece	num1
+			cpta	num144		piece	num2
+			cpta	num48		piece	num3
+			cpta	num0		piece	num4
+			cpta	num0		piece	num5
+			cpta	num0		piece	num6
+			cpta 	num0		piece	num7
+			be	display_piece	num1	num1
 
 // Piece2 is a L
-draw_piece2		cpta	num0	piece	num0
-				cpta	num0	piece	num1
-				cpta	num0	piece	num2
-				cpta	num0	piece	num3
-				cpta	num0	piece	num4
-				cpta	num0	piece	num5
-				cpta	num0	piece	num6
+draw_piece2	cpta	num96		piece	num0
+			cpta	num0		piece	num1
+			cpta	num120		piece	num2
+			cpta	num72		piece	num3
+			cpta	num120		piece	num4
+			cpta	num48		piece	num5
+			cpta	num144		piece	num6
+			cpta 	num72		piece	num7
+			be	display_piece	num1	num1
 
 // Piece3 is a backwards L
-draw_piece3		cpta	num0	piece	num0
-				cpta	num0	piece	num1
-				cpta	num0	piece	num2
-				cpta	num0	piece	num3
-				cpta	num0	piece	num4
-				cpta	num0	piece	num5
-				cpta	num0	piece	num6
+draw_piece3	cpta	num120		piece	num0
+			cpta	num0		piece	num1
+			cpta	num144		piece	num2
+			cpta	num72		piece	num3
+			cpta	num96		piece	num4
+			cpta	num48		piece	num5
+			cpta	num120		piece	num6
+			cpta 	num72		piece	num7
+			be	display_piece	num1	num1
 
 // Piece4 is a T
-draw_piece4		cpta	num0	piece	num0
-				cpta	num0	piece	num1
-				cpta	num0	piece	num2
-				cpta	num0	piece	num3
-				cpta	num0	piece	num4
-				cpta	num0	piece	num5
-				cpta	num0	piece	num6
+draw_piece4	cpta	num96		piece	num0
+			cpta	num0		piece	num1
+			cpta	num168		piece	num2
+			cpta	num24		piece	num3
+			cpta	num120		piece	num4
+			cpta	num24		piece	num5
+			cpta	num144		piece	num6
+			cpta 	num48		piece	num7
+			be	display_piece	num1	num1
 
-// Piece5 is an N
-draw_piece5		cpta	num0	piece	num0
-				cpta	num0	piece	num1
-				cpta	num0	piece	num2
-				cpta	num0	piece	num3
-				cpta	num0	piece	num4
-				cpta	num0	piece	num5
-				cpta	num0	piece	num6
+// Piece5 is a backwards Z
+draw_piece5	cpta	num120		piece	num0
+			cpta	num0		piece	num1
+			cpta	num168		piece	num2
+			cpta	num24		piece	num3
+			cpta	num96		piece	num4
+			cpta	num24		piece	num5
+			cpta	num144		piece	num6
+			cpta 	num48		piece	num7
+			be	display_piece	num1	num1
 
-// Piece6 is a backwards N
-draw_piece6		cpta	num0	piece	num0
-				cpta	num0	piece	num1
-				cpta	num0	piece	num2
-				cpta	num0	piece	num3
-				cpta	num0	piece	num4
-				cpta	num0	piece	num5
-				cpta	num0	piece	num6
+// Piece6 is a Z
+draw_piece6	cpta	num96		piece	num0
+			cpta	num0		piece	num1
+			cpta	num144		piece	num2
+			cpta	num24		piece	num3
+			cpta	num120		piece	num4
+			cpta	num24		piece	num5
+			cpta	num168		piece	num6
+			cpta 	num48		piece	num7
+			be	display_piece	num1	num1
 
-// Piece7 is a straigt line
-draw_piece7		cpta	num0	piece	num0
-				cpta	num0	piece	num1
-				cpta	num50	piece	num2
-				cpta	num50	piece	num3
-				cpta	num0	piece	num4
-				cpta	num0	piece	num5
-				cpta	num0	piece	num6
+// Piece7 is a straight line
+draw_piece7	cpta	num96		piece	num0
+			cpta	num0		piece	num1
+			cpta	num120		piece	num2
+			cpta	num96		piece	num3
+			cpta	num0		piece	num4
+			cpta	num0		piece	num5
+			cpta	num0		piece	num6
+			cpta 	num0		piece	num7
+			be	display_piece	num1	num1
 				
 display_piece	cpfa	vga_x1	piece	num0
 				cpfa	vga_y1	piece	num1

@@ -202,3 +202,6 @@ num97		.data	97
 num98		.data	98
 num99		.data	99
 num100		.data	100
+num120		.data	120
+num144		.data	144
+num168		.data 	168
