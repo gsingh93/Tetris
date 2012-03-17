@@ -146,19 +146,19 @@ get_random_color	call	get_random_number rand_num_ret_addr
 					be		set_violet 	rand_num num5
 					be		set_purple 	rand_num num6
 					
-set_red				cp 		rand_color 	num10
+set_red				cp 		rand_color 	num224
 					be		ret			num1 	num1
-set_orange			cp 		rand_color 	num20
+set_orange			cp 		rand_color 	num55
 					be		ret			num1 	num1
-set_yellow			cp		rand_color 	num30
+set_yellow			cp		rand_color 	num43
 					be		ret			num1 	num1
-set_green			cp 		rand_color 	num40
+set_green			cp 		rand_color 	num28
 					be		ret			num1 	num1
-set_blue			cp 		rand_color 	num50
+set_blue			cp 		rand_color 	num3
 					be		ret			num1 	num1
-set_violet			cp 		rand_color 	num60
+set_violet			cp 		rand_color 	num97
 					be		ret			num1 	num1
-set_purple			cp 		rand_color 	num70
+set_purple			cp 		rand_color 	num72
 					be		ret			num1 	num1
 
 ret					ret rand_color_ret_addr
