@@ -9,7 +9,7 @@
 			
 			// Make background black
 			cp 		vga_x2			screen_width
-			cp 		vga_y2			screen_height
+			cp 		vga_y2			screen_height		
 			call 	display_rect 	vga_ret_addr
 			
 mainloop	// Generate a new Tetris piece
@@ -132,6 +132,8 @@ display_piece	cpfa	vga_x1	piece	num0
 				cpfa	vga_y2	piece	num7
 				
 				call display_rect vga_ret_addr
+				
+				call wait_second wait_second_ret_addr
 								
 				ret generate_piece_ret_addr
 
@@ -182,6 +184,12 @@ get_random_number	in 		5 			time				// Gets the clock time
 skip_mod			ret 	rand_num_ret_addr
 
 //***************************************************************************//
+
+wait_second in	5			firstclock
+			add	next_time	firstclock 		num24
+timecheck	in 	5 			currentclock
+			blt timecheck	currentclock	next_time
+			ret wait_second_ret_addr
 
 // Moves current Tetris piece
 move_current_piece
@@ -327,3 +335,7 @@ check_for_input_ret_addr	.data 0
 check_for_keypress_ret_addr	.data 0
 is_move_valid_ret_addr		.data 0
 mod_ret_addr				.data 0
+wait_second_ret_addr		.data 0
+firstclock					.data 0
+currentclock				.data 0
+next_time					.data 0
