@@ -10,51 +10,30 @@ color_init	call 	display_camera_image	camera_ret_addr
 			blt		color_init				clock			start
 			call	get_img					init_ret_addr
 			cp		init_lp					num0
-			cp		red_init				red_tot
 			cp		grn_init				grn_tot
-			cp		blu_init				blu_tot
 
 //Set thresholds	
-			//mult	red_top					red_init		num11
-			//div		red_top					red_top			num10
-			//mult	red_bot					red_init		num9
-			//div		red_bot					red_bot			num10
-
 			mult	grn_top					grn_init		num12
 			div		grn_top					grn_top			num10
 			mult	grn_bot					grn_init		num10
 			div		grn_bot					grn_bot			num12
 
-			//mult	blu_top					blu_init		num11
-			//div		blu_top					blu_top			num10
-			//mult	blu_bot					blu_init		num9
-			//div		blu_bot					blu_bot			num10
-
-			//cp		red_tot					num0
 			cp		grn_tot					num0
-			//cp		blu_tot					num0
 
 
 start1
 
 
-//move_x_lt
+//Moves 10 x 10 box in the left x direction until the thresholds is out of bounds
 			cp		xpx						ixpx
 move_x_lt	sub		xpx						xpx				num1
 			sub		sxpx					sxpx			num1
 			call	dr_lns					move_ret_addr
 
-			//blt		commit_xlt				red_top			red_tot
 			blt		commit_xlt				grn_top			grn_tot
-			//blt		commit_xlt				blu_top			blu_tot
-
-			//blt		commit_xlt				red_tot			red_bot
 			blt		commit_xlt				grn_tot			grn_bot
-			//blt		commit_xlt				blu_tot			blu_bot
-			
-			cp		red_tot					num0
+
 			cp		grn_tot					num0
-			cp		blu_tot					num0
 
 			be		move_x_lt				num0			num0
 
@@ -70,10 +49,7 @@ commit_xlt	cp		commit_xlt_coord		xpx
 			cp			vga_y2			ebox_y2
 			call		display_rect	vga_ret_addr
 
-
-			cp		red_tot					num0
 			cp		grn_tot					num0
-			cp		blu_tot					num0
 
 //move_x_rt
 			cp		xpx						ixpx
@@ -81,17 +57,10 @@ move_x_rt	add		xpx						xpx				num1
 			add		sxpx					sxpx			num1
 			call	dr_lns					move_ret_addr
 
-			//blt		commit_xrt				red_top			red_tot
 			blt		commit_xrt				grn_top			grn_tot
-			//blt		commit_xrt				blu_top			blu_tot
-
-			//blt		commit_xrt				red_tot			red_bot
 			blt		commit_xrt				grn_tot			grn_bot
-			//blt		commit_xrt				blu_tot			blu_bot
 			
-			cp		red_tot					num0
 			cp		grn_tot					num0
-			cp		blu_tot					num0
 
 			be		move_x_rt				num0			num0
 
@@ -107,9 +76,7 @@ commit_xrt	cp		commit_xrt_coord		xpx
 			cp			vga_y2			ebox_y2
 			call		display_rect	vga_ret_addr
 
-			cp		red_tot					num0
 			cp		grn_tot					num0
-			cp		blu_tot					num0
 
 
 
@@ -141,8 +108,6 @@ get_img		call 	display_camera_image	camera_ret_addr
 
 dr_lns
 
-//#include draw_lines.e
-
 			cp			vga_x1			c1
 			cp			vga_x2			c2
 			cp			vga_y1			c3
@@ -159,7 +124,6 @@ set_rd_px	cp		vga_x					xpx
 //Gets 8 bit color at pixel xpx, ypx	
 rd_pixel	call	get_pixel_color			vga_ret_addr
 			cp		px						vga_color_read
-			//out		4						px
 
 
 //Converts 8 bit color to binary and copies binary number to clr_array
@@ -179,17 +143,6 @@ zero_array	cpta		num0			binary_num			curr_bit
 			blt			zero_array		curr_bit			num8
 
 
-			cp			clr_curr		num0
-//			cp			curr_bit		num5
-//fill_red	cpfa		temp			clr_array			clr_curr
-//			cpta		temp			binary_num			curr_bit
-//			add			curr_bit		curr_bit			num1
-//			add			clr_curr		clr_curr			num1
-//			blt			fill_red		curr_bit			num8
-//sum_red		cp			curr_power		num2
-//			cp			curr_bit		num5
-//			call		bin_to_dec		bin_ret_addr
-//			add			red_tot			red_tot				dec_num
 
 
 			cp			curr_bit		num5
@@ -203,18 +156,6 @@ sum_grn		cp			curr_power		num2
 			cp			curr_bit		num5
 			call		bin_to_dec		bin_ret_addr
 			add			grn_tot			grn_tot				dec_num
-
-
-//			cp			curr_bit		num6
-//fill_blu	cpfa		temp			clr_array			clr_curr
-//			cpta		temp			binary_num			curr_bit
-//			add			curr_bit		curr_bit			num1
-//			add			clr_curr		clr_curr			num1
-//			blt			fill_blu		curr_bit			num8
-//sum_blu		cp			curr_power		num1
-//			cp			curr_bit		num6
-//			call		bin_to_dec		bin_ret_addr
-//			add			blu_tot			blu_tot				dec_num
 			
 			
 //Looping statements to read 10 x 10 pixel area
@@ -243,13 +184,6 @@ decide		ret		move_ret_addr
 
 			
 			halt
-
-
-//move_x_lt
-//move_y_up
-//move_y_dn
-
-
 
 			
 			be		get_img					num1			num1
@@ -349,14 +283,3 @@ c4			.data 121
 #include vga_driver.e 
 #include camera_driver.e
 #include binary_tools.e
-//#include ../constants.e
-
-
-//Need to:
-// Move average in x direction
-//		Move right until color out of bounds
-//		Move left until color out of bounds
-// Move average in y direction
-//		Move up until color out of bounds
-//		Move down until color out of bounds
-// Update box values and redraw
