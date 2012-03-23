@@ -24,5 +24,5 @@ camera_check_response1	in 	131 					camera_response
 camera_x		.data 0
 camera_y		.data 0
 camera_cScale	.data 0
-camera_response
+camera_response .data 0
 camera_ret_addr	.data 0

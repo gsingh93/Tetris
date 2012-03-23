@@ -16,7 +16,7 @@ sd_chk_resp1	in			81				sd_response
 				bne			sd_chk_resp1	sd_response			num1
 				
 //Grab data from sd card at address
-get_data		in			84				sd_data
+sd_get_data		in			84				sd_data
 				out			80				num0
 
 //Return

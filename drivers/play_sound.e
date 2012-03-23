@@ -1,5 +1,6 @@
 //Plays a raw sound file from SD card by copying to SDRAM
 
+load_sound
 
 //Read a sample from the SD card
 get_sample_sd		cp			sd_addr_low			sd_curr_addr_low
@@ -39,6 +40,8 @@ sd_low_chk			blt			get_sample_sd		sd_curr_addr_low		fftn_bit_thresh
 
 //****************************************************************************//
 
+play_sound
+
 //Resets SDRAM addresses
 sdram_reset			cp			sdram_endx			sdram_currx
 					cp			sdram_endy			sdram_curry
@@ -54,7 +57,12 @@ get_sample_sdram	cp			sdram_x				sdram_currx
 
 //Plays sample from SDRAM
 sdram_play_sample	cp			spkr_sample			sdram_data_out
-					call		play_sound			spkr_ret_addr
+					call		play_sample			spkr_ret_addr
+
+
+//Counting test
+					out			3					count
+					add 		count				count					num1
 
 
 //If SDRAM x position > 2047, change it to 1 and add 1 to y position
@@ -68,8 +76,11 @@ sdram_end_chk		blt			get_sample_sdram	sdram_currx				sdram_endx
 					be			play_sound_end		sdram_curry				sdram_endy
 					be			get_sample_sdram	num1					num1
 
+play_sound_end		cp			sd_curr_addr_low	num0
+					cp			sd_curr_addr_high	num0
+					be			sdram_reset			num0					num0
 
-play_sound_end	halt
+					halt
 
 
 
@@ -87,6 +98,8 @@ sdram_endx			.data 0
 sdram_endy			.data 0
 sdram_thresh		.data 2048
 sdram_sample		.data 0
+
+count				.data 0
 
 #include sdcard_driver.e
 #include speaker_driver.e
