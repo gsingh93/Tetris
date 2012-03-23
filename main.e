@@ -269,6 +269,14 @@ shift_rows
 // Also contains numbers corresponding to binary strings (1 to 4). Format: bit1
 #include constants.e
 
+// Contains:	load_sound, play_sound
+// Inputs1:		None
+// Inputs2:		sound_high_addr, sound_low_addr
+// Outputs1:	None
+// Outputs2:	None
+// Ret Addr:	load_sound_ret_addr, play_sound_ret_addr
+#include sound_functions.e
+
 // Contains:	display_camera_image
 // Inputs: 		x, y, cScale (1-4)
 // Outputs: 	None
