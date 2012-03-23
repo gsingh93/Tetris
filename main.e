@@ -8,8 +8,17 @@
 // Application Entry Point
 			
 			// Make background black
+			cp		vga_color		num0
+			cp		vga_x1			num0
+			cp		vga_y2			num0
 			cp 		vga_x2			screen_width
-			cp 		vga_y2			screen_height		
+			cp 		vga_y2			screen_height
+			call 	display_rect 	vga_ret_addr
+			cp 		vga_color		num26
+			cp		vga_x1			num241
+			cp		vga_x2			num245
+			cp		vga_y1			num0
+			cp		vga_y2			screen_height
 			call 	display_rect 	vga_ret_addr
 			
 mainloop	// Generate a new Tetris piece
