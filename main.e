@@ -299,6 +299,18 @@ shift_rows
 // Ret Addr:	spkr_ret_addr
 #include drivers/speaker_driver.e
 
+// Contains:
+// Inputs:
+// Outputs:
+// Ret Addr:
+#include drivers/sdram_driver.e
+
+// Contains:
+// Inputs:
+// Outputs:
+// Ret Addr:
+#include drivers/sdcard_driver.e
+
 //***************************************************************************//
 
 // Utility Functions
