@@ -23,15 +23,18 @@
 			
 mainloop	// Generate a new Tetris piece
 			call generate_piece generate_piece_ret_addr
-	
+			
+subloop		call 	wait_second 		wait_second_ret_addr	
+
 			// Check for keyboard or camera input
-			call check_for_input check_for_input_ret_addr
+			call 	check_for_input 	check_for_input_ret_addr
 			
 			// Move piece based on input
 			// Check if the current piece is touching another, and generate another if true
 			// Check if any rows should be deleted
 			// Restart loop
-			be mainloop num1 num1 
+			be	mainloop	second	num1 
+			be 	subloop		second	num0
 			halt
 
 //***************************************************************************//
@@ -190,23 +193,120 @@ skip_mod			ret 	rand_num_ret_addr
 
 //***************************************************************************//
 
-wait_second in	5			firstclock
-			add	next_time	firstclock 		num24
-timecheck	in 	5 			currentclock
-			blt timecheck	currentclock	next_time
-			ret wait_second_ret_addr
+// This function ensures that the game waits one second before moving pieces
+// down the screen or generating new pieces. The current time is read and stored.
+// We check to see if next_time(initialized to 0) is less than current time.
+// If it is, then we say that the second has been reached. At this time, we
+// add 24 to the current time, and store that new value in next_time. We 
+// then repeat this process. 
+// If the function determines that the second has not been reached, then we 
+// move on with our program flow, checking for keyboard input and playing sound, 
+// then loop back to this function after we have done those two things.
+wait_second	in	5				current_time
+			blt	second_reached	next_time	current_time
+
+not_second	cp	second		num0
+			be	subloop		num1	num1
+		
+second_reached	add	next_time	current_time	num12
+				cp	second		num1
+				out	3			current_time
+				add	counter		counter			num1
 
 // Moves current Tetris piece
 move_current_piece
 
+
+// Moves current Tetris piece
+//1) erase old piece by drawing over the old rectangles with black
+//2)calculate new coords by subtracting num24 from all of the y-coords
+//3)draw new piece by drawing rectangles with the new coords	
+
+erase_prev_image	cp	vga_color	num0
+			cpfa	vga_x1	piece	num0
+			cpfa	vga_y1	piece	num1
+			cpfa	vga_x2	piece	num2
+			cpfa	vga_y2	piece	num3	
+			call display_rect vga_ret_addr	
+			cpfa	vga_x1	piece	num4
+			cpfa	vga_y1	piece	num5
+			cpfa	vga_x2	piece	num6
+			cpfa	vga_y2	piece	num7	
+			call display_rect vga_ret_addr
+			
+	
+calculate_new_coords	cpfa	my_y11	piece	num1
+			cpfa	my_y12	piece	num3
+			cpfa	my_y21	piece	num5
+			cpfa	my_y22	piece	num7
+			add	my_y11	my_y11	num24
+			add	my_y12	my_y12	num24
+			add	my_y21	my_y21	num24
+			add	my_y22	my_y22	num24
+			cpta	my_y11	piece	num1
+			cpta	my_y12	piece	num3
+			cpta	my_y21	piece	num5
+			cpta	my_y22	piece	num7
+
+draw_new_image		cp	vga_color	rand_color
+			cpfa	vga_x1	piece	num0
+			cpfa	vga_y1	piece	num1
+			cpfa	vga_x2	piece	num2
+			cpfa	vga_y2	piece	num3	
+			call display_rect vga_ret_addr	
+			cpfa	vga_x1	piece	num4
+			cpfa	vga_y1	piece	num5
+			cpfa	vga_x2	piece	num6
+			cpfa	vga_y2	piece	num7	
+			call display_rect vga_ret_addr
+			out	4	vga_y2
+			
+//Now, the program checks to see if we need to move the piece again, or draw a new
+//piece.
+
+//get the bottom-most y-value, and check if it is 0
+//if it is 0, then make new piece. If not, then keep looping
+			cpfa	bottom_y1	piece	num3
+			cpfa	bottom_y2	piece	num7
+			be	mainloop	bottom_y1	screen_height
+			be	mainloop	bottom_y2	screen_height
+			
+//now, checks to see if there is a block right beneath it. If so, then the block
+//will cease to move down.
+			//first, check first rectangle
+			cpfa	vga_x	piece	num0
+			cpfa	vga_y	piece	num3
+			//not sure about this, but I'll add 10 to the x value, just to make
+			//sure I'm in the range of the block right below the block I'm checking,
+			//and not on a boundary pixel.
+			add		test_x	vga_x	num10
+			add		my_y11	vga_y	num24
+			cp		vga_y	my_y11
+			cp		vga_x	test_x
+			call	get_pixel_color	vga_ret_addr
+			bne		mainloop	vga_color_read	num0
+			//now, check second rectangle
+			cpfa	vga_x	piece	num4
+			cpfa	vga_y	piece	num7
+			add		test_x	vga_x	num10
+			add		my_y11	vga_y	num24
+			cp		vga_y	my_y11
+			cp		vga_x	test_x
+			bne		mainloop	vga_color_read	num0
+			
+			be	subloop		num1	num1
+			
+			//Now that the piece has moved, generate new piece!
+			//be	mainloop	num1	num1
+
 // Helper function to calculate the position of the Tetris piece
-calculate_new_coord
+//calculate_new_coord
 
 // Helper function to erase the previous image of the piece
-erase_prev_image
+//erase_prev_image
 
 // Helper function to draw the new image of the piece
-draw_new_image
+//draw_new_image
 
 //***************************************************************************//
 
@@ -349,6 +449,14 @@ check_for_keypress_ret_addr	.data 0
 is_move_valid_ret_addr		.data 0
 mod_ret_addr				.data 0
 wait_second_ret_addr		.data 0
-firstclock					.data 0
-currentclock				.data 0
+current_time			.data	0
 next_time					.data 0
+second	.data	0
+counter	.data	0
+my_y11	.data	0
+my_y12	.data	0
+my_y21	.data	0
+my_y22	.data	0
+bottom_y1	.data	0
+bottom_y2	.data	0
+test_x		.data	0
