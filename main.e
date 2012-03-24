@@ -45,7 +45,7 @@ generate_piece 	call get_random_color 	rand_color_ret_addr
 				
 				// Display piece
 				cp vga_color 	rand_color
-debug			be draw_piece1 	rand_shape num0
+				be draw_piece1 	rand_shape num0
 				be draw_piece2 	rand_shape num1
 				be draw_piece3 	rand_shape num2
 				be draw_piece4 	rand_shape num3
@@ -58,8 +58,7 @@ draw_piece1	cpta	num96		piece	num0
 			cpta	num0		piece	num1
 			cpta	num144		piece	num2
 			cpta	num48		piece	num3
-
-			be	display_piece	num1	num1
+			be	finish_generation	num1	num1
 
 // Piece2 is a L
 draw_piece2	cpta	num96		piece	num0
@@ -70,7 +69,7 @@ draw_piece2	cpta	num96		piece	num0
 			cpta	num48		piece	num5
 			cpta	num144		piece	num6
 			cpta 	num72		piece	num7
-			be	display_piece	num1	num1
+			be	finish_generation	num1	num1
 
 // Piece3 is a backwards L
 draw_piece3	cpta	num120		piece	num0
@@ -81,7 +80,7 @@ draw_piece3	cpta	num120		piece	num0
 			cpta	num48		piece	num5
 			cpta	num120		piece	num6
 			cpta 	num72		piece	num7
-			be	display_piece	num1	num1
+			be	finish_generation	num1	num1
 
 // Piece4 is a T
 draw_piece4	cpta	num96		piece	num0
@@ -92,7 +91,7 @@ draw_piece4	cpta	num96		piece	num0
 			cpta	num24		piece	num5
 			cpta	num144		piece	num6
 			cpta 	num48		piece	num7
-			be	display_piece	num1	num1
+			be	finish_generation	num1	num1
 
 // Piece5 is a backwards Z
 draw_piece5	cpta	num120		piece	num0
@@ -103,7 +102,7 @@ draw_piece5	cpta	num120		piece	num0
 			cpta	num24		piece	num5
 			cpta	num144		piece	num6
 			cpta 	num48		piece	num7
-			be	display_piece	num1	num1
+			be	finish_generation	num1	num1
 
 // Piece6 is a Z
 draw_piece6	cpta	num96		piece	num0
@@ -114,7 +113,7 @@ draw_piece6	cpta	num96		piece	num0
 			cpta	num24		piece	num5
 			cpta	num168		piece	num6
 			cpta 	num48		piece	num7
-			be	display_piece	num1	num1
+			be	finish_generation	num1	num1
 
 // Piece7 is a straight line
 draw_piece7	cpta	num96		piece	num0
@@ -125,8 +124,13 @@ draw_piece7	cpta	num96		piece	num0
 			cpta	num0		piece	num5
 			cpta	num0		piece	num6
 			cpta 	num0		piece	num7
-			be	display_piece	num1	num1
-				
+			be	finish_generation	num1	num1
+			
+finish_generation	call	display_piece	display_piece_ret_addr
+					ret 	generate_piece_ret_addr
+
+			
+// Displays the current piece on the screen
 display_piece	cpfa	vga_x1	piece	num0
 				cpfa	vga_y1	piece	num1
 				cpfa	vga_x2	piece	num2
@@ -139,11 +143,9 @@ display_piece	cpfa	vga_x1	piece	num0
 				cpfa	vga_x2	piece	num6
 				cpfa	vga_y2	piece	num7
 				
-				call display_rect vga_ret_addr
+				call 	display_rect 	vga_ret_addr
 				
-				call wait_second wait_second_ret_addr
-								
-				ret generate_piece_ret_addr
+				ret		display_piece_ret_addr
 
 // Helper function to generate a random color
 // Output: rand_color
@@ -217,20 +219,8 @@ second_reached	add	next_time	current_time	num12
 move_current_piece
 
 // Erase old piece by drawing over the old rectangles with black
-erase_prev_image	cp	vga_color	num0
-					cpfa	vga_x1	piece	num0
-					cpfa	vga_y1	piece	num1
-					cpfa	vga_x2	piece	num2
-					cpfa	vga_y2	piece	num3
-					
-					call 	display_rect 	vga_ret_addr	
-					
-					cpfa	vga_x1	piece	num4
-					cpfa	vga_y1	piece	num5
-					cpfa	vga_x2	piece	num6
-					cpfa	vga_y2	piece	num7	
-					
-					call 	display_rect	vga_ret_addr
+erase_prev_image	cp		vga_color		num0
+					call 	display_piece	display_piece_ret_addr
 					
 // Calculate new coords by subtracting num24 from all of the y-coords
 calculate_new_coords	cpfa	my_y11	piece	num1
@@ -248,19 +238,7 @@ calculate_new_coords	cpfa	my_y11	piece	num1
 
 // Draw new piece by drawing rectangles with the new coords
 draw_new_image			cp		vga_color		rand_color
-						cpfa	vga_x1	piece	num0
-						cpfa	vga_y1	piece	num1
-						cpfa	vga_x2	piece	num2
-						cpfa	vga_y2	piece	num3
-						
-						call 	display_rect 	vga_ret_addr
-						
-						cpfa	vga_x1	piece	num4
-						cpfa	vga_y1	piece	num5
-						cpfa	vga_x2	piece	num6
-						cpfa	vga_y2	piece	num7
-						
-						call 	display_rect 	vga_ret_addr
+						call	display_piece	display_piece_ret_addr
 			
 // Check to see if we need to move the piece again, or draw a 
 // new piece.
@@ -419,9 +397,6 @@ mod_op1						.data 0
 mod_op2						.data 7
 mod_result					.data 0
 key							.data 0
-left						.data 37
-right						.data 39
-space						.data 32
 current_time				.data 0
 next_time					.data 0
 second						.data 0
@@ -445,3 +420,4 @@ check_for_keypress_ret_addr	.data 0
 is_move_valid_ret_addr		.data 0
 mod_ret_addr				.data 0
 wait_second_ret_addr		.data 0
+display_piece_ret_addr		.data 0
