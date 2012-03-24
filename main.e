@@ -40,10 +40,6 @@ mainloop	// Generate a new Tetris piece
 generate_piece 	call get_random_color 	rand_color_ret_addr
 				call get_random_shape	rand_shape_ret_addr
 				
-				// Debug
-				//out 3 rand_color
-				out 4 rand_shape
-				
 				// Display piece
 				cp vga_color 	rand_color
 debug			be draw_piece1 	rand_shape num0

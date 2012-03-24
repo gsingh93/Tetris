@@ -1,4 +1,5 @@
-//SD Card Driver
+// SDCard Driver
+// Author: Peter Romanelli
 
 read_sdcard
 
@@ -6,16 +7,16 @@ read_sdcard
 sd_chk_resp0	in			81				sd_response
 				bne 		sd_chk_resp0	sd_response 		num0
 
-//set address and set command
+// Set address and set command
 sd_addr_set		out			82				sd_addr_low
 				out			83				sd_addr_high
 				out			80				num1
 
-//loop until response is one, store data to sd_data, set command to 0
+// Loop until response is one, store data to sd_data, set command to 0
 sd_chk_resp1	in			81				sd_response
 				bne			sd_chk_resp1	sd_response			num1
 				
-//Grab data from sd card at address
+// Grab data from sd card at address
 sd_get_data		in			84				sd_data
 				out			80				num0
 
