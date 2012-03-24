@@ -216,97 +216,80 @@ second_reached	add	next_time	current_time	num12
 // Moves current Tetris piece
 move_current_piece
 
-
-// Moves current Tetris piece
-//1) erase old piece by drawing over the old rectangles with black
-//2)calculate new coords by subtracting num24 from all of the y-coords
-//3)draw new piece by drawing rectangles with the new coords	
-
+// Erase old piece by drawing over the old rectangles with black
 erase_prev_image	cp	vga_color	num0
-			cpfa	vga_x1	piece	num0
-			cpfa	vga_y1	piece	num1
-			cpfa	vga_x2	piece	num2
-			cpfa	vga_y2	piece	num3	
-			call display_rect vga_ret_addr	
-			cpfa	vga_x1	piece	num4
-			cpfa	vga_y1	piece	num5
-			cpfa	vga_x2	piece	num6
-			cpfa	vga_y2	piece	num7	
-			call display_rect vga_ret_addr
-			
-	
+					cpfa	vga_x1	piece	num0
+					cpfa	vga_y1	piece	num1
+					cpfa	vga_x2	piece	num2
+					cpfa	vga_y2	piece	num3
+					
+					call 	display_rect 	vga_ret_addr	
+					
+					cpfa	vga_x1	piece	num4
+					cpfa	vga_y1	piece	num5
+					cpfa	vga_x2	piece	num6
+					cpfa	vga_y2	piece	num7	
+					
+					call 	display_rect	vga_ret_addr
+					
+// Calculate new coords by subtracting num24 from all of the y-coords
 calculate_new_coords	cpfa	my_y11	piece	num1
-			cpfa	my_y12	piece	num3
-			cpfa	my_y21	piece	num5
-			cpfa	my_y22	piece	num7
-			add	my_y11	my_y11	num24
-			add	my_y12	my_y12	num24
-			add	my_y21	my_y21	num24
-			add	my_y22	my_y22	num24
-			cpta	my_y11	piece	num1
-			cpta	my_y12	piece	num3
-			cpta	my_y21	piece	num5
-			cpta	my_y22	piece	num7
+						cpfa	my_y12	piece	num3
+						cpfa	my_y21	piece	num5
+						cpfa	my_y22	piece	num7
+						add		my_y11	my_y11	num24
+						add		my_y12	my_y12	num24
+						add		my_y21	my_y21	num24
+						add		my_y22	my_y22	num24
+						cpta	my_y11	piece	num1
+						cpta	my_y12	piece	num3
+						cpta	my_y21	piece	num5
+						cpta	my_y22	piece	num7
 
-draw_new_image		cp	vga_color	rand_color
-			cpfa	vga_x1	piece	num0
-			cpfa	vga_y1	piece	num1
-			cpfa	vga_x2	piece	num2
-			cpfa	vga_y2	piece	num3	
-			call display_rect vga_ret_addr	
-			cpfa	vga_x1	piece	num4
-			cpfa	vga_y1	piece	num5
-			cpfa	vga_x2	piece	num6
-			cpfa	vga_y2	piece	num7	
-			call display_rect vga_ret_addr
-			out	4	vga_y2
+// Draw new piece by drawing rectangles with the new coords
+draw_new_image			cp		vga_color		rand_color
+						cpfa	vga_x1	piece	num0
+						cpfa	vga_y1	piece	num1
+						cpfa	vga_x2	piece	num2
+						cpfa	vga_y2	piece	num3
+						
+						call 	display_rect 	vga_ret_addr
+						
+						cpfa	vga_x1	piece	num4
+						cpfa	vga_y1	piece	num5
+						cpfa	vga_x2	piece	num6
+						cpfa	vga_y2	piece	num7
+						
+						call 	display_rect 	vga_ret_addr
 			
-//Now, the program checks to see if we need to move the piece again, or draw a new
-//piece.
+// Check to see if we need to move the piece again, or draw a 
+// new piece.
 
-//get the bottom-most y-value, and check if it is 0
-//if it is 0, then make new piece. If not, then keep looping
-			cpfa	bottom_y1	piece	num3
-			cpfa	bottom_y2	piece	num7
-			be	mainloop	bottom_y1	screen_height
-			be	mainloop	bottom_y2	screen_height
-			
-//now, checks to see if there is a block right beneath it. If so, then the block
-//will cease to move down.
-			//first, check first rectangle
-			cpfa	vga_x	piece	num0
-			cpfa	vga_y	piece	num3
-			//not sure about this, but I'll add 10 to the x value, just to make
-			//sure I'm in the range of the block right below the block I'm checking,
-			//and not on a boundary pixel.
-			add		test_x	vga_x	num10
-			add		my_y11	vga_y	num24
-			cp		vga_y	my_y11
-			cp		vga_x	test_x
-			call	get_pixel_color	vga_ret_addr
-			bne		mainloop	vga_color_read	num0
-			//now, check second rectangle
-			cpfa	vga_x	piece	num4
-			cpfa	vga_y	piece	num7
-			add		test_x	vga_x	num10
-			add		my_y11	vga_y	num24
-			cp		vga_y	my_y11
-			cp		vga_x	test_x
-			bne		mainloop	vga_color_read	num0
-			
-			be	subloop		num1	num1
-			
-			//Now that the piece has moved, generate new piece!
-			//be	mainloop	num1	num1
-
-// Helper function to calculate the position of the Tetris piece
-//calculate_new_coord
-
-// Helper function to erase the previous image of the piece
-//erase_prev_image
-
-// Helper function to draw the new image of the piece
-//draw_new_image
+// Get the bottom-most y-value, and check if it is at the bottom of the screen
+// If it is, generate a new piece. If not, then keep looping
+get_bottom_y_value		cpfa	bottom_y1			piece		num3
+						cpfa	bottom_y2			piece		num7
+						blt		y2_bottom			bottom_y1	bottom_y2
+y1_bottom				cp		bottom_y			bottom_y1
+						cpfa	bottom_x			piece		num2
+						be		check_for_bottom	num1		num1
+y2_bottom				cp		bottom_y			bottom_y2
+						cpfa	bottom_x			piece		num6
+check_for_bottom		be		mainloop			bottom_y1	screen_height
+						
+// Now, check to see if the current block has landed on another block.
+// If so, then the block will stop and a new one will be generated.
+					
+						// Add/Subtract 10 to the location to check to ensure
+						// boundary is not checked
+						sub		vga_y				bottom_x		num10
+						add		vga_x				bottom_y		num24
+						call	get_pixel_color		vga_ret_addr
+						
+						// Contains generate piece code. TODO: Refactor
+						bne		mainloop			vga_color_read	num0
+						
+						be		subloop				num1			num1
 
 //***************************************************************************//
 
@@ -319,9 +302,10 @@ check_for_keypress
 						// Get keypress, if any
 						call	get_keypress	ps2_ret_addr
 						cp		key				ps2_ascii
-						out 3 key		
-						call is_move_valid	is_move_valid_ret_addr
-						ret	check_for_keypress_ret_addr
+						out 	3 				key		
+						call 	is_move_valid	is_move_valid_ret_addr
+						
+						ret		check_for_keypress_ret_addr
 
 // Checks if the user has made a relevant gesture
 check_for_camera_gesture
@@ -371,7 +355,7 @@ shift_rows
 // Outputs1:	None
 // Outputs2:	None
 // Ret Addr:	load_sound_ret_addr, play_sound_ret_addr
-#include sound_functions.e
+//#include sound_functions.e
 
 // Contains:	display_camera_image
 // Inputs: 		x, y, cScale (1-4)
@@ -424,20 +408,32 @@ piece	.data	0	// x11
 		.data	0	// x22
 		.data	0	// y22
 		
-screen_width	.data 640
-screen_height	.data 480
+screen_width				.data 640
+screen_height				.data 480
 		
-rand_color	.data 0
-rand_shape	.data 0
-rand_num	.data 0
-time		.data 0
-mod_op1		.data 0
-mod_op2		.data 7
-mod_result	.data 0
-key		.data	0
-left	.data	37
-right	.data	39
-space	.data	32
+rand_color					.data 0
+rand_shape					.data 0
+rand_num					.data 0
+time						.data 0
+mod_op1						.data 0
+mod_op2						.data 7
+mod_result					.data 0
+key							.data 0
+left						.data 37
+right						.data 39
+space						.data 32
+current_time				.data 0
+next_time					.data 0
+second						.data 0
+my_y11						.data 0
+my_y12						.data 0
+my_y21						.data 0
+my_y22						.data 0
+bottom_y1					.data 0
+bottom_y2					.data 0
+bottom_y					.data 0
+bottom_x					.data 0
+counter						.data 0
 				
 // Return addresses
 generate_piece_ret_addr		.data 0
@@ -449,14 +445,3 @@ check_for_keypress_ret_addr	.data 0
 is_move_valid_ret_addr		.data 0
 mod_ret_addr				.data 0
 wait_second_ret_addr		.data 0
-current_time			.data	0
-next_time					.data 0
-second	.data	0
-counter	.data	0
-my_y11	.data	0
-my_y12	.data	0
-my_y21	.data	0
-my_y22	.data	0
-bottom_y1	.data	0
-bottom_y2	.data	0
-test_x		.data	0
