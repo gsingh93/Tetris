@@ -24,12 +24,14 @@
 mainloop	// Generate a new Tetris piece
 			call generate_piece generate_piece_ret_addr
 			
-subloop		call 	wait_second 		wait_second_ret_addr	
-
-			// Check for keyboard or camera input
+subloop		// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr
 			
+			call 	wait_second 		wait_second_ret_addr	
+			
 			// Move piece based on input
+			call	move_current_piece	move_current_piece_ret_addr
+			
 			// Check if the current piece is touching another, and generate another if true
 			// Check if any rows should be deleted
 			// Restart loop
@@ -58,6 +60,11 @@ draw_piece1	cpta	num96		piece	num0
 			cpta	num0		piece	num1
 			cpta	num144		piece	num2
 			cpta	num48		piece	num3
+			cpta	num96		piece	num4
+			cpta	num0		piece	num5
+			cpta	num144		piece	num6
+			cpta	num48		piece	num7
+			
 			be	finish_generation	num1	num1
 
 // Piece2 is a L
@@ -136,7 +143,7 @@ display_piece	cpfa	vga_x1	piece	num0
 				cpfa	vga_x2	piece	num2
 				cpfa	vga_y2	piece	num3
 				
-				call display_rect vga_ret_addr
+				call 	display_rect 	vga_ret_addr
 				
 				cpfa	vga_x1	piece	num4
 				cpfa	vga_y1	piece	num5
@@ -214,6 +221,7 @@ second_reached	add	next_time	current_time	num12
 				cp	second		num1
 				out	3			current_time
 				add	counter		counter			num1
+				ret				wait_second_ret_addr
 
 // Moves current Tetris piece
 move_current_piece
@@ -223,7 +231,8 @@ erase_prev_image	cp		vga_color		num0
 					call 	display_piece	display_piece_ret_addr
 					
 // Calculate new coords by subtracting num24 from all of the y-coords
-calculate_new_coords	cpfa	my_y11	piece	num1
+calculate_new_coords	// Move the piece downward
+						cpfa	my_y11	piece	num1
 						cpfa	my_y12	piece	num3
 						cpfa	my_y21	piece	num5
 						cpfa	my_y22	piece	num7
@@ -235,11 +244,29 @@ calculate_new_coords	cpfa	my_y11	piece	num1
 						cpta	my_y12	piece	num3
 						cpta	my_y21	piece	num5
 						cpta	my_y22	piece	num7
+						
+						// Shift piece based on input
+						cpfa	my_x11		piece	num0
+						cpfa	my_x12		piece	num2
+						cpfa	my_x21		piece	num4
+						cpfa	my_x22		piece	num6
+
+						add		my_x11	my_x11		move_amount
+						cpta	my_x11	piece		num0
+						add		my_x12	my_x12		move_amount
+						cpta	my_x12	piece		num2
+						add		my_x21	my_x21		move_amount
+						cpta	my_x21	piece		num4
+						add		my_x22	my_x22		move_amount
+						cpta	my_x22	piece		num6
+						cp		move_amount			num0
 
 // Draw new piece by drawing rectangles with the new coords
 draw_new_image			cp		vga_color		rand_color
+						out 4 vga_color
+						out 3 move_amount
 						call	display_piece	display_piece_ret_addr
-			
+		
 // Check to see if we need to move the piece again, or draw a 
 // new piece.
 
@@ -272,8 +299,8 @@ check_for_bottom		be		mainloop			bottom_y1	screen_height
 //***************************************************************************//
 
 // Check for keyboard or user input
-check_for_input call check_for_keypress check_for_keypress_ret_addr
-				ret check_for_input_ret_addr
+check_for_input call 	check_for_keypress check_for_keypress_ret_addr
+				ret 	check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key
 check_for_keypress		
@@ -295,7 +322,38 @@ check_for_camera_gesture
 determine_move	
 
 // Checks to see if move should be made based on time in move region
-is_move_valid	ret is_move_valid_ret_addr
+is_move_valid			cpfa	my_x11		piece	num0
+						cpfa	my_y11		piece	num1
+						cpfa	my_x12		piece	num2
+						cpfa	my_y12		piece	num3
+						cpfa	my_x21		piece	num4
+						cpfa	my_y21		piece	num5
+						cpfa	my_x22		piece	num6
+						cpfa	my_y22		piece	num7
+						
+						be		set_left_amount		key		left
+						be		set_right_amount	key		right
+						be		set_space_amount	key		space
+						be		is_move_valid_return	num1	num1
+										
+set_left_amount			be	is_move_valid_return	my_x11		num0
+						be	is_move_valid_return	my_x12		num0
+						be	is_move_valid_return	my_x21		num0
+						be	is_move_valid_return	my_x22		num0
+						cp 	move_amount				numneg24
+						be	is_move_valid_return	num1		num1
+
+set_right_amount		be	is_move_valid_return	my_x11		game_width
+						be	is_move_valid_return	my_x12		game_width
+						be	is_move_valid_return	my_x21		game_width
+						be	is_move_valid_return	my_x22		game_width
+						cp 	move_amount				num24
+						be	is_move_valid_return	num1		num1
+
+set_space_amount		out 3 num10	
+							
+is_move_valid_return	cp	key		num0
+						ret is_move_valid_ret_addr
 							
 //***************************************************************************//
 
@@ -388,6 +446,7 @@ piece	.data	0	// x11
 		
 screen_width				.data 640
 screen_height				.data 480
+game_width					.data 240
 		
 rand_color					.data 0
 rand_shape					.data 0
@@ -404,11 +463,19 @@ my_y11						.data 0
 my_y12						.data 0
 my_y21						.data 0
 my_y22						.data 0
+my_x11						.data 0
+my_x12						.data 0
+my_x21						.data 0
+my_x22						.data 0
 bottom_y1					.data 0
 bottom_y2					.data 0
 bottom_y					.data 0
 bottom_x					.data 0
 counter						.data 0
+move_amount					.data 0
+left						.data 52
+right						.data 54
+space						.data 32
 				
 // Return addresses
 generate_piece_ret_addr		.data 0
@@ -421,3 +488,4 @@ is_move_valid_ret_addr		.data 0
 mod_ret_addr				.data 0
 wait_second_ret_addr		.data 0
 display_piece_ret_addr		.data 0
+move_current_piece_ret_addr	.data 0
