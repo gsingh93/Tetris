@@ -53,6 +53,7 @@ commit_xlt	cp		commit_xlt_coord		xpx
 
 
 //Moves 10 x 10 box in the right x direction until the thresholds is out of bounds
+			cp		ixpx					sxpx
 			cp		xpx						ixpx
 move_x_rt	add		xpx						xpx				num1
 			add		ixpx					ixpx			num1
@@ -79,6 +80,63 @@ commit_xrt	cp		commit_xrt_coord		xpx
 
 			cp		grn_tot					num0
 
+
+//Moves 10 x 10 box in the downwards y direction until the thresholds is out of bounds
+			add		temp					commit_xrt_coord	commit_xlt_coord
+			div		ixpx					temp				num2
+			cp		sxpx					ixpx
+			cp		ypx						iypx
+move_y_dn	add		ypx						ypx				num1
+			add		iypx					iypx			num1
+			call	draw_center				move_ret_addr
+
+			blt		commit_ydn				grn_top			grn_tot
+			blt		commit_ydn				grn_tot			grn_bot
+			
+			cp		grn_tot					num0
+			be		move_y_dn				num0			num0
+
+commit_ydn	cp		commit_ydn_coord		ypx
+
+			cp		ebox_y1					commit_ydn_coord
+			add		ebox_y2					ebox_y1			num5
+
+			cp		vga_x1					ixpx
+			sub		vga_x1					vga_x1			num640
+			cp		vga_x2					vga_x1
+			add		vga_x2					vga_x2			num5
+			cp		vga_y1					ebox_y1
+			cp		vga_y2					ebox_y2
+			call	display_rect			vga_ret_addr
+
+			cp		grn_tot					num0
+
+
+//Moves 10 x 10 box in the downwards y direction until the thresholds is out of bounds
+			cp		sypx					iypx
+			cp		ypx						iypx
+move_y_up	sub		ypx						ypx				num1
+			sub		iypx					iypx			num1
+			call	draw_center				move_ret_addr
+
+			blt		commit_yup				grn_top			grn_tot
+			blt		commit_yup				grn_tot			grn_bot
+			
+			cp		grn_tot					num0
+			be		move_y_up				num0			num0
+
+commit_yup	cp		commit_yup_coord		ypx
+
+			cp		ebox_y1					commit_yup_coord
+			add		ebox_y2					ebox_y1			num5
+
+			cp		vga_y1					ebox_y1
+			cp		vga_y2					ebox_y2
+			call	display_rect			vga_ret_addr
+
+			cp		grn_tot					num0
+
+			halt
 
 
 			call 	display_camera_image	camera_ret_addr
@@ -181,6 +239,8 @@ decide		ret		move_ret_addr
 
 ixpx		.data   795
 iypx		.data   115
+sxpx		.data   795
+sypx		.data   115
 xpx			.data	795
 ypx			.data	115
 x2px		.data	500
@@ -192,8 +252,6 @@ start		.data	60
 px			.data	255
 i			.data	0
 j			.data	0
-sxpx		.data	795
-sypx		.data	115
 expx		.data	165
 eypx		.data	125
 pxinc		.data	1
@@ -219,8 +277,8 @@ l4_x2	.data 170
 //Commits
 commit_xrt_coord	.data 0
 commit_xlt_coord	.data 0
-commit_ytp_coord	.data 0
-commit_ybm_coord	.data 0
+commit_yup_coord	.data 0
+commit_ydn_coord	.data 0
 commit_found		.data 0
 
 x_avg			.data 0
@@ -262,8 +320,8 @@ temp		.data 0
 
 ebox_x1		.data 0
 ebox_x2		.data 0
-ebox_y1		.data 315
-ebox_y2		.data 320
+ebox_y1		.data 115
+ebox_y2		.data 120
 
 c1			.data 159
 c2			.data 161
