@@ -38,16 +38,7 @@ move_x_lt	sub		xpx						xpx				num1
 
 
 commit_xlt	cp		commit_xlt_coord		xpx
-
-			cp		ebox_x1					commit_xlt_coord
-			sub		ebox_x1					ebox_x1			num640
-			add		ebox_x2					ebox_x1			num5
-
-			cp		vga_x1					ebox_x1
-			cp		vga_x2					ebox_x2
-			cp		vga_y1					ebox_y1
-			cp		vga_y2					ebox_y2
-			call	display_rect			vga_ret_addr
+			sub		commit_xlt_coord		commit_xlt_coord num640
 
 			cp		grn_tot					num0
 
@@ -67,16 +58,7 @@ move_x_rt	add		xpx						xpx				num1
 
 
 commit_xrt	cp		commit_xrt_coord		xpx
-
-			cp		ebox_x1					commit_xrt_coord
-			sub		ebox_x1					ebox_x1			num640
-			add		ebox_x2					ebox_x1			num5
-
-			cp		vga_x1					ebox_x1
-			cp		vga_x2					ebox_x2
-			cp		vga_y1					ebox_y1
-			cp		vga_y2					ebox_y2
-			call	display_rect			vga_ret_addr
+			sub		commit_xrt_coord		commit_xrt_coord num640
 
 			cp		grn_tot					num0
 
@@ -98,17 +80,6 @@ move_y_dn	add		ypx						ypx				num1
 
 commit_ydn	cp		commit_ydn_coord		ypx
 
-			cp		ebox_y1					commit_ydn_coord
-			add		ebox_y2					ebox_y1			num5
-
-			cp		vga_x1					ixpx
-			sub		vga_x1					vga_x1			num640
-			cp		vga_x2					vga_x1
-			add		vga_x2					vga_x2			num5
-			cp		vga_y1					ebox_y1
-			cp		vga_y2					ebox_y2
-			call	display_rect			vga_ret_addr
-
 			cp		grn_tot					num0
 
 
@@ -127,14 +98,27 @@ move_y_up	sub		ypx						ypx				num1
 
 commit_yup	cp		commit_yup_coord		ypx
 
-			cp		ebox_y1					commit_yup_coord
-			add		ebox_y2					ebox_y1			num5
-
-			cp		vga_y1					ebox_y1
-			cp		vga_y2					ebox_y2
-			call	display_rect			vga_ret_addr
-
 			cp		grn_tot					num0
+
+
+//Draw box around detected area
+			cp		vga_color				color
+det_box_l1	cp		vga_y2					commit_yup_coord
+			sub		vga_y1					commit_yup_coord	num4
+			cp		vga_x1					commit_xlt_coord
+			cp		vga_x2					commit_xrt_coord
+			call	display_rect			vga_ret_addr
+det_box_l2	cp		vga_y1					commit_ydn_coord
+			add		vga_y2					commit_ydn_coord	num4
+			call	display_rect			vga_ret_addr
+det_box_l3	cp		vga_y1					commit_yup_coord
+			sub		vga_y1					vga_y1				num4
+			cp		vga_x2					commit_xlt_coord
+			sub		vga_x1					vga_x1				num4
+			call	display_rect			vga_ret_addr
+det_box_l4	cp		vga_x1					commit_xrt_coord
+			add		vga_x2					vga_x1				num4
+			call	display_rect			vga_ret_addr
 
 
 
