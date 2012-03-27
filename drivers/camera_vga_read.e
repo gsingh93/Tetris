@@ -136,7 +136,6 @@ commit_yup	cp		commit_yup_coord		ypx
 
 			cp		grn_tot					num0
 
-			halt
 
 
 			call 	display_camera_image	camera_ret_addr
@@ -207,12 +206,12 @@ sum_grn		cp			curr_power		num2
 			
 			
 //Looping statements to read 10 x 10 pixel area
-			add		xpx						xpx				num1
-			add		j						j				num1
+			add		xpx						xpx				num2
+			add		j						j				num2
 loop1		blt		set_rd_px				j				num10
-			add		i						i				num1
+			add		i						i				num2
 			cp		j						num0
-			add		ypx						ypx				num1
+			add		ypx						ypx				num2
 			cp		xpx						ixpx
 loop2		blt		set_rd_px				i				num10
 			cp 		xpx						ixpx
@@ -229,22 +228,12 @@ decide		ret		move_ret_addr
 
 
 
-
-			
-			halt
-
-			
-			be		get_img					num1			num1
-
-
 ixpx		.data   795
 iypx		.data   115
 sxpx		.data   795
 sypx		.data   115
 xpx			.data	795
 ypx			.data	115
-x2px		.data	500
-y2px		.data	500
 color		.data	224
 clock		.data	0
 inc 		.data	10
@@ -252,9 +241,6 @@ start		.data	60
 px			.data	255
 i			.data	0
 j			.data	0
-expx		.data	165
-eypx		.data	125
-pxinc		.data	1
 
 num640		.data	640
 
@@ -331,3 +317,10 @@ c4			.data 121
 #include vga_driver.e 
 #include camera_driver.e
 #include binary_tools.e
+
+//TODO:
+// Draw box around green area
+// Add frame limit
+// Add new average function
+// Clean up and optimize code
+// Test on DE2
