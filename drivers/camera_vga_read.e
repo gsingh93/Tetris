@@ -28,6 +28,8 @@ begin_detection
 
 
 //Moves 10 x 10 box in the left x direction until the thresholds is out of bounds
+			cp		iypx					sypx
+			cp		ypx						iypx
 			cp		ixpx					sxpx
 			cp		xpx						ixpx
 move_x_lt	sub		xpx						xpx				num1
