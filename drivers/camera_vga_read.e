@@ -20,6 +20,9 @@ color_init	call 	display_camera_image	camera_ret_addr
 
 			cp		grn_tot					num0
 
+			in		5						clock
+			add		start					clock			num10
+
 
 begin_detection
 
@@ -120,18 +123,27 @@ det_box_l4	cp		vga_x1					commit_xrt_coord
 			add		vga_x2					vga_x1				num4
 			call	display_rect			vga_ret_addr
 
-
+clock_lp	in		5						clock
+			blt		clock_lp				clock				start
 
 			call 	display_camera_image	camera_ret_addr
 			cp		camera_x				num640
 			call 	display_camera_image	camera_ret_addr
 			cp		camera_x				num0
 
+
 			add		temp					commit_xrt_coord	commit_xlt_coord
 			div		ixpx					temp				num2
+			add		ixpx					ixpx				num640
 			cp		sxpx					ixpx
 
-			be		begin_detection			num0				num0
+			add		temp					commit_ydn_coord	commit_yup_coord
+			div		iypx					temp				num2
+			cp		sypx					iypx
+
+			add		start					start				num10
+
+reset_det	be		begin_detection			num0				num0
 
 			halt
 
@@ -229,21 +241,6 @@ j			.data	0
 num640		.data	640
 
 
-//Rectangle
-
-l13_x1	.data 150
-l13_x2	.data 170
-l24_y1	.data 110
-l24_y2	.data 130
-l1_y1	.data 110
-l1_y2	.data 114
-l3_y1	.data 126
-l3_y2	.data 130
-l2_x1	.data 150
-l2_x2	.data 154
-l4_x1	.data 166
-l4_x2	.data 170
-
 //Commits
 commit_xrt_coord	.data 0
 commit_xlt_coord	.data 0
@@ -303,7 +300,6 @@ c4			.data 121
 #include binary_tools.e
 
 //TODO:
-// Draw box around green area
 // Add frame limit
 // Add new average function
 // Clean up and optimize code
