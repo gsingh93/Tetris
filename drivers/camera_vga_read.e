@@ -13,21 +13,22 @@ color_init	call 	display_camera_image	camera_ret_addr
 			cp		grn_init				grn_tot
 
 //Set thresholds	
-			mult	grn_top					grn_init		num12
+			mult	grn_top					grn_init		num11
 			div		grn_top					grn_top			num10
 			mult	grn_bot					grn_init		num10
-			div		grn_bot					grn_bot			num12
+			div		grn_bot					grn_bot			num11
 
 			cp		grn_tot					num0
 
 			in		5						clock
-			add		start					clock			num10
+			add		start					clock			num5
 
 
 begin_detection
 
 
 //Moves 10 x 10 box in the left x direction until the thresholds is out of bounds
+			cp		ixpx					sxpx
 			cp		xpx						ixpx
 move_x_lt	sub		xpx						xpx				num1
 			sub		ixpx					ixpx			num1
@@ -69,7 +70,9 @@ commit_xrt	cp		commit_xrt_coord		xpx
 //Moves 10 x 10 box in the downwards y direction until the thresholds is out of bounds
 			add		temp					commit_xrt_coord	commit_xlt_coord
 			div		ixpx					temp				num2
+			add		ixpx					ixpx				num640
 			cp		sxpx					ixpx
+			cp		sypx					iypx
 			cp		ypx						iypx
 move_y_dn	add		ypx						ypx				num1
 			add		iypx					iypx			num1
@@ -142,6 +145,7 @@ clock_lp	in		5						clock
 			cp		sypx					iypx
 
 			add		start					start				num10
+			//halt
 
 reset_det	be		begin_detection			num0				num0
 
