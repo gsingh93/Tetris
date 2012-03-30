@@ -1,6 +1,10 @@
 // Plays a raw sound file from SD card by copying to SDRAM
 
 load_sound
+					cp			sdram_currx			num0
+					cp			sdram_curry			num0
+					cp			sd_curr_addr_low	num0
+					cp			sd_curr_addr_high	num0
 
 // Read a sample from the SD card
 get_sd_sample		cp			sd_addr_low			sd_curr_addr_low
@@ -75,7 +79,7 @@ sdram_reset			cp			sdram_endx			sdram_currx
 
 sd_curr_addr_low	.data 0
 sd_curr_addr_high	.data 0
-sd_addr_low_end		.data 15000
+sd_addr_low_end		.data 28800
 sd_addr_high_end	.data 0
 
 fftn_bit_thresh		.data 32767
