@@ -1,4 +1,4 @@
-// Camera Driver
+// Keyboard Driver
 // Author: Jay Soni
 
 get_keypress
