@@ -7,21 +7,21 @@
 
 //task: shift values		
 draw_piece2	cp	vga_color	10
-		cpta	num96		piece	num0
+		cpta	num72		piece	num0
 		cpta	num24		piece	num1
-		cpta	num120		piece	num2
+		cpta	num96		piece	num2
 		cpta	num48		piece	num3
-		cpta	num96		piece	num4
+		cpta	num72		piece	num4
 		cpta	num48		piece	num5
-		cpta	num120		piece	num6
+		cpta	num96		piece	num6
 		cpta 	num72		piece	num7
-		cpta	num96		piece	num8
+		cpta	num72		piece	num8
 		cpta	num72		piece	num9
-		cpta	num120		piece	num10
+		cpta	num96		piece	num10
 		cpta 	num96		piece	num11
-		cpta	num120		piece	num12
+		cpta	num96		piece	num12
 		cpta	num72		piece	num13
-		cpta	num144		piece	num14
+		cpta	num120		piece	num14
 		cpta 	num96		piece	num15
 			
 display_piece	cpfa	vga_x1	piece	num0
@@ -71,34 +71,33 @@ rotate_piece	//cpfa	firstx	piece	num0
 		cpta	tempval	temparr	num0
 		cpfa	tempval	piece	num1
 		cpta	tempval	temparr	num1
-		cpfa	tempval	piece	num2
-		cpta	tempval	temparr	num2
-		cpfa	tempval	piece	num3
-		cpta	tempval	temparr	num3
 		cpfa	tempval	piece	num4
 		cpta	tempval	temparr	num4
 		cpfa	tempval	piece	num5
 		cpta	tempval	temparr	num5
-		cpfa	tempval	piece	num6
-		cpta	tempval	temparr	num6
-		cpfa	tempval	piece	num7
-		cpta	tempval	temparr	num7
+		cpfa	tempval	piece	num8
+		cpta	tempval	temparr	num8
+		cpfa	tempval	piece	num9
+		cpta	tempval	temparr	num9
+		cpfa	tempval	piece	num12
+		cpta	tempval	temparr	num12
+		cpfa	tempval	piece	num13
+		cpta	tempval	temparr	num13
 		
 		//Actual Rotation (not using 'q')
 		//x11
 		cpfa 	tempval		temparr	num1
-		out 	3	tempval
 		add	finalval	tempval	cmx
-		out	4	finalval
 		sub	finalval	finalval	cmy
 		cpta	finalval	piece	num0
-		//out	3	finalval
+		
 		
 		//y11
 		cpfa	tempval	temparr	num0
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
 		cpta	finalval	piece	num1
+		
 		//x12
 		cpfa	tempval	piece	num0
 		add	tempval	tempval	num24
@@ -112,11 +111,13 @@ rotate_piece	//cpfa	firstx	piece	num0
 		add	finalval	tempval	cmx
 		sub	finalval	finalval	cmy
 		cpta	finalval	piece	num4
+		
 		//y21
 		cpfa	tempval	temparr	num4
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
 		cpta	finalval	piece	num5
+		
 		//x22
 		cpfa	tempval	piece	num4
 		add	tempval	tempval	num24
@@ -131,15 +132,18 @@ rotate_piece	//cpfa	firstx	piece	num0
 		add	finalval	tempval	cmx
 		sub	finalval	finalval	cmy
 		cpta	finalval	piece	num8
-		//y31
+		
+		//y31 
 		cpfa	tempval	temparr	num8
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
 		cpta	finalval	piece	num9
+		
 		//x32
 		cpfa	tempval	piece	num8
 		add	tempval	tempval	num24
 		cpta	tempval	piece	num10
+		
 		//y32
 		cpfa	tempval	piece	num9
 		add	tempval	tempval	num24
@@ -150,11 +154,13 @@ rotate_piece	//cpfa	firstx	piece	num0
 		add	finalval	tempval	cmx
 		sub	finalval	finalval	cmy
 		cpta	finalval	piece	num12
+		
 		//y41
 		cpfa	tempval	temparr	num12
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
 		cpta	finalval	piece	num13
+		
 		//x42
 		cpfa	tempval	piece	num12
 		add	tempval	tempval	num24
@@ -164,7 +170,8 @@ rotate_piece	//cpfa	firstx	piece	num0
 		add	tempval	tempval	num24
 		cpta	tempval	piece	num15
 		
-		call	display_rect	vga_ret_addr	
+		call	display_rect	vga_ret_addr
+		
 		halt
 		
 		
@@ -191,7 +198,7 @@ rotate_piece	//cpfa	firstx	piece	num0
 
 num640		.data 	640
 num480		.data 	480
-cmx		.data	120
+cmx		.data	96
 cmy		.data	60
 firstx		.data	0
 secondx		.data	0
@@ -199,14 +206,22 @@ firsty		.data	0
 secondy		.data	0
 tempval		.data	0
 finalval	.data	0
-temparr		.data	0	//tempx11
-		.data	0	//tempy11
-		.data	0	//tempx12
-		.data	0	//tempy12
-		.data	0	//tempx21
-		.data	0	//tempy21
-		.data	0	//tempx22
-		.data	0	//tempy22
+temparr		.data	0	
+		.data	0	
+		.data	0	
+		.data	0	
+		.data	0	
+		.data	0	
+		.data	0	
+		.data	0
+		.data	0
+		.data	0	
+		.data	0	
+		.data	0	
+		.data	0	
+		.data	0	
+		.data	0
+		.data	0	
 
 		// The rectangle coordinates of the current piece
 piece		.data	0	// x11
