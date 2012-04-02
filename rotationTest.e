@@ -5,24 +5,45 @@
 		cp 	vga_y2		num480
 		call 	display_rect 	vga_ret_addr
 
-//task: shift values		
 draw_piece2	cp	vga_color	10
-		cpta	num72		piece	num0
+		cpta	num96		piece	num0
 		cpta	num24		piece	num1
-		cpta	num96		piece	num2
+		cpta	num120		piece	num2
 		cpta	num48		piece	num3
-		cpta	num72		piece	num4
-		cpta	num48		piece	num5
-		cpta	num96		piece	num6
-		cpta 	num72		piece	num7
-		cpta	num72		piece	num8
-		cpta	num72		piece	num9
-		cpta	num96		piece	num10
-		cpta 	num96		piece	num11
-		cpta	num96		piece	num12
-		cpta	num72		piece	num13
-		cpta	num120		piece	num14
-		cpta 	num96		piece	num15
+		cpta	num120		piece	num4
+		cpta	num24		piece	num5
+		cpta	num144		piece	num6
+		cpta 	num48		piece	num7
+		cpta	num144		piece	num8
+		cpta	num24		piece	num9
+		cpta	num168		piece	num10
+		cpta 	num48		piece	num11
+		cpta	num120		piece	num12
+		cpta	num48		piece	num13
+		cpta	num144		piece	num14
+		cpta 	num72		piece	num15
+
+//L piece		
+//draw_piece2	cp	vga_color	10
+//		cpta	num72		piece	num0
+//		cpta	num24		piece	num1
+//		cpta	num96		piece	num2
+//		cpta	num48		piece	num3
+//		cpta	num72		piece	num4
+//		cpta	num48		piece	num5
+//		cpta	num96		piece	num6
+//		cpta 	num72		piece	num7
+//		cpta	num72		piece	num8
+//		cpta	num72		piece	num9
+//		cpta	num96		piece	num10
+//		cpta 	num96		piece	num11
+//		cpta	num96		piece	num12
+//		cpta	num72		piece	num13
+//		cpta	num120		piece	num14
+//		cpta 	num96		piece	num15
+		
+		
+mainloop
 			
 display_piece	cpfa	vga_x1	piece	num0
 		cpfa	vga_y1	piece	num1
@@ -52,7 +73,10 @@ display_piece	cpfa	vga_x1	piece	num0
 			
 		call 	display_rect 	vga_ret_addr
 		
+		call get_keypress	ps2_ret_addr
 		
+		bne	mainloop	ps2_pressed	num1
+		bne	mainloop 	ps2_ascii	num32
 
 rotate_piece	//cpfa	firstx	piece	num0
 		//cpfa	secondx	piece	num14
@@ -96,6 +120,7 @@ rotate_piece	//cpfa	firstx	piece	num0
 		cpfa	tempval	temparr	num0
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
+		sub 	finalval	finalval	num24
 		cpta	finalval	piece	num1
 		
 		//x12
@@ -116,6 +141,7 @@ rotate_piece	//cpfa	firstx	piece	num0
 		cpfa	tempval	temparr	num4
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
+		sub	finalval	finalval	num24
 		cpta	finalval	piece	num5
 		
 		//x22
@@ -137,6 +163,7 @@ rotate_piece	//cpfa	firstx	piece	num0
 		cpfa	tempval	temparr	num8
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
+		sub	finalval	finalval	num24
 		cpta	finalval	piece	num9
 		
 		//x32
@@ -159,6 +186,7 @@ rotate_piece	//cpfa	firstx	piece	num0
 		cpfa	tempval	temparr	num12
 		add	finalval	cmx	cmy
 		sub	finalval	finalval	tempval
+		sub	finalval	finalval	num24
 		cpta	finalval	piece	num13
 		
 		//x42
@@ -170,7 +198,41 @@ rotate_piece	//cpfa	firstx	piece	num0
 		add	tempval	tempval	num24
 		cpta	tempval	piece	num15
 		
+		cp 	vga_color	0
+		cp	vga_x1		0
+		cp	vga_x2		num640
+		cp	vga_y1		0
+		cp 	vga_y2		num480
+		call 	display_rect 	vga_ret_addr
+		
+		cp 	vga_color	10
+		
+		cpfa 	vga_x1	piece	num0
+		cpfa	vga_y1	piece	num1
+		cpfa	vga_x2	piece	num2
+		cpfa 	vga_y2	piece	num3
 		call	display_rect	vga_ret_addr
+		
+		cpfa 	vga_x1	piece	num4
+		cpfa	vga_y1	piece	num5
+		cpfa	vga_x2	piece	num6
+		cpfa 	vga_y2	piece	num7
+		call	display_rect	vga_ret_addr
+		
+		cpfa 	vga_x1	piece	num8
+		cpfa	vga_y1	piece	num9
+		cpfa	vga_x2	piece	num10
+		cpfa 	vga_y2	piece	num11
+		call	display_rect	vga_ret_addr
+		
+		cpfa 	vga_x1	piece	num12
+		cpfa	vga_y1	piece	num13
+		cpfa	vga_x2	piece	num14
+		cpfa 	vga_y2	piece	num15
+		call	display_rect	vga_ret_addr
+		
+		cp	ps2_ascii	num0
+		be 	mainloop	num1	num1
 		
 		halt
 		
@@ -198,8 +260,8 @@ rotate_piece	//cpfa	firstx	piece	num0
 
 num640		.data 	640
 num480		.data 	480
-cmx		.data	96
-cmy		.data	60
+cmx		.data	132
+cmy		.data	36
 firstx		.data	0
 secondx		.data	0
 firsty		.data	0
