@@ -4,24 +4,24 @@
 		cp	vga_y1		0
 		cp 	vga_y2		num480
 		call 	display_rect 	vga_ret_addr
-
-draw_piece2	cp	vga_color	10
-		cpta	num96		piece	num0
-		cpta	num24		piece	num1
-		cpta	num120		piece	num2
-		cpta	num48		piece	num3
-		cpta	num120		piece	num4
-		cpta	num24		piece	num5
-		cpta	num144		piece	num6
-		cpta 	num48		piece	num7
-		cpta	num144		piece	num8
-		cpta	num24		piece	num9
-		cpta	num168		piece	num10
-		cpta 	num48		piece	num11
-		cpta	num120		piece	num12
-		cpta	num48		piece	num13
-		cpta	num144		piece	num14
-		cpta 	num72		piece	num15
+//T piece
+//draw_piece2	cp	vga_color	10
+//		cpta	num96		piece	num0
+//		cpta	num24		piece	num1
+//		cpta	num120		piece	num2
+//		cpta	num48		piece	num3
+//		cpta	num120		piece	num4
+//		cpta	num24		piece	num5
+//		cpta	num144		piece	num6
+//		cpta 	num48		piece	num7
+//		cpta	num144		piece	num8
+//		cpta	num24		piece	num9
+//		cpta	num168		piece	num10
+//		cpta 	num48		piece	num11
+//		cpta	num120		piece	num12
+//		cpta	num48		piece	num13
+//		cpta	num144		piece	num14
+//		cpta 	num72		piece	num15
 
 //L piece		
 //draw_piece2	cp	vga_color	10
@@ -260,8 +260,11 @@ rotate_piece	//cpfa	firstx	piece	num0
 
 num640		.data 	640
 num480		.data 	480
-cmx		.data	132
-cmy		.data	36
+//cmx		.data	132	//T piece cmx
+//cmy		.data	36	//T piece cmy
+//cmx		.data	84	//L piece cmx
+//cmy		.data	84	//L piece cmy
+
 firstx		.data	0
 secondx		.data	0
 firsty		.data	0
