@@ -42,11 +42,9 @@ subloop		// Check for keyboard or camera input
 //***************************************************************************//
 
 // Generates a random Tetris piece
-generate_piece 	call get_random_color 	rand_color_ret_addr
-				call get_random_shape	rand_shape_ret_addr
+generate_piece	call get_random_shape	rand_shape_ret_addr
 				
 				// Display piece
-				cp vga_color 	rand_color
 				be draw_piece1 	rand_shape num0
 				be draw_piece2 	rand_shape num1
 				be draw_piece3 	rand_shape num2
@@ -56,7 +54,9 @@ generate_piece 	call get_random_color 	rand_color_ret_addr
 				be draw_piece7 	rand_shape num6
 
 // Piece1 is a square
-draw_piece1	cpta	num96		piece	num0
+draw_piece1	cp		color		num224
+			cp		vga_color	color
+			cpta	num96		piece	num0
 			cpta	num0		piece	num1
 			cpta	num120		piece	num2
 			cpta	num24		piece	num3
@@ -79,7 +79,9 @@ draw_piece1	cpta	num96		piece	num0
 			be	finish_generation	num1	num1
 
 // Piece2 is a L
-draw_piece2	cpta	num72		piece	num0
+draw_piece2	cp		color		num55
+			cp		vga_color	color
+			cpta	num72		piece	num0
 			cpta	num24		piece	num1
 			cpta	num96		piece	num2
 			cpta	num48		piece	num3
@@ -102,7 +104,9 @@ draw_piece2	cpta	num72		piece	num0
 			be	finish_generation	num1	num1
 
 // Piece3 is a backwards L
-draw_piece3	cpta	num72		piece	num0
+draw_piece3	cp		color		num43
+			cp		vga_color	color
+			cpta	num72		piece	num0
 			cpta	num0		piece	num1
 			cpta	num96		piece	num2
 			cpta	num24		piece	num3
@@ -125,7 +129,9 @@ draw_piece3	cpta	num72		piece	num0
 			be	finish_generation	num1	num1
 
 // Piece4 is a T. cmx: 132, cmy: 12
-draw_piece4 cpta	num72		piece	num0
+draw_piece4 cp		color		num28
+			cp		vga_color	color
+			cpta	num72		piece	num0
 			cpta	num24		piece	num1
 			cpta	num96		piece	num2
 			cpta	num48		piece	num3
@@ -148,7 +154,9 @@ draw_piece4 cpta	num72		piece	num0
 			be	finish_generation	num1	num1
 
 // Piece5 is a backwards Z
-draw_piece5 cpta	num72		piece	num0
+draw_piece5 cp		color		num3
+			cp		vga_color	color
+			cpta	num72		piece	num0
 			cpta	num0		piece	num1
 			cpta	num96		piece	num2
 			cpta	num24		piece	num3
@@ -171,7 +179,9 @@ draw_piece5 cpta	num72		piece	num0
 			be	finish_generation	num1	num1
 
 // Piece6 is a Z
-draw_piece6	cpta	num72		piece	num0
+draw_piece6	cp		color		num97
+			cp		vga_color	color
+			cpta	num72		piece	num0
 			cpta	num0		piece	num1
 			cpta	num96		piece	num2
 			cpta	num24		piece	num3
@@ -194,7 +204,9 @@ draw_piece6	cpta	num72		piece	num0
 			be	finish_generation	num1	num1
 
 // Piece7 is a straight line
-draw_piece7	cpta	num72		piece	num0
+draw_piece7	cp		color		num72
+			cp		vga_color	color
+			cpta	num72		piece	num0
 			cpta	num0		piece	num1
 			cpta	num96		piece	num2
 			cpta	num24		piece	num3
@@ -249,34 +261,6 @@ display_piece	cpfa	vga_x1	piece	num0
 				call 	display_rect 	vga_ret_addr
 				
 				ret		display_piece_ret_addr
-				
-// Helper function to generate a random color
-// Output: rand_color
-get_random_color	call	get_random_number rand_num_ret_addr
-					be		set_red 	rand_num num0
-					be		set_orange 	rand_num num1
-					be		set_yellow	rand_num num2
-					be		set_green 	rand_num num3
-					be		set_blue 	rand_num num4
-					be		set_violet 	rand_num num5
-					be		set_purple 	rand_num num6
-					
-set_red				cp 		rand_color 	num224
-					be		ret			num1 	num1
-set_orange			cp 		rand_color 	num55
-					be		ret			num1 	num1
-set_yellow			cp		rand_color 	num43
-					be		ret			num1 	num1
-set_green			cp 		rand_color 	num28
-					be		ret			num1 	num1
-set_blue			cp 		rand_color 	num3
-					be		ret			num1 	num1
-set_violet			cp 		rand_color 	num97
-					be		ret			num1 	num1
-set_purple			cp 		rand_color 	num72
-					be		ret			num1 	num1
-
-ret					ret rand_color_ret_addr
 					
 // Helper function to get a random shape
 // Output: rand_shape
@@ -387,7 +371,7 @@ calculate_new_coords	// Move the piece downward
 						cp		move_amount			num0
 
 // Draw new piece by drawing rectangles with the new coords
-draw_new_image			cp		vga_color		rand_color
+draw_new_image			cp		vga_color		color
 						out 4 vga_color
 						out 3 move_amount
 						call	display_piece	display_piece_ret_addr
@@ -509,7 +493,7 @@ set_right_amount		be	is_move_valid_return	my_x11		game_width
 set_space_amount		// Erase previous piece
 						cp		vga_color		num0
 						call	display_piece	display_piece_ret_addr
-						cp		vga_color		rand_color
+						cp		vga_color		color
 						
 						//Make Temp Array
 						cpfa	tempval	piece	num0
@@ -700,13 +684,13 @@ cm		.data	120	// x11
 		.data	96	// x12
 		.data	24	// y12
 		.data	120	// x21
-		.data	12	// y21
+		.data	24	// y21
 		
 screen_width				.data 640
 screen_height				.data 480
 game_width					.data 240
 		
-rand_color					.data 0
+color					.data 0
 rand_shape					.data 0
 rand_num					.data 0
 time						.data 0
@@ -757,7 +741,6 @@ cmy							.data 0
 // Return addresses
 generate_piece_ret_addr		.data 0
 rand_num_ret_addr			.data 0
-rand_color_ret_addr			.data 0
 rand_shape_ret_addr			.data 0
 check_for_input_ret_addr	.data 0
 check_for_keypress_ret_addr	.data 0
