@@ -58,84 +58,166 @@ generate_piece 	call get_random_color 	rand_color_ret_addr
 // Piece1 is a square
 draw_piece1	cpta	num96		piece	num0
 			cpta	num0		piece	num1
-			cpta	num144		piece	num2
-			cpta	num48		piece	num3
-			cpta	num96		piece	num4
+			cpta	num120		piece	num2
+			cpta	num24		piece	num3
+			cpta	num120		piece	num4
 			cpta	num0		piece	num5
 			cpta	num144		piece	num6
-			cpta	num48		piece	num7
+			cpta 	num24		piece	num7
+			cpta	num96		piece	num8
+			cpta	num24		piece	num9
+			cpta	num120		piece	num10
+			cpta 	num48		piece	num11
+			cpta	num120		piece	num12
+			cpta	num24		piece	num13
+			cpta	num144		piece	num14
+			cpta 	num48		piece	num15
+			
+			cpfa	cmx			cm		num0
+			cpfa	cmy			cm		num1
 			
 			be	finish_generation	num1	num1
 
 // Piece2 is a L
-draw_piece2	cpta	num96		piece	num0
-			cpta	num0		piece	num1
-			cpta	num120		piece	num2
-			cpta	num72		piece	num3
-			cpta	num120		piece	num4
-			cpta	num48		piece	num5
-			cpta	num144		piece	num6
-			cpta 	num72		piece	num7
+draw_piece2	cpta	num72		piece	num0
+			cpta	num24		piece	num1
+			cpta	num96		piece	num2
+			cpta	num48		piece	num3
+			cpta	num96		piece	num4
+			cpta	num24		piece	num5
+			cpta	num120		piece	num6
+			cpta 	num48		piece	num7
+			cpta	num120		piece	num8
+			cpta	num24		piece	num9
+			cpta	num144		piece	num10
+			cpta 	num48		piece	num11
+			cpta	num120		piece	num12
+			cpta	num0		piece	num13
+			cpta	num144		piece	num14
+			cpta 	num24		piece	num15
+			
+			cpfa	cmx			cm		num2
+			cpfa	cmy			cm		num3
+			
 			be	finish_generation	num1	num1
 
 // Piece3 is a backwards L
-draw_piece3	cpta	num120		piece	num0
+draw_piece3	cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num144		piece	num2
-			cpta	num72		piece	num3
-			cpta	num96		piece	num4
-			cpta	num48		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num72		piece	num7
+			cpta	num96		piece	num2
+			cpta	num24		piece	num3
+			cpta	num72		piece	num4
+			cpta	num24		piece	num5
+			cpta	num96		piece	num6
+			cpta 	num48		piece	num7
+			cpta	num96		piece	num8
+			cpta	num24		piece	num9
+			cpta	num120		piece	num10
+			cpta 	num48		piece	num11
+			cpta	num120		piece	num12
+			cpta	num24		piece	num13
+			cpta	num144		piece	num14
+			cpta 	num48		piece	num15
+			
+			cpfa	cmx			cm		num4
+			cpfa	cmy			cm		num5
+			
 			be	finish_generation	num1	num1
 
-// Piece4 is a T
-draw_piece4	cpta	num96		piece	num0
-			cpta	num0		piece	num1
-			cpta	num168		piece	num2
-			cpta	num24		piece	num3
-			cpta	num120		piece	num4
-			cpta	num24		piece	num5
-			cpta	num144		piece	num6
-			cpta 	num48		piece	num7
+// Piece4 is a T. cmx: 132, cmy: 12
+draw_piece4 cpta	num72		piece	num0
+			cpta	num24		piece	num1
+			cpta	num96		piece	num2
+			cpta	num48		piece	num3
+			cpta	num96		piece	num4
+			cpta	num0		piece	num5
+			cpta	num120		piece	num6
+			cpta 	num24		piece	num7
+			cpta	num96		piece	num8
+			cpta	num24		piece	num9
+			cpta	num120		piece	num10
+			cpta 	num48		piece	num11
+			cpta	num120		piece	num12
+			cpta	num24		piece	num13
+			cpta	num144		piece	num14
+			cpta 	num48		piece	num15
+			
+			cpfa	cmx			cm		num6
+			cpfa	cmy			cm		num7
+			
 			be	finish_generation	num1	num1
 
 // Piece5 is a backwards Z
-draw_piece5	cpta	num120		piece	num0
+draw_piece5 cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num168		piece	num2
+			cpta	num96		piece	num2
 			cpta	num24		piece	num3
 			cpta	num96		piece	num4
-			cpta	num24		piece	num5
-			cpta	num144		piece	num6
-			cpta 	num48		piece	num7
+			cpta	num0		piece	num5
+			cpta	num120		piece	num6
+			cpta 	num24		piece	num7
+			cpta	num96		piece	num8
+			cpta	num24		piece	num9
+			cpta	num120		piece	num10
+			cpta 	num48		piece	num11
+			cpta	num120		piece	num12
+			cpta	num24		piece	num13
+			cpta	num144		piece	num14
+			cpta 	num48		piece	num15
+			
+			cpfa	cmx			cm		num8
+			cpfa	cmy			cm		num9
+			
 			be	finish_generation	num1	num1
 
 // Piece6 is a Z
-draw_piece6	cpta	num96		piece	num0
+draw_piece6	cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num144		piece	num2
+			cpta	num96		piece	num2
 			cpta	num24		piece	num3
-			cpta	num120		piece	num4
-			cpta	num24		piece	num5
-			cpta	num168		piece	num6
-			cpta 	num48		piece	num7
+			cpta	num96		piece	num4
+			cpta	num0		piece	num5
+			cpta	num120		piece	num6
+			cpta 	num24		piece	num7
+			cpta	num96		piece	num8
+			cpta	num24		piece	num9
+			cpta	num120		piece	num10
+			cpta 	num48		piece	num11
+			cpta	num120		piece	num12
+			cpta	num24		piece	num13
+			cpta	num144		piece	num14
+			cpta 	num48		piece	num15
+			
+			cpfa	cmx			cm		num10
+			cpfa	cmy			cm		num11
+			
 			be	finish_generation	num1	num1
 
 // Piece7 is a straight line
-draw_piece7	cpta	num96		piece	num0
+draw_piece7	cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num120		piece	num2
-			cpta	num96		piece	num3
-			cpta	num0		piece	num4
+			cpta	num96		piece	num2
+			cpta	num24		piece	num3
+			cpta	num96		piece	num4
 			cpta	num0		piece	num5
-			cpta	num0		piece	num6
-			cpta 	num0		piece	num7
+			cpta	num120		piece	num6
+			cpta 	num24		piece	num7
+			cpta	num120		piece	num8
+			cpta	num0		piece	num9
+			cpta	num144		piece	num10
+			cpta 	num24		piece	num11
+			cpta	num144		piece	num12
+			cpta	num0		piece	num13
+			cpta	num168		piece	num14
+			cpta 	num24		piece	num15
+			
+			cpfa	cmx			cm		num12
+			cpfa	cmy			cm		num13
+			
 			be	finish_generation	num1	num1
 			
 finish_generation	call	display_piece	display_piece_ret_addr
 					ret 	generate_piece_ret_addr
-
 			
 // Displays the current piece on the screen
 display_piece	cpfa	vga_x1	piece	num0
@@ -144,16 +226,30 @@ display_piece	cpfa	vga_x1	piece	num0
 				cpfa	vga_y2	piece	num3
 				
 				call 	display_rect 	vga_ret_addr
-				
+					
 				cpfa	vga_x1	piece	num4
 				cpfa	vga_y1	piece	num5
 				cpfa	vga_x2	piece	num6
 				cpfa	vga_y2	piece	num7
+					
+				call 	display_rect 	vga_ret_addr
 				
+				cpfa	vga_x1	piece	num8
+				cpfa	vga_y1	piece	num9
+				cpfa	vga_x2	piece	num10
+				cpfa	vga_y2	piece	num11
+					
+				call 	display_rect 	vga_ret_addr
+				
+				cpfa	vga_x1	piece	num12
+				cpfa	vga_y1	piece	num13
+				cpfa	vga_x2	piece	num14
+				cpfa	vga_y2	piece	num15
+					
 				call 	display_rect 	vga_ret_addr
 				
 				ret		display_piece_ret_addr
-
+				
 // Helper function to generate a random color
 // Output: rand_color
 get_random_color	call	get_random_number rand_num_ret_addr
@@ -236,20 +332,38 @@ calculate_new_coords	// Move the piece downward
 						cpfa	my_y12	piece	num3
 						cpfa	my_y21	piece	num5
 						cpfa	my_y22	piece	num7
+						cpfa	my_y31	piece	num9
+						cpfa	my_y32	piece	num11
+						cpfa	my_y41	piece	num13
+						cpfa	my_y42	piece	num15
 						add		my_y11	my_y11	num24
 						add		my_y12	my_y12	num24
 						add		my_y21	my_y21	num24
 						add		my_y22	my_y22	num24
+						add		my_y31	my_y31	num24
+						add		my_y32	my_y32	num24
+						add		my_y41	my_y41	num24
+						add		my_y42	my_y42	num24
 						cpta	my_y11	piece	num1
 						cpta	my_y12	piece	num3
 						cpta	my_y21	piece	num5
 						cpta	my_y22	piece	num7
+						cpta	my_y31	piece	num9
+						cpta	my_y32	piece	num11
+						cpta	my_y41	piece	num13
+						cpta	my_y42	piece	num15
+						
+						add		cmy		cmy		num24
 						
 						// Shift piece based on input
 						cpfa	my_x11		piece	num0
 						cpfa	my_x12		piece	num2
 						cpfa	my_x21		piece	num4
 						cpfa	my_x22		piece	num6
+						cpfa	my_x31		piece	num8
+						cpfa	my_x32		piece	num10
+						cpfa	my_x41		piece	num12
+						cpfa	my_x42		piece	num14
 
 						add		my_x11	my_x11		move_amount
 						cpta	my_x11	piece		num0
@@ -259,6 +373,17 @@ calculate_new_coords	// Move the piece downward
 						cpta	my_x21	piece		num4
 						add		my_x22	my_x22		move_amount
 						cpta	my_x22	piece		num6
+						add		my_x31	my_x31		move_amount
+						cpta	my_x31	piece		num8
+						add		my_x32	my_x32		move_amount
+						cpta	my_x32	piece		num10
+						add		my_x41	my_x41		move_amount
+						cpta	my_x41	piece		num12
+						add		my_x42	my_x42		move_amount
+						cpta	my_x42	piece		num14
+						
+						add		cmx		cmx			move_amount
+						
 						cp		move_amount			num0
 
 // Draw new piece by drawing rectangles with the new coords
@@ -274,21 +399,51 @@ draw_new_image			cp		vga_color		rand_color
 // If it is, generate a new piece. If not, then keep looping
 get_bottom_y_value		cpfa	bottom_y1			piece		num3
 						cpfa	bottom_y2			piece		num7
-						blt		y2_bottom			bottom_y1	bottom_y2
-y1_bottom				cp		bottom_y			bottom_y1
-						cpfa	bottom_x			piece		num2
+						cpfa	bottom_y3			piece		num11
+						cpfa	bottom_y4			piece		num15
+						
+						// Determine bottom_y
+						cp		bottom_y			bottom_y1
+						call	is_bottom			is_bottom_ret_addr
+						be		y1_bottom			is_bottom_bool	num1
+						cp		bottom_y			bottom_y2
+						call	is_bottom			is_bottom_ret_addr
+						be		y2_bottom			is_bottom_bool	num1
+						cp		bottom_y			bottom_y3
+						call	is_bottom			is_bottom_ret_addr
+						be		y3_bottom			is_bottom_bool	num1
+						cp		bottom_y			bottom_y4
+						call	is_bottom			is_bottom_ret_addr
+						be		y4_bottom			is_bottom_bool	num1
+						
+is_bottom				blt		is_bottom_ret 	bottom_y	bottom_y1
+						blt		is_bottom_ret 	bottom_y	bottom_y2
+						blt		is_bottom_ret 	bottom_y	bottom_y3
+						blt		is_bottom_ret	bottom_y	bottom_y4
+						cp		is_bottom_bool	num1
+is_bottom_ret			ret 	is_bottom_ret_addr
+		
+
+y1_bottom				cpfa	bottom_x			piece		num2
 						be		check_for_bottom	num1		num1
-y2_bottom				cp		bottom_y			bottom_y2
-						cpfa	bottom_x			piece		num6
-check_for_bottom		be		mainloop			bottom_y1	screen_height
+						
+y2_bottom				cpfa	bottom_x			piece		num6
+						be		check_for_bottom	num1		num1
+						
+y3_bottom				cpfa	bottom_x			piece		num10
+						be		check_for_bottom	num1		num1
+						
+y4_bottom				cpfa	bottom_x			piece		num14
+check_for_bottom		cp		is_bottom_bool		num0
+						be		mainloop			bottom_y	screen_height
 						
 // Now, check to see if the current block has landed on another block.
 // If so, then the block will stop and a new one will be generated.
 					
 						// Add/Subtract 10 to the location to check to ensure
 						// boundary is not checked
-						sub		vga_y				bottom_x		num10
-						add		vga_x				bottom_y		num24
+						sub		vga_x				bottom_x		num10
+						add		vga_y				bottom_y		num10
 						call	get_pixel_color		vga_ret_addr
 						
 						// Contains generate piece code. TODO: Refactor
@@ -307,10 +462,11 @@ check_for_keypress
 						// Get keypress, if any
 						call	get_keypress	ps2_ret_addr
 						cp		key				ps2_ascii
-						out 	3 				key		
+						out 	3 				key	
+						be		check_keypress_ret	ps2_pressed		num0
 						call 	is_move_valid	is_move_valid_ret_addr
 						
-						ret		check_for_keypress_ret_addr
+check_keypress_ret		ret		check_for_keypress_ret_addr
 
 // Checks if the user has made a relevant gesture
 check_for_camera_gesture
@@ -350,7 +506,69 @@ set_right_amount		be	is_move_valid_return	my_x11		game_width
 						cp 	move_amount				num24
 						be	is_move_valid_return	num1		num1
 
-set_space_amount		out 3 num10	
+set_space_amount		// Erase previous piece
+						cp		vga_color		num0
+						call	display_piece	display_piece_ret_addr
+						cp		vga_color		rand_color
+						
+						//Make Temp Array
+						cpfa	tempval	piece	num0
+						cpta	tempval	temparr	num0
+						cpfa	tempval	piece	num1
+						cpta	tempval	temparr	num1
+						cpfa	tempval	piece	num4
+						cpta	tempval	temparr	num4
+						cpfa	tempval	piece	num5
+						cpta	tempval	temparr	num5
+						cpfa	tempval	piece	num8
+						cpta	tempval	temparr	num8
+						cpfa	tempval	piece	num9
+						cpta	tempval	temparr	num9
+						cpfa	tempval	piece	num12
+						cpta	tempval	temparr	num12
+						cpfa	tempval	piece	num13
+						cpta	tempval	temparr	num13
+						
+						cp 		rotate_var_1		num1
+						call 	calc_rotate_coord calc_rotate_coord_ret_addr
+						cp 		rotate_var_1		num5
+						call 	calc_rotate_coord calc_rotate_coord_ret_addr
+						cp 		rotate_var_1		num9
+						call 	calc_rotate_coord calc_rotate_coord_ret_addr
+						cp 		rotate_var_1		num13
+						call 	calc_rotate_coord calc_rotate_coord_ret_addr
+						
+						call	display_piece	display_piece_ret_addr
+						be		is_move_valid_return	num1		num1		
+		
+calc_rotate_coord		sub 	rotate_var_2	rotate_var_1	num1
+						add		rotate_var_3	rotate_var_1	num2
+						add		rotate_var_4	rotate_var_2	num2
+
+						// Calculate top left x
+						cpfa 	tempval		temparr		rotate_var_1
+						add		finalval	tempval		cmx
+						sub		finalval	finalval	cmy
+						cpta	finalval	piece		rotate_var_2
+						
+						// Calculate top left y
+						cpfa	tempval		temparr		rotate_var_2
+						add		finalval	cmx			cmy
+						sub		finalval	finalval	tempval
+						sub 	finalval	finalval	num24
+						cpta	finalval	piece		rotate_var_1
+						
+						// Calculate bottom right x
+						cpfa	tempval	piece	rotate_var_2
+						add		tempval	tempval	num24
+						cpta	tempval	piece	rotate_var_4
+						
+						// Calculate bottom right y
+						cpfa	tempval	piece	rotate_var_1
+						add		tempval	tempval	num24
+						cpta	tempval	piece	rotate_var_3
+						
+						ret		calc_rotate_coord_ret_addr	
 							
 is_move_valid_return	cp	key		num0
 						ret is_move_valid_ret_addr
@@ -443,6 +661,46 @@ piece	.data	0	// x11
 		.data	0	// y21
 		.data	0	// x22
 		.data	0	// y22
+		.data	0	// x31
+		.data	0	// y31
+		.data	0	// x32
+		.data	0	// y32
+		.data	0	// x41
+		.data	0	// y41
+		.data	0	// x42
+		.data	0	// y42
+		
+temparr	.data	0	// x11
+		.data	0	// y11
+		.data	0	// x12
+		.data	0	// y12
+		.data	0	// x21
+		.data	0	// y21
+		.data	0	// x22
+		.data	0	// y22
+		.data	0	// x31
+		.data	0	// y31
+		.data	0	// x32
+		.data	0	// y32
+		.data	0	// x41
+		.data	0	// y41
+		.data	0	// x42
+		.data	0	// y42
+		
+cm		.data	120	// x11
+		.data	24	// y11
+		.data	108	// x12
+		.data	36	// y12
+		.data	108	// x21
+		.data	36	// y21
+		.data	108	// x22
+		.data	36	// y22
+		.data	96	// x11   
+		.data	24	// y11
+		.data	96	// x12
+		.data	24	// y12
+		.data	120	// x21
+		.data	12	// y21
 		
 screen_width				.data 640
 screen_height				.data 480
@@ -463,20 +721,39 @@ my_y11						.data 0
 my_y12						.data 0
 my_y21						.data 0
 my_y22						.data 0
+my_y31						.data 0
+my_y32						.data 0
+my_y41						.data 0
+my_y42						.data 0
 my_x11						.data 0
 my_x12						.data 0
 my_x21						.data 0
 my_x22						.data 0
+my_x31						.data 0
+my_x32						.data 0
+my_x41						.data 0
+my_x42						.data 0
 bottom_y1					.data 0
 bottom_y2					.data 0
+bottom_y3					.data 0
+bottom_y4					.data 0
 bottom_y					.data 0
 bottom_x					.data 0
+is_bottom_bool				.data 0
 counter						.data 0
 move_amount					.data 0
 left						.data 52
 right						.data 54
 space						.data 32
-				
+tempval						.data 0
+finalval					.data 0
+rotate_var_1				.data 0	
+rotate_var_2				.data 0	
+rotate_var_3				.data 0	
+rotate_var_4				.data 0
+cmx							.data 0
+cmy							.data 0
+
 // Return addresses
 generate_piece_ret_addr		.data 0
 rand_num_ret_addr			.data 0
@@ -489,3 +766,5 @@ mod_ret_addr				.data 0
 wait_second_ret_addr		.data 0
 display_piece_ret_addr		.data 0
 move_current_piece_ret_addr	.data 0
+calc_rotate_coord_ret_addr	.data 0
+is_bottom_ret_addr			.data 0
