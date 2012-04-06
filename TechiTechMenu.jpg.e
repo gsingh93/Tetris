@@ -1,4 +1,4 @@
-	.data 127
+imagearray	.data 127
 	.data 127
 	.data 127
 	.data 127
