@@ -7,24 +7,6 @@
 
 // Application Entry Point
 			
-<<<<<<< HEAD
-			// Make background
-			cp		vga_color			num0
-			cp 		vga_x2			num240
-			cp 		vga_y2			screen_height
-			call 	display_rect 	vga_ret_addr
-			cp		vga_color			num255
-			cp		vga_x1			num241
-			cp		vga_y1			num0
-			cp		vga_x2			num640
-			cp		vga_y2			num480
-			call 	display_rect 	vga_ret_addr2
-			
-mainloop	// Generate a new Tetris piece
-			call generate_piece generate_piece_ret_addr
-	
-			// Check for keyboard or camera input
-=======
 			// Make background black
 			cp		vga_color		num0
 			cp		vga_x1			num0
@@ -47,161 +29,19 @@ subloop		// Check for keyboard or camera input
 			
 			call 	wait_second 		wait_second_ret_addr	
 			
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
 			// Move piece based on input
 			call	move_current_piece	move_current_piece_ret_addr
 			
 			// Check if the current piece is touching another, and generate another if true
 			// Check if any rows should be deleted
 			// Restart loop
-<<<<<<< HEAD
-			be mainloop num1 num1 
-=======
 			be	mainloop	second	num1 
 			be 	subloop		second	num0
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
 			halt
 
 //***************************************************************************//
 
 // Generates a random Tetris piece
-<<<<<<< HEAD
-generate_piece 	call 	get_random_color 	rand_color_ret_addr
-			call 	get_random_shape	rand_shape_ret_addr
-				
-				// Debug
-				out 3 rand_color
-				out 4 rand_shape
-				
-				// Display piece
-				cp 	vga_color 	rand_color
-				be 	draw_piece1 	rand_shape	 num0
-				be 	draw_piece2 	rand_shape	num1
-				be 	draw_piece3 	rand_shape	num2
-				be 	draw_piece4 	rand_shape	 num3
-				be 	draw_piece5 	rand_shape	num4
-				be 	draw_piece6 	rand_shape	num5
-				be 	draw_piece7 	rand_shape	num6
-
-				// TODO: Get correct coords
-// Piece1 is a square
-draw_piece1		cpta	num120	piece	num0
-			cpta	num0		piece	num1
-			cpta	num168	piece	num2
-			cpta	num48		piece	num3
-			cpta	num0		piece	num4
-			cpta	num0		piece	num5
-			cpta	num0		piece	num6
-			cpta 	num0		piece	num7
-			be	display_piece	num1	num1
-
-// Piece2 is a L
-draw_piece2		cpta	num120	piece	num0
-			cpta	num0		piece	num1
-			cpta	num144	piece	num2
-			cpta	num72		piece	num3
-			cpta	num144	piece	num4
-			cpta	num48		piece	num5
-			cpta	num168	piece	num6
-			cpta 	num72		piece	num7
-			be	display_piece	num1	num1
-
-// Piece3 is a backwards L
-draw_piece3		cpta	num144	piece	num0
-			cpta	num0		piece	num1
-			cpta	num168	piece	num2
-			cpta	num72		piece	num3
-			cpta	num120	piece	num4
-			cpta	num48		piece	num5
-			cpta	num144	piece	num6
-			cpta 	num72		piece	num7
-			be	display_piece	num1	num1
-
-// Piece4 is a T
-draw_piece4		cpta	num120	piece	num0
-			cpta	num0		piece	num1
-			cpta	num192	piece	num2
-			cpta	num24		piece	num3
-			cpta	num144	piece	num4
-			cpta	num24		piece	num5
-			cpta	num168	piece	num6
-			cpta 	num48		piece	num7
-			be	display_piece	num1	num1
-
-// Piece5 is a backwards Z
-draw_piece5		cpta	num144	piece	num0
-			cpta	num0		piece	num1
-			cpta	num192	piece	num2
-			cpta	num24		piece	num3
-			cpta	num120	piece	num4
-			cpta	num24		piece	num5
-			cpta	num168	piece	num6
-			cpta 	num48		piece	num7
-			be	display_piece	num1	num1
-
-// Piece6 is a Z
-draw_piece6		cpta	num120	piece	num0
-			cpta	num0		piece	num1
-			cpta	num168	piece	num2
-			cpta	num24		piece	num3
-			cpta	num144	piece	num4
-			cpta	num24		piece	num5
-			cpta	num192	piece	num6
-			cpta 	num48		piece	num7
-			be	display_piece	num1	num1
-
-// Piece7 is a straigt line
-draw_piece7		cpta	num120	piece	num0
-			cpta	num0		piece	num1
-			cpta	num144	piece	num2
-			cpta	num96		piece	num3
-			cpta	num0		piece	num4
-			cpta	num0		piece	num5
-			cpta	num0		piece	num6
-			cpta 	num0		piece	num7
-			be	display_piece	num1	num1
-				
-display_piece		cpfa	vga_x1	piece	num0
-			cpfa	vga_y1	piece	num1
-			cpfa	vga_x2	piece	num2
-			cpfa	vga_y2	piece	num3	
-			call 	display_rect 	vga_ret_addr
-				
-			cpfa	vga_x1	piece	num4
-			cpfa	vga_y1	piece	num5
-			cpfa	vga_x2	piece	num6
-			cpfa	vga_y2	piece	num7	
-			call 	display_rect 	vga_ret_addr
-								
-			ret 	generate_piece_ret_addr
-
-// Helper function to generate a random color
-// Output: rand_color
-get_random_color	call	get_random_number rand_num_ret_addr
-			be	set_red 	rand_num 	num0
-			be	set_orange 	rand_num 	num1
-			be	set_yellow	rand_num 	num2
-			be	set_green 	rand_num 	num3
-			be	set_blue 	rand_num 	num4
-			be	set_violet 	rand_num 	num5
-			be	set_purple 	rand_num 	num6
-					
-set_red			cp 	rand_color 	num10
-			be 	return		num1	num1
-set_orange		cp 	rand_color 	num20
-			be 	return		num1	num1
-set_yellow		cp	rand_color 	num30
-			be 	return		num1	num1
-set_green		cp 	rand_color 	num40
-			be 	return		num1	num1
-set_blue		cp 	rand_color 	num50
-			be 	return		num1	num1
-set_violet		cp 	rand_color 	num60
-			be 	return		num1	num1
-set_purple		cp 	rand_color 	num70
-
-return			ret 	rand_color_ret_addr
-=======
 generate_piece	call get_random_shape	rand_shape_ret_addr
 				
 				// Display piece
@@ -218,20 +58,20 @@ draw_piece1	cp		color		num224
 			cp		vga_color	color
 			cpta	num96		piece	num0
 			cpta	num0		piece	num1
-			cpta	num120		piece	num2
-			cpta	num24		piece	num3
+			cpta	num119		piece	num2
+			cpta	num23		piece	num3
 			cpta	num120		piece	num4
 			cpta	num0		piece	num5
-			cpta	num144		piece	num6
-			cpta 	num24		piece	num7
+			cpta	num143		piece	num6
+			cpta 	num23		piece	num7
 			cpta	num96		piece	num8
 			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
+			cpta	num119		piece	num10
+			cpta 	num47		piece	num11
 			cpta	num120		piece	num12
 			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
+			cpta	num143		piece	num14
+			cpta 	num47		piece	num15
 			
 			cpfa	cmx			cm		num0
 			cpfa	cmy			cm		num1
@@ -243,20 +83,20 @@ draw_piece2	cp		color		num55
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num24		piece	num1
-			cpta	num96		piece	num2
-			cpta	num48		piece	num3
+			cpta	num95		piece	num2
+			cpta	num47		piece	num3
 			cpta	num96		piece	num4
 			cpta	num24		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num48		piece	num7
+			cpta	num119		piece	num6
+			cpta 	num47		piece	num7
 			cpta	num120		piece	num8
 			cpta	num24		piece	num9
-			cpta	num144		piece	num10
-			cpta 	num48		piece	num11
+			cpta	num143		piece	num10
+			cpta 	num47		piece	num11
 			cpta	num120		piece	num12
 			cpta	num0		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num24		piece	num15
+			cpta	num143		piece	num14
+			cpta 	num23		piece	num15
 			
 			cpfa	cmx			cm		num2
 			cpfa	cmy			cm		num3
@@ -268,20 +108,20 @@ draw_piece3	cp		color		num43
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
+			cpta	num95		piece	num2
+			cpta	num23		piece	num3
 			cpta	num72		piece	num4
 			cpta	num24		piece	num5
-			cpta	num96		piece	num6
-			cpta 	num48		piece	num7
+			cpta	num95		piece	num6
+			cpta 	num47		piece	num7
 			cpta	num96		piece	num8
 			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
+			cpta	num119		piece	num10
+			cpta 	num47		piece	num11
 			cpta	num120		piece	num12
 			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
+			cpta	num143		piece	num14
+			cpta 	num47		piece	num15
 			
 			cpfa	cmx			cm		num4
 			cpfa	cmy			cm		num5
@@ -293,20 +133,20 @@ draw_piece4 cp		color		num28
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num24		piece	num1
-			cpta	num96		piece	num2
-			cpta	num48		piece	num3
+			cpta	num95		piece	num2
+			cpta	num47		piece	num3
 			cpta	num96		piece	num4
 			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
+			cpta	num119		piece	num6
+			cpta 	num23		piece	num7
 			cpta	num96		piece	num8
 			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
+			cpta	num119		piece	num10
+			cpta 	num47		piece	num11
 			cpta	num120		piece	num12
 			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
+			cpta	num143		piece	num14
+			cpta 	num47		piece	num15
 			
 			cpfa	cmx			cm		num6
 			cpfa	cmy			cm		num7
@@ -318,20 +158,20 @@ draw_piece5 cp		color		num3
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
+			cpta	num95		piece	num2
+			cpta	num23		piece	num3
 			cpta	num96		piece	num4
 			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
+			cpta	num119		piece	num6
+			cpta 	num23		piece	num7
 			cpta	num96		piece	num8
 			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
+			cpta	num119		piece	num10
+			cpta 	num47		piece	num11
 			cpta	num120		piece	num12
 			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
+			cpta	num143		piece	num14
+			cpta 	num47		piece	num15
 			
 			cpfa	cmx			cm		num8
 			cpfa	cmy			cm		num9
@@ -343,20 +183,20 @@ draw_piece6	cp		color		num97
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
+			cpta	num95		piece	num2
+			cpta	num23		piece	num3
 			cpta	num96		piece	num4
 			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
+			cpta	num119		piece	num6
+			cpta 	num23		piece	num7
 			cpta	num96		piece	num8
 			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
+			cpta	num119		piece	num10
+			cpta 	num47		piece	num11
 			cpta	num120		piece	num12
 			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
+			cpta	num143		piece	num14
+			cpta 	num47		piece	num15
 			
 			cpfa	cmx			cm		num10
 			cpfa	cmy			cm		num11
@@ -368,20 +208,20 @@ draw_piece7	cp		color		num72
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
+			cpta	num95		piece	num2
+			cpta	num23		piece	num3
 			cpta	num96		piece	num4
 			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
+			cpta	num119		piece	num6
+			cpta 	num23		piece	num7
 			cpta	num120		piece	num8
 			cpta	num0		piece	num9
-			cpta	num144		piece	num10
-			cpta 	num24		piece	num11
+			cpta	num143		piece	num10
+			cpta 	num23		piece	num11
 			cpta	num144		piece	num12
 			cpta	num0		piece	num13
-			cpta	num168		piece	num14
-			cpta 	num24		piece	num15
+			cpta	num167		piece	num14
+			cpta 	num23		piece	num15
 			
 			cpfa	cmx			cm		num12
 			cpfa	cmy			cm		num13
@@ -421,25 +261,15 @@ display_piece	cpfa	vga_x1	piece	num0
 				call 	display_rect 	vga_ret_addr
 				
 				ret		display_piece_ret_addr
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
 					
 // Helper function to get a random shape
 // Output: rand_shape
-get_random_shape	call	get_random_number rand_num_ret_addr
-				cp 	rand_shape		rand_num
-				ret 	rand_shape_ret_addr
+get_random_shape	call	get_random_number 	rand_num_ret_addr
+					cp 		rand_shape			rand_num
+					ret 	rand_shape_ret_addr
 
 // Applies an algorithm to generate a random number between 0 and 6
 // Output: rand_num
-<<<<<<< HEAD
-get_random_number	in 		5 		time				
-// Gets the clock time
-			cp 		rand_num	time
-			blt		skip_mod	rand_num	num7
-			cp		mod_op1	rand_num
-			call		mod		mod_ret_addr
-			cp		rand_num	mod_result
-=======
 get_random_number	in 		5 			time				// Gets the clock time
 					out		3			time
 					cp 		rand_num	time
@@ -447,9 +277,8 @@ get_random_number	in 		5 			time				// Gets the clock time
 					cp		mod_op1		rand_num
 					call	mod			mod_ret_addr
 					cp		rand_num	mod_result
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
 					
-skip_mod		ret 	rand_num_ret_addr
+skip_mod			ret 	rand_num_ret_addr
 
 //***************************************************************************//
 
@@ -480,6 +309,15 @@ move_current_piece
 // Erase old piece by drawing over the old rectangles with black
 erase_prev_image	cp		vga_color		num0
 					call 	display_piece	display_piece_ret_addr
+					
+					
+					
+					
+					
+					
+					
+					
+//*****************************************************************//START CHANGE HERE
 					
 // Calculate new coords by subtracting num24 from all of the y-coords
 calculate_new_coords	// Move the piece downward
@@ -606,7 +444,17 @@ check_for_bottom		cp		is_bottom_bool		num0
 						
 						be		subloop				num1			num1
 
-//***************************************************************************//
+//***************************************************************************//END CHANGE STUFF
+
+
+
+
+
+
+
+
+
+
 
 // Check for keyboard or user input
 check_for_input call 	check_for_keypress check_for_keypress_ret_addr
@@ -625,13 +473,22 @@ check_keypress_ret		ret		check_for_keypress_ret_addr
 
 // Checks if the user has made a relevant gesture
 check_for_camera_gesture
-// Check to see what possible move should be made
-// Check to see if move should be made based on time
-// Set return value
+							// Check to see what possible move should be made
+							// Check to see if move should be made based on time
+							// Set return value
 				
 // Checks to see what possible move should be made based on camera data				
 determine_move	
 
+
+
+
+
+
+
+
+
+//**********************************************//CHANGE HERE
 // Checks to see if move should be made based on time in move region
 is_move_valid			cpfa	my_x11		piece	num0
 						cpfa	my_y11		piece	num1
@@ -730,10 +587,21 @@ is_move_valid_return	cp	key		num0
 							
 //***************************************************************************//
 
-// Checks if the current piece is touching another stationary //piece
+
+
+
+
+
+
+
+
+
+
+
+// Checks if the current piece is touching another stationary piece
 is_block_touching
 
-// Stores the block coordinates so that they can be shifted upon //row completion
+// Stores the block coordinates so that they can be shifted upon row completion
 store_block_coord
 
 //***************************************************************************//
@@ -797,15 +665,10 @@ shift_rows
 // Utility Functions
 
 // Returns mod_result = mod_op1 % mod_op2
-<<<<<<< HEAD
-mod			sub mod_result 	mod_op1 mod_op2
-			blt mod		mod_op2 mod_op1
-=======
 mod			cp 	mod_result	mod_op1
 mod_loop	sub mod_result 	mod_result mod_op2
 			blt mod_loop	mod_op2 mod_result
 
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
 			ret mod_ret_addr
 
 //***************************************************************************//
@@ -813,16 +676,6 @@ mod_loop	sub mod_result 	mod_result mod_op2
 // Variables
 
 // The rectangle coordinates of the current piece
-<<<<<<< HEAD
-piece	.data	0	// x1,1
-	.data	0	// y1,1
-	.data	0	// x1,2
-	.data	0	// y1,2
-	.data	0	// x2,1
-	.data	0	// y2,1
-	.data	0	// x2,2
-	.data	0	// y2,2
-=======
 piece	.data	0	// x11
 		.data	0	// y11
 		.data	0	// x12
@@ -856,7 +709,6 @@ temparr	.data	0	// x11
 		.data	0	// y41
 		.data	0	// x42
 		.data	0	// y42
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
 		
 cm		.data	120	// x11
 		.data	24	// y11
@@ -873,23 +725,6 @@ cm		.data	120	// x11
 		.data	120	// x21
 		.data	24	// y21
 		
-<<<<<<< HEAD
-rand_color	.data 0
-rand_shape	.data 0
-rand_num	.data 0
-time		.data 0
-mod_op1	.data 0
-mod_op2	.data 7
-mod_result	.data 0
-				
-// Return addresses
-generate_piece_ret_addr	.data 0
-rand_num_ret_addr		.data 0
-rand_color_ret_addr		.data 0
-rand_shape_ret_addr		.data 0
-mod_ret_addr			.data 0
-vga_ret_addr2			.data	0
-=======
 screen_width				.data 640
 screen_height				.data 480
 game_width					.data 240
@@ -955,4 +790,3 @@ display_piece_ret_addr		.data 0
 move_current_piece_ret_addr	.data 0
 calc_rotate_coord_ret_addr	.data 0
 is_bottom_ret_addr			.data 0
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
