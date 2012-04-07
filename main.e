@@ -7,7 +7,7 @@
 
 // Application Entry Point
 
-			call	draw_menu		draw_menu_ret_addr
+start		call	draw_menu		draw_menu_ret_addr
 menuloop	call	get_keypress	ps2_ret_addr
 			bne		menuloop		ps2_ascii	num10
 
@@ -29,9 +29,23 @@ menuloop	call	get_keypress	ps2_ret_addr
 			cp		sd_addr_high_end	sound_file_high_end
 			//call 	load_sound			spkr_ret_addr
 			
-mainloop	// Generate a new Tetris piece
-			call 	generate_piece 		generate_piece_ret_addr
-			
+mainloop		// Check for Game Over scenario
+game_over		cp	vga_x	num2
+				cp	vga_y	num50
+
+game_over_sub	call	get_pixel_color		vga_ret_addr
+				bne	game_over_true	vga_color_read	num0
+				blt	not_over		num214	vga_x
+				add	vga_x			vga_x	num24
+				be	game_over_sub	num1	num1
+					
+				//If game over is true, display a game over message and halt the game
+game_over_true	be	start			num1	num1
+
+
+			// Generate a new Tetris piece
+not_over	call 	generate_piece 		generate_piece_ret_addr
+
 subloop		//call	play_sound			spkr_ret_addr
 			// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr
@@ -315,7 +329,7 @@ wait_second	in	5				current_time
 not_second	cp	second		num0
 			be	subloop		num1	num1
 		
-second_reached	add	next_time	current_time	num12
+second_reached	add	next_time	current_time	num8
 				cp	second		num1
 				out	3			current_time
 				add	counter		counter			num1

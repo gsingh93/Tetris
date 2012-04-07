@@ -1,5 +1,9 @@
 // Read a pixel from the SD card
 draw_menu
+				cp	sd_curr_addr_low	num0
+				cp	sd_curr_addr_high	num0
+				cp	counter_x			num0
+				cp	counter_y			num0
 get_sd_pixel	
 				cp		sd_addr_low			sd_curr_addr_low
 				cp		sd_addr_high 		sd_curr_addr_high
@@ -22,7 +26,6 @@ get_sd_pixel
 		
 //Check for end of SD card, switches from low address to high address
 sd_addr_chk2	add		sd_curr_addr_low		sd_curr_addr_low		num1
-				//blt		sd_low_chk			sd_curr_addr_low		sd_addr_low_end		
 
 sd_low_chk2	blt		get_sd_pixel	sd_curr_addr_low		fftn_bit_thresh
 
@@ -31,8 +34,9 @@ sd_low_chk2	blt		get_sd_pixel	sd_curr_addr_low		fftn_bit_thresh
 					be		get_sd_pixel			num0					num0
 
 
-			out 3	num1
-menu_end	ret	draw_menu_ret_addr
+menu_end	cp	sd_curr_addr_low	num0
+			cp	sd_curr_addr_high	num0
+			ret	draw_menu_ret_addr
 	
 
 counter_x	.data	0
