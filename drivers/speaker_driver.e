@@ -1,7 +1,7 @@
 // Speaker Driver
 // Author: Peter Romanelli
 
-play_sound
+play_sample
 
 //	Check initial response equal to 0
 spkr_check_response0	in	41						spkr_response
