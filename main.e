@@ -6,11 +6,15 @@
 // TODO: Add sound loaded from SDCard
 
 // Application Entry Point
-			
+
+			call	draw_menu		draw_menu_ret_addr
+menuloop	call	get_keypress	ps2_ret_addr
+			bne		menuloop		ps2_ascii	num10
+
 			// Make background black
 			cp		vga_color		num0
 			cp		vga_x1			num0
-			cp		vga_y2			num0
+			cp		vga_y1			num0
 			cp 		vga_x2			screen_width
 			cp 		vga_y2			screen_height
 			call 	display_rect 	vga_ret_addr
@@ -21,9 +25,10 @@
 			cp		vga_y2			screen_height
 			call 	display_rect 	vga_ret_addr
 			
-			cp		sd_addr_low_end	sound_file_low_end
+			cp		sd_addr_low_end		sound_file_low_end
 			cp		sd_addr_high_end	sound_file_high_end
 			//call 	load_sound			spkr_ret_addr
+			
 mainloop	// Generate a new Tetris piece
 			call 	generate_piece 		generate_piece_ret_addr
 			
@@ -571,7 +576,7 @@ calc_rotate_coord		sub 	rotate_var_2	rotate_var_1	num1
 						add		tempval	tempval	num23
 						cpta	tempval	piece	rotate_var_3
 						
-debug						ret		calc_rotate_coord_ret_addr	
+						ret		calc_rotate_coord_ret_addr	
 							
 is_move_valid_return	cp	key		num0
 						ret is_move_valid_ret_addr
@@ -661,6 +666,8 @@ shift_rows
 // Integer constants from -100 to 100. Format: num1, numneg1.
 // Also contains numbers corresponding to binary strings (1 to 4). Format: bit1
 #include constants.e
+
+#include draw_menu.e
 
 // Contains:	get_mic_sample
 // Inputs:		None
