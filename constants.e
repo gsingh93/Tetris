@@ -401,18 +401,6 @@ num96		.data	96
 num97		.data	97
 num98		.data	98
 num99		.data	99
-<<<<<<< HEAD
-num100	.data	100
-num120	.data	120
-num144	.data	144
-num168	.data	168
-num192	.data	192
-num240	.data	240
-num241	.data	241
-num255	.data	255
-num480	.data	480
-num640	.data	640
-=======
 num100		.data	100
 num101		.data	101
 num102		.data	102
@@ -614,4 +602,5 @@ num297		.data	297
 num298		.data	298
 num299		.data	299
 num300		.data	300
->>>>>>> 675ea6c1a87daa239ea7f78ae39b95b9102c6524
+num480		.data	480
+num640		.data	640
