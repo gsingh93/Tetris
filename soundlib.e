@@ -65,6 +65,7 @@ sdram_end_chk		blt			get_sample_sdram	sdram_currx				sdram_endx
 
 play_sound_end		cp			sd_curr_addr_low	num0
 					cp			sd_curr_addr_high	num0
+					out			4		num8
 					be			sdram_reset			num0					num0
 
 //Declarations

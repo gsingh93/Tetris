@@ -21,19 +21,22 @@
 			cp		vga_y2			screen_height
 			call 	display_rect 	vga_ret_addr
 			
+			cp		sd_addr_low_end	sound_file_low_end
+			cp		sd_addr_high_end	sound_file_high_end
+			//call 	load_sound			spkr_ret_addr
 mainloop	// Generate a new Tetris piece
-			call generate_piece generate_piece_ret_addr
+			call 	generate_piece 		generate_piece_ret_addr
 			
-subloop		// Check for keyboard or camera input
+subloop		//call	play_sound			spkr_ret_addr
+			// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr
-			
 			call 	wait_second 		wait_second_ret_addr	
 			
 			// Move piece based on input
 			call	move_current_piece	move_current_piece_ret_addr
 			
 			// Check if the current piece is touching another, and generate another if true
-			// Check if any rows should be deleted
+
 			// Restart loop
 			be	mainloop	second	num1 
 			be 	subloop		second	num0
@@ -659,6 +662,10 @@ shift_rows
 // Also contains numbers corresponding to binary strings (1 to 4). Format: bit1
 #include constants.e
 
+// Contains:	get_mic_sample
+// Inputs:		None
+// Outputs:		mic_sample
+// Ret Addr:	mic_ret_addr
 #include drivers/microphone_driver.e
 
 // Contains:	load_sound, play_sound
@@ -667,7 +674,7 @@ shift_rows
 // Outputs1:	None
 // Outputs2:	None
 // Ret Addr:	load_sound_ret_addr, play_sound_ret_addr
-//#include sound_functions.e
+#include soundlib.e
 
 // Contains:	display_camera_image
 // Inputs: 		x, y, cScale (1-4)
@@ -694,6 +701,12 @@ shift_rows
 // Outputs:		None
 // Ret Addr:	spkr_ret_addr
 #include drivers/speaker_driver.e
+
+// Contains: sdram_write, sdram_read
+#include drivers/sdram_driver.e
+
+// Contains: read_sdcard
+#include drivers/sdcard_driver.e
 
 //***************************************************************************//
 
@@ -764,7 +777,7 @@ screen_width				.data 640
 screen_height				.data 480
 game_width					.data 240
 		
-color					.data 0
+color						.data 0
 rand_shape					.data 0
 rand_num					.data 0
 time						.data 0
@@ -815,6 +828,8 @@ rotate_var_3				.data 0
 rotate_var_4				.data 0
 cmx							.data 0
 cmy							.data 0
+sound_file_low_end			.data 28815
+sound_file_high_end			.data 0
 rand1						.data 0
 rand2						.data 0
 rand3						.data 0

@@ -22,9 +22,8 @@ sd_get_data		in			84				sd_data
 
 //Return
 				ret			sd_ret_addr
+				
 
-
-//declarations
 sd_addr_low			.data 		0
 sd_addr_high		.data 		0
 sd_response			.data 		0

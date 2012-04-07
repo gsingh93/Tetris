@@ -34,7 +34,6 @@ sdram_get_data	in		36		sdram_data_out
 
 //*******************************************************************************//
 
-
 //Sets x and y address for sdram
 sdram_addr_set	out		33						sdram_x
 				out		34						sdram_y
@@ -47,7 +46,7 @@ sdram_chk_resp1	in		31						sdram_response
 
 //Checks for response to be equal to 1
 sdram_chk_resp0	in		31						sdram_response
-				bne		sdram_chk_resp0`		sdram_response		num0
+				bne		sdram_chk_resp0			sdram_response		num0
 				ret		sdram_chk_resp0_ret_addr
 
 //Declarations
