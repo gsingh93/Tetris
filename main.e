@@ -270,9 +270,19 @@ get_random_shape	call	get_random_number 	rand_num_ret_addr
 
 // Applies an algorithm to generate a random number between 0 and 6
 // Output: rand_num
-get_random_number	in 		5 			time				// Gets the clock time
-					out		3			time
-					cp 		rand_num	time
+get_random_number	call 	get_mic_sample	mic_ret_addr
+					and		rand1			mic_sample		num1
+					call 	get_mic_sample	mic_ret_addr
+					and		rand2			mic_sample		num1
+					call 	get_mic_sample	mic_ret_addr
+					and		rand3			mic_sample		num1
+					
+					mult	rand3		rand3	num4
+					mult	rand2		rand2	num2
+					add		rand2		rand2	rand3
+					add		rand1		rand1	rand2
+					
+					cp 		rand_num	rand1
 					blt		skip_mod	rand_num			num7
 					cp		mod_op1		rand_num
 					call	mod			mod_ret_addr
@@ -649,6 +659,8 @@ shift_rows
 // Also contains numbers corresponding to binary strings (1 to 4). Format: bit1
 #include constants.e
 
+#include drivers/microphone_driver.e
+
 // Contains:	load_sound, play_sound
 // Inputs1:		None
 // Inputs2:		sound_high_addr, sound_low_addr
@@ -803,6 +815,9 @@ rotate_var_3				.data 0
 rotate_var_4				.data 0
 cmx							.data 0
 cmy							.data 0
+rand1						.data 0
+rand2						.data 0
+rand3						.data 0
 
 // Return addresses
 generate_piece_ret_addr		.data 0
