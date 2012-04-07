@@ -463,11 +463,57 @@ fake_move_bottom		//erase
 				//if they are all 0, go to subloop
 				//out	3	test3
 				//out	4	test4
-				bne		mainloop	test1	num0
-				bne		mainloop	test2	num0
-				bne		mainloop	test3	num0
-				bne		mainloop	test4	num0
+				bne		finish	test1	num0
+				bne		finish	test2	num0
+				bne		finish	test3	num0
+				bne		finish	test4	num0
 				be		subloop		num1	num1
+// Check's for a complete row, and if one is found, then it is erased
+//To check for a complete row, this algorithm will check the rows inhabited by all 4 blocks. Even if 2 or more of the
+//blocks occupy the same row, this check will still test all 4. This will make the code less efficient at run time,
+//but it is an easier method to translate into code.
+check_row_complete_y1		// Check the coordinate (x, y11+12), where x is each blocks center
+						add 	vga_y		my_y11	num12
+						cp 		vga_x		numneg12
+						be		color_check_loop	num1	num1
+check_row_complete_y2		// Check the coordinate (x, y21+12), where x is each blocks center
+						add 	vga_y		my_y21	num12
+						cp 		vga_x		numneg12
+						be		color_check_loop	num1	num1
+check_row_complete_y3		// Check the coordinate (x, y31+12), where x is each blocks center
+						add 	vga_y		my_y31	num12
+						cp 		vga_x		numneg12
+						be		color_check_loop	num1	num1
+check_row_complete_y4		// Check the coordinate (x, y41+12), where x is each blocks center
+						add 	vga_y		my_y41	num12
+						cp 		vga_x		numneg12
+						be		color_check_loop	num1	num1
+						
+color_check_loop		add		vga_x		vga_x		num24
+						blt		complete_row_found		game_width			vga_x
+						call 	get_pixel_color			vga_ret_addr
+						out 	3	vga_color_read
+						be		color_check_loop_done	vga_color_read		num0
+						be		color_check_loop		num1				num1
+						
+complete_row_found		out 4 num12
+						cp	vga_color	num0
+						cp	vga_x1	num0
+						cp	vga_x2	num239
+						add	vga_y1	vga_y	numneg12
+						add	vga_y2	vga_y1	num24
+						call	display_rect	vga_ret_addr	
+						ret check_row_complete_ret_addr
+						
+color_check_loop_done	cp 	color_count		num0
+						ret check_row_complete_ret_addr
+						
+finish					call	check_row_complete_y1	check_row_complete_ret_addr
+						call	check_row_complete_y2	check_row_complete_ret_addr
+						call	check_row_complete_y3	check_row_complete_ret_addr
+						call	check_row_complete_y4	check_row_complete_ret_addr
+						be		mainloop		num1	num1
+
 
 //***************************************************************************//END CHANGE STUFF
 
@@ -868,6 +914,7 @@ test1						.data 0
 test2						.data 0
 test3						.data 0
 test4						.data 0
+color_count					.data 0
 
 // Return addresses
 generate_piece_ret_addr		.data 0
@@ -884,3 +931,4 @@ calc_rotate_coord_ret_addr	.data 0
 is_bottom_ret_addr			.data 0
 fake_move_ret_addr		.data 0
 check_rotate_ret_addr		.data 0
+check_row_complete_ret_addr	.data 0
