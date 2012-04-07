@@ -22,7 +22,7 @@
 			call 	display_rect 	vga_ret_addr
 			
 mainloop	// Generate a new Tetris piece
-			call generate_piece generate_piece_ret_addr
+			call game_over generate_piece_ret_addr
 			
 subloop		// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr
@@ -32,13 +32,26 @@ subloop		// Check for keyboard or camera input
 			// Move piece based on input
 			call	move_current_piece	move_current_piece_ret_addr
 			
-			// Check if the current piece is touching another, and generate another if true
-			// Check if any rows should be deleted
-			// Restart loop
-			be	mainloop	second	num1 
-			be 	subloop		second	num0
-			halt
-
+			
+//**************************************************************************//
+//Check's for Game-Over scenario
+game_over	cp	vga_x	num2
+		cp	vga_y	num50
+game_over_sub	call	get_pixel_color	vga_ret_addr
+		bne	game_over_true	vga_color_read	num0
+		blt	generate_piece	num214	vga_x
+		//out	4	vga_x
+		add	vga_x	vga_x	num24
+		be	game_over_sub	num1	num1
+		
+//If game over is true, display a game over message and halt the game. TODO: add a sound/graphic
+game_over_true	cp	vga_x1	num0
+		cp	vga_y1	num0
+		cp	vga_x2	num240
+		cp	vga_y2	screen_height
+		cp	vga_color	num224
+		call	display_rect	vga_ret_addr
+		halt
 //***************************************************************************//
 
 // Generates a random Tetris piece
