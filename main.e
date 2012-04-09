@@ -28,10 +28,10 @@ menuloop	call	get_keypress	ps2_ret_addr
 			cp		sd_addr_low_end		sound_file_low_end
 			cp		sd_addr_high_end	sound_file_high_end
 			//call 	load_sound			spkr_ret_addr
-			
-mainloop		// Check for Game Over scenario
+
+// Check for Game Over scenario
 game_over		cp	vga_x	num2
-				cp	vga_y	num50
+				cp	vga_y	num36
 
 game_over_sub	call	get_pixel_color		vga_ret_addr
 				bne	game_over_true	vga_color_read	num0
@@ -42,7 +42,7 @@ game_over_sub	call	get_pixel_color		vga_ret_addr
 				//If game over is true, display a game over message and halt the game
 game_over_true	be	start			num1	num1
 
-
+mainloop
 			// Generate a new Tetris piece
 not_over	call 	generate_piece 		generate_piece_ret_addr
 
@@ -53,7 +53,7 @@ subloop		//call	play_sound			spkr_ret_addr
 			
 			// Move piece based on input
 			call	move_current_piece	move_current_piece_ret_addr
-			
+debug2			
 			// Check if the current piece is touching another, and generate another if true
 
 			// Restart loop
@@ -314,20 +314,13 @@ skip_mod			ret 	rand_num_ret_addr
 
 //***************************************************************************//
 
-// This function ensures that the game waits one second before moving pieces
-// down the screen or generating new pieces. The current time is read and stored.
-// We check to see if next_time(initialized to 0) is less than current time.
-// If it is, then we say that the second has been reached. At this time, we
-// add 24 to the current time, and store that new value in next_time. We 
-// then repeat this process. 
-// If the function determines that the second has not been reached, then we 
-// move on with our program flow, checking for keyboard input and playing sound, 
-// then loop back to this function after we have done those two things.
-wait_second	in	5				current_time
-			blt	second_reached	next_time	current_time
+// Check if a certain amount of time has passed before moving piece downward
+// May not be one second.
+wait_second		in	5				current_time
+				blt	second_reached	next_time	current_time
 
-not_second	cp	second		num0
-			be	subloop		num1	num1
+not_second		cp	second		num0
+				be	subloop		num1	num1
 		
 second_reached	add	next_time	current_time	num8
 				cp	second		num1
@@ -337,147 +330,49 @@ second_reached	add	next_time	current_time	num8
 
 // Moves current Tetris piece
 move_current_piece
-
-// Erase old piece by drawing over the old rectangles with black
-erase_prev_image	cp		vga_color		num0
-					call 	display_piece	display_piece_ret_addr
-									
-// Calculate new coords by subtracting num24 from all of the y-coords
-calculate_new_coords	
-						// Shift piece based on input
-						cpfa	my_x11		piece	num0
-						cpfa	my_x12		piece	num2
-						cpfa	my_x21		piece	num4
-						cpfa	my_x22		piece	num6
-						cpfa	my_x31		piece	num8
-						cpfa	my_x32		piece	num10
-						cpfa	my_x41		piece	num12
-						cpfa	my_x42		piece	num14
-						be		fake_move_right	move_amount	num24
-						be		fake_move_left	move_amount	numneg24
-
-fake_move_passed		add		my_x11	my_x11		move_amount
-						cpta	my_x11	piece		num0
-						add		my_x12	my_x12		move_amount
-						cpta	my_x12	piece		num2
-						add		my_x21	my_x21		move_amount
-						cpta	my_x21	piece		num4
-						add		my_x22	my_x22		move_amount
-						cpta	my_x22	piece		num6
-						add		my_x31	my_x31		move_amount
-						cpta	my_x31	piece		num8
-						add		my_x32	my_x32		move_amount
-						cpta	my_x32	piece		num10
-						add		my_x41	my_x41		move_amount
-						cpta	my_x41	piece		num12
-						add		my_x42	my_x42		move_amount
-						cpta	my_x42	piece		num14
-						
-						add		cmx		cmx			move_amount
-						
-fake_move_failed		// Move the piece downward
-						cpfa	my_y11	piece	num1
-						cpfa	my_y12	piece	num3
-						cpfa	my_y21	piece	num5
-						cpfa	my_y22	piece	num7
-						cpfa	my_y31	piece	num9
-						cpfa	my_y32	piece	num11
-						cpfa	my_y41	piece	num13
-						cpfa	my_y42	piece	num15
-						add		my_y11	my_y11	num24
-						add		my_y12	my_y12	num24
-						add		my_y21	my_y21	num24
-						add		my_y22	my_y22	num24
-						add		my_y31	my_y31	num24
-						add		my_y32	my_y32	num24
-						add		my_y41	my_y41	num24
-						add		my_y42	my_y42	num24
-						cpta	my_y11	piece	num1
-						cpta	my_y12	piece	num3
-						cpta	my_y21	piece	num5
-						cpta	my_y22	piece	num7
-						cpta	my_y31	piece	num9
-						cpta	my_y32	piece	num11
-						cpta	my_y41	piece	num13
-						cpta	my_y42	piece	num15
-						
-						add		cmy		cmy		num24
-						
-						cp		move_amount			num0
-
-// Draw new piece by drawing rectangles with the new coords
-draw_new_image			cp		vga_color		color
-						call	display_piece	display_piece_ret_addr
-		
-// Check to see if we need to move the piece again, or draw a 
-// new piece.
-
-// Get the bottom-most y-value, and check if it is at the bottom of the screen
-// If it is, generate a new piece. If not, then keep looping
-get_bottom_y_value		cpfa	bottom_y1			piece		num3
-						cpfa	bottom_y2			piece		num7
-						cpfa	bottom_y3			piece		num11
-						cpfa	bottom_y4			piece		num15
-						
+					call	check_bottom_collision	check_bottom_collision_ret_addr
+					be		mainloop				bottom_reached			num1
+					
+					// Shift piece down
+					cpfa	my_y11	piece	num1
+					cpfa	my_y12	piece	num3
+					cpfa	my_y21	piece	num5
+					cpfa	my_y22	piece	num7
+					cpfa	my_y31	piece	num9
+					cpfa	my_y32	piece	num11
+					cpfa	my_y41	piece	num13
+					cpfa	my_y42	piece	num15
+					add		my_y11	my_y11	num24
+					add		my_y12	my_y12	num24
+					add		my_y21	my_y21	num24
+					add		my_y22	my_y22	num24
+					add		my_y31	my_y31	num24
+					add		my_y32	my_y32	num24
+					add		my_y41	my_y41	num24
+					add		my_y42	my_y42	num24
+					cpta	my_y11	piece	num1
+					cpta	my_y12	piece	num3
+					cpta	my_y21	piece	num5
+					cpta	my_y22	piece	num7
+					cpta	my_y31	piece	num9
+					cpta	my_y32	piece	num11
+					cpta	my_y41	piece	num13
+					cpta	my_y42	piece	num15
+					
+					add		cmy		cmy		num24
 				
-check_for_bottom		be	mainloop	bottom_y1	screen_height
-						be	mainloop	bottom_y2	screen_height
-						be	mainloop	bottom_y3	screen_height
-						be	mainloop	bottom_y3	screen_height
-						
-// Check to see if the current block has landed on another block.
-// If so, then the block will stop and a new one will be generated.
+					// Draw shifted piece
+					cp		vga_color		color
+					call	display_piece	display_piece_ret_addr
+					
+					ret		move_current_piece_ret_addr
 
-//SEQUENCE OF STEPS:
-// Erase the piece
-// Run the fake_move tests
-// If any fail, then back to mainloop
-// If none fail, then back to subloop
 
-fake_move_bottom		
-				// Erase piece	
-				cp		vga_color		num0
-				call 	display_piece	display_piece_ret_addr
+//*****************************************************************************
 				
-				// Test point (x11+12,y11+36), store color value in test1
-				add		vga_x	my_x11	num12
-				add		vga_y	my_y11	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test1	vga_color_read
-				
-				// Test point (x21+12,y21+36), store color value in test2
-				add		vga_x	my_x21	num12
-				add		vga_y	my_y21	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test2	vga_color_read
-				
-				// Test point (x31+12,y31+36), store color value in test3
-				add		vga_x	my_x31	num12
-				add		vga_y	my_y31	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test3	vga_color_read
-				
-				// Test point (x41+12,y41+36), store color value in test4
-				add		vga_x	my_x41	num12
-				add		vga_y	my_y41	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test4	vga_color_read
-				
-				// Redraw erased piece
-				cp		vga_color		color
-				call 	display_piece	display_piece_ret_addr
-			
-				// If any of the test values are not 0, then we will skip stop movement and go back to mainloop
-				// Otherwise, go to subloop
-				bne		mainloop	test1	num0
-				bne		mainloop	test2	num0
-				bne		mainloop	test3	num0
-				bne		mainloop	test4	num0
-				be		subloop		num1	num1
-
 // Check for keyboard or user input
-check_for_input call 	check_for_keypress check_for_keypress_ret_addr
-				ret 	check_for_input_ret_addr
+check_for_input 		call 	check_for_keypress check_for_keypress_ret_addr
+						ret 	check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key
 check_for_keypress		
@@ -499,9 +394,10 @@ check_for_camera_gesture
 // Checks to see what possible move should be made based on camera data				
 determine_move	
 
-//**********************************************//CHANGE HERE
+//*****************************************************************************
+
 // Checks to see if move should be made based on time in move region
-is_move_valid					cpfa	my_x11		piece	num0
+is_move_valid			cpfa	my_x11		piece	num0
 						cpfa	my_x12		piece	num2
 						cpfa	my_x21		piece	num4
 						cpfa	my_x22		piece	num6
@@ -515,21 +411,32 @@ is_move_valid					cpfa	my_x11		piece	num0
 						be		set_space_amount	key		space
 						be		is_move_valid_return	num1	num1
 										
-check_left					be	is_move_valid_return	my_x11		num0
+check_left				be	is_move_valid_return	my_x11		num0
 						be	is_move_valid_return	my_x21		num0
 						be	is_move_valid_return	my_x31		num0
 						be	is_move_valid_return	my_x41		num0
 						cp 	move_amount				numneg24
-						be	is_move_valid_return	num1		num1
+						call	check_left_right_collision	check_left_right_collision_ret_addr
+						be	is_move_valid_return	num1		num1						
 
-check_right					be	is_move_valid_return	my_x12		num239
+check_right				be	is_move_valid_return	my_x12		num239
 						be	is_move_valid_return	my_x22		num239
 						be	is_move_valid_return	my_x32		num239
 						be	is_move_valid_return	my_x42		num239
 						cp 	move_amount				num24
+						call	check_left_right_collision	check_left_right_collision_ret_addr
 						be	is_move_valid_return	num1		num1
 						
-set_space_amount		// Erase previous piece
+set_space_amount		be	is_move_valid_return	my_x11		num0
+						be	is_move_valid_return	my_x21		num0
+						be	is_move_valid_return	my_x31		num0
+						be	is_move_valid_return	my_x41		num0
+						be	is_move_valid_return	my_x12		num239
+						be	is_move_valid_return	my_x22		num239
+						be	is_move_valid_return	my_x32		num239
+						be	is_move_valid_return	my_x42		num239
+						
+						// Erase previous piece
 						cp		vga_color		num0
 						call	display_piece	display_piece_ret_addr
 						cp		vga_color		color
@@ -561,7 +468,8 @@ set_space_amount		// Erase previous piece
 						cp 		rotate_var_1		num13
 						call 	calc_rotate_coord calc_rotate_coord_ret_addr
 						call	display_piece	display_piece_ret_addr
-						be		is_move_valid_return	num1		num1		
+						//be	check_valid_left_right	num1		num1
+						be	is_move_valid_return	num1		num1		
 		
 calc_rotate_coord		sub 	rotate_var_2	rotate_var_1	num1
 						add		rotate_var_3	rotate_var_1	num2
@@ -592,72 +500,10 @@ calc_rotate_coord		sub 	rotate_var_2	rotate_var_1	num1
 						
 						ret		calc_rotate_coord_ret_addr	
 							
-is_move_valid_return	cp	key		num0
-						ret is_move_valid_ret_addr
-						
-// The fake_move functions will test if a move shift will overlap  
-fake_move_right
-				// Test point (x11+36,y11+36), store color value in test1
-				add		vga_x	my_x11	num36
-				add		vga_y	my_y11	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test1	vga_color_read
-				
-				// Test point (x21+36,y21+36), store color value in test2
-				add		vga_x	my_x21	num36
-				add		vga_y	my_y21	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test2	vga_color_read
-				
-				// Test point (x31+36,y31+36), store color value in test3
-				add		vga_x	my_x31	num36
-				add		vga_y	my_y31	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test3	vga_color_read
-				
-				// Test point (x41+36,y41+36), store color value in test4
-				add		vga_x	my_x41	num36
-				add		vga_y	my_y41	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test4	vga_color_read
-				
-				bne		fake_move_failed	test1	num0
-				bne		fake_move_failed	test2	num0
-				bne		fake_move_failed	test3	num0
-				bne		fake_move_failed	test4	num0	
-				be		fake_move_passed	num1	num1
-
-fake_move_left
-				// Test point (x11-12,y11+36), store color value in test1
-				add		vga_x	my_x11	numneg12
-				add		vga_y	my_y11	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test1	vga_color_read
-				
-				// Test point (x21-12,y21+36), store color value in test2
-				add		vga_x	my_x21	numneg12
-				add		vga_y	my_y21	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test2	vga_color_read
-				
-				// Test point (x31-12,y31+36), store color value in test3
-				add		vga_x	my_x31	numneg12
-				add		vga_y	my_y31	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test3	vga_color_read
-				
-				// Test point (x41-12,y41+36), store color value in test4
-				add		vga_x	my_x41	numneg12
-				add		vga_y	my_y41	num36
-				call	get_pixel_color	vga_ret_addr
-				cp		test4	vga_color_read
-				
-				bne		fake_move_failed	test1	num0
-				bne		fake_move_failed	test2	num0
-				bne		fake_move_failed	test3	num0
-				bne		fake_move_failed	test4	num0
-					
- 				be		fake_move_passed	num1	num1
+is_move_valid_return	call	display_piece	display_piece_ret_addr
+						cp		move_amount			num0
+						cp		key					num0
+						ret 	is_move_valid_ret_addr
 
 //***************************************************************************//
 
@@ -682,6 +528,8 @@ shift_rows
 #include constants.e
 
 #include draw_menu.e
+
+#include collisionlib.e
 
 // Contains:	get_mic_sample
 // Inputs:		None
