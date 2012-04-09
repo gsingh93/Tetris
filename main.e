@@ -8,20 +8,23 @@
 // Application Entry Point
 			
 			// Make background black
-			cp		vga_color		num0
+			//cp		vga_color		num0
 			cp		vga_x1			num0
 			cp		vga_y2			num0
 			cp 		vga_x2			screen_width
-			cp 		vga_y2			screen_height
+			cp 		vga_y2			num479
 			call 	display_rect 	vga_ret_addr
 			cp 		vga_color		num26
 			cp		vga_x1			num241
 			cp		vga_x2			num245
 			cp		vga_y1			num0
-			cp		vga_y2			screen_height
+			cp		vga_y2			num479
 			call 	display_rect 	vga_ret_addr
 			
 mainloop	// Generate a new Tetris piece
+			
+			add	mainloop_counter	mainloop_counter	num1
+			out	3	mainloop_counter
 			call game_over generate_piece_ret_addr
 			
 subloop		// Check for keyboard or camera input
@@ -35,14 +38,14 @@ subloop		// Check for keyboard or camera input
 			
 //**************************************************************************//
 //Check's for Game-Over scenario
-game_over	cp	vga_x	num2
-		cp	vga_y	num50
+game_over		cp	vga_x	num2
+				cp	vga_y	num50
 game_over_sub	call	get_pixel_color	vga_ret_addr
-		bne	game_over_true	vga_color_read	num0
-		blt	generate_piece	num214	vga_x
-		//out	4	vga_x
-		add	vga_x	vga_x	num24
-		be	game_over_sub	num1	num1
+				bne	game_over_true	vga_color_read	num0
+				blt	generate_piece	num214	vga_x
+				//out	4	vga_x
+				add	vga_x	vga_x	num24
+				be	game_over_sub	num1	num1
 		
 //If game over is true, display a game over message and halt the game. TODO: add a sound/graphic
 game_over_true	cp	vga_x1	num0
@@ -55,7 +58,23 @@ game_over_true	cp	vga_x1	num0
 //***************************************************************************//
 
 // Generates a random Tetris piece
-generate_piece	call get_random_shape	rand_shape_ret_addr
+generate_piece	cpta	num0	piece	num0
+				cpta	num0	piece	num1
+				cpta	num0	piece	num2
+				cpta	num0	piece	num3
+				cpta	num0	piece	num4
+				cpta	num0	piece	num5
+				cpta	num0	piece	num6
+				cpta	num0	piece	num7
+				cpta	num0	piece	num8
+				cpta	num0	piece	num9
+				cpta	num0	piece	num10
+				cpta	num0	piece	num11
+				cpta	num0	piece	num12
+				cpta	num0	piece	num13
+				cpta	num0	piece	num14
+				cpta	num0	piece	num15
+				call get_random_shape	rand_shape_ret_addr
 				
 				// Display piece
 				be draw_piece1 	rand_shape num0
@@ -284,7 +303,7 @@ get_random_shape	call	get_random_number 	rand_num_ret_addr
 // Applies an algorithm to generate a random number between 0 and 6
 // Output: rand_num
 get_random_number	in 		5 			time				// Gets the clock time
-					out		3			time
+					//out		3			time
 					cp 		rand_num	time
 					blt		skip_mod	rand_num			num7
 					cp		mod_op1		rand_num
@@ -312,7 +331,7 @@ not_second	cp	second		num0
 		
 second_reached	add	next_time	current_time	num6
 				cp	second		num1
-				out	3			current_time
+				//out	3			current_time
 				add	counter		counter			num1
 				ret				wait_second_ret_addr
 
@@ -330,7 +349,7 @@ erase_prev_image	cp		vga_color		num0
 					
 					
 					
-//*****************************************************************//START CHANGE HERE
+//*****************************************************************//
 					
 // Calculate new coords by subtracting num24 from all of the y-coords
 calculate_new_coords	
@@ -398,8 +417,8 @@ fake_move_failed				// Move the piece downward
 
 // Draw new piece by drawing rectangles with the new coords
 draw_new_image			cp		vga_color		color
-						out 4 vga_color
-						out 3 move_amount
+						//out 4 vga_color
+						//out 3 move_amount
 						call	display_piece	display_piece_ret_addr
 		
 // Check to see if we need to move the piece again, or draw a 
@@ -413,10 +432,10 @@ get_bottom_y_value		cpfa	bottom_y1			piece		num3
 						cpfa	bottom_y4			piece		num15
 						
 				
-check_for_bottom		be	mainloop	bottom_y1	screen_height
-				be	mainloop	bottom_y2	screen_height
-				be	mainloop	bottom_y3	screen_height
-				be	mainloop	bottom_y3	screen_height
+check_for_bottom	be	finish	bottom_y1	num479
+					be	finish	bottom_y2	num479
+					be	finish	bottom_y3	num479
+					be	finish	bottom_y4	num479
 						
 // Now, check to see if the current block has landed on another block.
 // If so, then the block will stop and a new one will be generated.
@@ -459,11 +478,11 @@ fake_move_bottom		//erase
 				call 	display_piece	display_piece_ret_addr
 			
 				
-				//Now, if any of the test values are not 0, then we will skip stop movement and go back to mainloop
+				//Now, if any of the test values are not 0, then we will skip stop movement and go to the check_row_complete function
 				//if they are all 0, go to subloop
 				//out	3	test3
 				//out	4	test4
-				bne		finish	test1	num0
+debug5			bne		finish	test1	num0
 				bne		finish	test2	num0
 				bne		finish	test3	num0
 				bne		finish	test4	num0
@@ -492,37 +511,166 @@ check_row_complete_y4		// Check the coordinate (x, y41+12), where x is each bloc
 color_check_loop		add		vga_x		vga_x		num24
 						blt		complete_row_found		game_width			vga_x
 						call 	get_pixel_color			vga_ret_addr
-						out 	3	vga_color_read
+						//out 	3	vga_color_read
 						be		color_check_loop_done	vga_color_read		num0
 						be		color_check_loop		num1				num1
 						
-complete_row_found		out 4 num12
+complete_row_found		//out 4 num12
 						cp	vga_color	num0
 						cp	vga_x1	num0
 						cp	vga_x2	num239
 						add	vga_y1	vga_y	numneg12
 						add	vga_y2	vga_y1	num24
-						call	display_rect	vga_ret_addr	
+						call	display_rect	vga_ret_addr
+						cp	complete_found	num1
 						ret check_row_complete_ret_addr
 						
-color_check_loop_done	cp 	color_count		num0
-						ret check_row_complete_ret_addr
+color_check_loop_done	ret check_row_complete_ret_addr
 						
 finish					call	check_row_complete_y1	check_row_complete_ret_addr
 						call	check_row_complete_y2	check_row_complete_ret_addr
 						call	check_row_complete_y3	check_row_complete_ret_addr
 						call	check_row_complete_y4	check_row_complete_ret_addr
+						be		shift_blocks	complete_found	num1	
 						be		mainloop		num1	num1
 
+//***************************************************************************//
+						
+shift_blocks			//start at y=screenheight-12 and keep checking all the way until y=12
+						//check for any entirely black rows
+						//if found, shift everything above it down 24 pixels
+						//repeat scan
+						//if none found, then reset complete_found to 0 and branch to mainloop
+						cp	complete_found	num0
+						add	vga_y	screen_height	numneg12
+shift_blocks_loop		cp	vga_x	numneg12
+						call	check_empty_row	check_empty_row_ret_addr
+						add	vga_y	vga_y	numneg24
+						//out	3	shift_counter
+						blt	mainloop	vga_y	num0
+						be	shift_blocks_loop	num1	num1
+						
+check_empty_row	
+						add	vga_x	vga_x	num24
+						blt	empty_row_found	game_width	vga_x
+						call 	get_pixel_color			vga_ret_addr
+						//out 	3	vga_color_read
+						bne		check_empty_row_done	vga_color_read		num0
+						be		check_empty_row		num1				num1
+check_empty_row_done	ret	check_empty_row_ret_addr
 
-//***************************************************************************//END CHANGE STUFF
+empty_row_found			//start at (0, vga_y - 36), and scan across the width of the screen, reading the color of each
+						//block, then re-drawing it shifted down 24 pixels. once the width of the screen is hit, subtract 24
+						//from vga_y1, and repeat the scan and redraw. Repeat this method until my_y = 0. Finally, return
+						//to check_empty_row_ret_addr.
+						
+						//but first, check if there are 5 empty rows in a row. If so, then skip this and go to mainloop
+						//if this check is not included, then the program will loop forever and keep finding empty rows
+						cp	vga_x	numneg12
+						add	vga_y	vga_y	numneg24
+						
+another_empty_row_loop	add	vga_x	vga_x	num24
+						blt	add_1	game_width		vga_x
+go_here					call 	get_pixel_color			vga_ret_addr
+						bne		not_5_empty_row		vga_color_read		num0
+						be		another_empty_row_loop		num1				num1
+						
+add_1					add	empty_row_counter	empty_row_counter	num1
+						//out	3	empty_row_counter
+						blt	mainloop	num4	empty_row_counter
+						be	go_here	num1	num1
+						
+not_5_empty_row			add	vga_y1	vga_y	num12
+empty_row_loop			cp	vga_x1	num0
+						out	4	vga_y1
+						call	shift_down	shift_down_ret_addr
+						add	vga_y1	vga_y1	numneg47
+						blt	shift_blocks_loop	vga_y1	num0
+						//out	3	shift_counter
+						be	empty_row_loop	num1	num1
+		
+	
+shift_down				//first, get block colors. then, redraw blocks 24 pixels down
 
+get_block_colors		add	shift_counter	shift_counter	num1
+						//out	3	shift_counter
+						add	vga_y	vga_y1	num12
+						cp	vga_x	num12
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_1	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_2	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_3	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_4	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_5	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_6	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_7	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_8	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_9	vga_color_read
+						add	vga_x	vga_x	num24
+						call 	get_pixel_color			vga_ret_addr
+						cp	vga_color_block_10	vga_color_read
 
+redraw_blocks			add	vga_y1	vga_y1	num23
+						add	vga_x2	vga_x1	num24
+						add	vga_y2	vga_y1	num24
+						cp	vga_color	vga_color_block_1
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_2
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_3
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_4
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_5
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_6
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_7
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_8
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_9
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_10
+						call	display_rect	vga_ret_addr
+						ret		shift_down_ret_addr
+						
 
-
-
-
-
+//***************************************************************************//
 
 
 
@@ -536,7 +684,7 @@ check_for_keypress
 						// Get keypress, if any
 						call	get_keypress	ps2_ret_addr
 						cp		key				ps2_ascii
-						out 	3 				key	
+						//out 	3 				key	
 						be		check_keypress_ret	ps2_pressed		num0
 						call 	is_move_valid	is_move_valid_ret_addr
 						
@@ -874,6 +1022,7 @@ key							.data 0
 current_time				.data 0
 next_time					.data 0
 second						.data 0
+my_y						.data 0
 my_y11						.data 0
 my_y12						.data 0
 my_y21						.data 0
@@ -915,6 +1064,22 @@ test2						.data 0
 test3						.data 0
 test4						.data 0
 color_count					.data 0
+complete_found				.data 0
+vga_color_block_1			.data 0
+vga_color_block_2			.data 0
+vga_color_block_3			.data 0
+vga_color_block_4			.data 0
+vga_color_block_5			.data 0
+vga_color_block_6			.data 0
+vga_color_block_7			.data 0
+vga_color_block_8			.data 0
+vga_color_block_9			.data 0
+vga_color_block_10			.data 0
+shift_counter				.data 0
+empty_row_counter			.data 0
+mainloop_counter			.data 0
+num510						.data 510
+num479						.data 479
 
 // Return addresses
 generate_piece_ret_addr		.data 0
@@ -932,3 +1097,5 @@ is_bottom_ret_addr			.data 0
 fake_move_ret_addr		.data 0
 check_rotate_ret_addr		.data 0
 check_row_complete_ret_addr	.data 0
+check_empty_row_ret_addr	.data 0
+shift_down_ret_addr			.data 0
