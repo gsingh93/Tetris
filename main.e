@@ -75,7 +75,7 @@ generate_piece	call get_random_shape	rand_shape_ret_addr
 				be draw_piece6 	rand_shape num5
 				be draw_piece7 	rand_shape num6
 
-// Piece1 is a square
+// Piece1 is a red square
 draw_piece1	cp		color		num224
 			cp		vga_color	color
 			cpta	num96		piece	num0
@@ -101,7 +101,7 @@ draw_piece1	cp		color		num224
 			be	finish_generation	num1	num1
 
 // Piece2 is a L
-draw_piece2	cp		color		num55
+draw_piece2	cp		color		num236
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num24		piece	num1
@@ -150,7 +150,7 @@ draw_piece3	cp		color		num43
 			
 			be	finish_generation	num1	num1
 
-// Piece4 is a T. cmx: 132, cmy: 12
+// Piece4 is a T
 draw_piece4 cp		color		num28
 			cp		vga_color	color
 			cpta	num72		piece	num0
@@ -226,7 +226,7 @@ draw_piece6	cp		color		num97
 			be	finish_generation	num1	num1
 
 // Piece7 is a straight line
-draw_piece7	cp		color		num72
+draw_piece7	cp		color		num252
 			cp		vga_color	color
 			cpta	num72		piece	num0
 			cpta	num0		piece	num1
