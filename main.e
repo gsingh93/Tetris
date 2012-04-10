@@ -28,38 +28,18 @@ menuloop	call	get_keypress	ps2_ret_addr
 			cp		sd_addr_low_end		sound_file_low_end
 			cp		sd_addr_high_end	sound_file_high_end
 			//call 	load_sound			spkr_ret_addr
-
-// Check for Game Over scenario
-game_over		cp	vga_x	num2
-				cp	vga_y	num36
-
-game_over_sub	call	get_pixel_color		vga_ret_addr
-				bne	game_over_true	vga_color_read	num0
-				blt	not_over		num214	vga_x
-				add	vga_x			vga_x	num24
-				be	game_over_sub	num1	num1
-					
-				//If game over is true, display a game over message and halt the game
-game_over_true	be	start			num1	num1
-
+			call	generate_piece		generate_piece_ret_addr
 mainloop
-			// Generate a new Tetris piece
-not_over	call 	generate_piece 		generate_piece_ret_addr
-			cp		bottom_reached		num0
-subloop		//call	play_sound			spkr_ret_addr
+			//call	play_sound			spkr_ret_addr
+
 			// Check for keyboard or camera input
-			call 	check_for_input 	check_for_input_ret_addr
-			//call 	wait_second 		wait_second_ret_addr	
+			call 	check_for_input 	check_for_input_ret_addr	
 			
 			// Move piece based on input
 			call	move_current_piece	move_current_piece_ret_addr
 			
-			// Check if the current piece is touching another, and generate another if true
-			be	subloop		bottom_reached		num0
-			
 			// Restart loop
-			be	mainloop	second	num1 
-			be 	subloop		second	num0
+			be	mainloop	num1	num1
 			halt
 
 //***************************************************************************//
@@ -319,13 +299,12 @@ move_current_piece
 
 // Check if a certain amount of time has passed before moving piece downward
 // May not be one second.
-wait_second		in	5				current_time
-				blt	second_reached	next_time	current_time
-
-not_second		cp	second		num0
-				be	subloop		num1	num1
+wait			in	5				current_time
+				blt	wait_done		next_time	current_time
+				
+				ret	move_current_piece_ret_addr
 		
-second_reached	add	next_time	current_time	num8
+wait_done		add	next_time	current_time	num8
 				cp	second		num1
 				out	3			current_time
 				add	counter		counter			num1
@@ -381,7 +360,28 @@ second_reached	add	next_time	current_time	num8
 skip_shift			// Draw shifted piece
 					cp		vga_color		color
 					call	display_piece	display_piece_ret_addr
-					be		mainloop		num1	num1
+					
+					call	check_game_over	check_game_over_ret_addr
+					
+					call 	generate_piece 		generate_piece_ret_addr
+					cp		bottom_reached		num0
+					
+					ret		move_current_piece_ret_addr
+					
+// Check for Game Over scenario
+check_game_over		cp	vga_x	num2
+					cp	vga_y	num12 // TODO: IS THIS THE RIGHT VALUE? IF SO DRAW LINE
+
+game_over_sub		call	get_pixel_color		vga_ret_addr
+					bne		game_over_true		vga_color_read	num0
+					blt		not_over			num214			vga_x
+					add		vga_x				vga_x			num24
+					be		game_over_sub		num1			num1
+					
+				//If game over is true, display a game over message and halt the game
+game_over_true	be			start			num1	num1
+
+not_over		ret			check_game_over_ret_addr
 
 
 //*****************************************************************************
@@ -733,3 +733,4 @@ display_piece_ret_addr		.data 0
 move_current_piece_ret_addr	.data 0
 calc_rotate_coord_ret_addr	.data 0
 is_bottom_ret_addr			.data 0
+check_game_over_ret_addr	.data 0
