@@ -96,7 +96,6 @@ draw_piece4 cp		color		num28
 
 // Piece5 is a backwards Z
 draw_piece5 cp		color		num3
-
 			cpta	num72		piece	num0
 			cpta	num0		piece	num1
 			cpta	num96		piece	num2
@@ -121,7 +120,6 @@ draw_piece5 cp		color		num3
 
 // Piece6 is a Z
 draw_piece6	cp		color		num97
-
 			cpta	num72		piece	num0
 			cpta	num0		piece	num1
 			cpta	num96		piece	num2

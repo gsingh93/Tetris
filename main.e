@@ -296,19 +296,9 @@ check_right				be	is_move_valid_return	my_x12		num239
 						call	check_left_right_collision	check_left_right_collision_ret_addr
 						be	is_move_valid_return	num1		num1
 						
-set_space_amount		be	is_move_valid_return	my_x11		num0
-						be	is_move_valid_return	my_x21		num0
-						be	is_move_valid_return	my_x31		num0
-						be	is_move_valid_return	my_x41		num0
-						be	is_move_valid_return	my_x12		num239
-						be	is_move_valid_return	my_x22		num239
-						be	is_move_valid_return	my_x32		num239
-						be	is_move_valid_return	my_x42		num239
-						
-						// Erase previous piece
-						cp		vga_color		num0
-						call	display_piece	display_piece_ret_addr
-						cp		vga_color		color
+set_space_amount						
+						call	check_rotate_collision	check_rotate_collision_ret_addr
+						be		is_move_valid_return	rotate_move_passed		num0
 						
 						//Make Temp Array
 						cpfa	tempval	piece	num0
