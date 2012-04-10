@@ -1,10 +1,3 @@
-// Possible features for the future:
-// * Scores
-// * Levels (velocity change after certain score)
-// * Saving high score after certain number of levels completed
-
-// TODO: Add sound loaded from SDCard
-
 // Application Entry Point
 
 start		call	draw_menu		draw_menu_ret_addr
@@ -45,7 +38,9 @@ mainloop
 //***************************************************************************//
 
 // Generates a random Tetris piece
-generate_piece	call get_random_shape	rand_shape_ret_addr
+generate_piece	cp		prev_shape			rand_shape
+generate_loop	call 	get_random_shape	rand_shape_ret_addr
+				be		generate_loop		rand_shape			prev_shape
 				
 				// Display piece
 				be create_piece1 	rand_shape num0
@@ -327,7 +322,6 @@ set_space_amount
 						cp 		rotate_var_1		num13
 						call 	calc_rotate_coord calc_rotate_coord_ret_addr
 						call	display_piece	display_piece_ret_addr
-						//be	check_valid_left_right	num1		num1
 						be	is_move_valid_return	num1		num1		
 		
 calc_rotate_coord		sub 	rotate_var_2	rotate_var_1	num1
@@ -551,6 +545,7 @@ sound_file_high_end			.data 0
 rand1						.data 0
 rand2						.data 0
 rand3						.data 0
+prev_shape					.data 0
 
 // Return addresses
 generate_piece_ret_addr		.data 0

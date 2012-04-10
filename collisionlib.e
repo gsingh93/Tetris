@@ -106,10 +106,20 @@ fake_move_right
 				call	get_pixel_color	vga_ret_addr
 				cp		test4	vga_color_read
 				
+				add		temp_x12	my_x12	move_amount
+				add		temp_x22	my_x22	move_amount
+				add		temp_x32	my_x32	move_amount
+				add		temp_x42	my_x42	move_amount
+				
 				bne		fake_move_failed		test1	num0
 				bne		fake_move_failed		test2	num0
 				bne		fake_move_failed		test3	num0
 				bne		fake_move_failed		test4	num0
+				blt		fake_move_failed		num240	temp_x12
+				blt		fake_move_failed		num240	temp_x22
+				blt		fake_move_failed		num240	temp_x32
+				blt		fake_move_failed		num240	temp_x42
+				
 				
 				be		fake_move_passed	num1	num1
 
@@ -138,10 +148,20 @@ fake_move_left
 				call	get_pixel_color	vga_ret_addr
 				cp		test4	vga_color_read
 				
+				add		temp_x12	my_x12	move_amount
+				add		temp_x22	my_x22	move_amount
+				add		temp_x32	my_x32	move_amount
+				add		temp_x42	my_x42	move_amount
+				
 				bne		fake_move_failed		test1	num0
 				bne		fake_move_failed		test2	num0
 				bne		fake_move_failed		test3	num0
 				bne		fake_move_failed		test4	num0
+				
+				blt		fake_move_failed		temp_x12	num0
+				blt		fake_move_failed		temp_x22	num0
+				blt		fake_move_failed		temp_x32	num0
+				blt		fake_move_failed		temp_x42	num0
 					
  				be		fake_move_passed	num1	num1
 				
@@ -354,6 +374,10 @@ bottom_y4							.data 	0
 bottom_y							.data 	0
 bottom_x							.data 	0
 rotate_move_passed					.data	0
+temp_x12							.data	0
+temp_x22							.data	0
+temp_x32							.data	0
+temp_x42							.data	0
 
 check_bottom_collision_ret_addr		.data	0
 check_left_right_collision_ret_addr	.data	0
