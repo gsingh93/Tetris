@@ -48,190 +48,45 @@ mainloop
 generate_piece	call get_random_shape	rand_shape_ret_addr
 				
 				// Display piece
-				be draw_piece1 	rand_shape num0
-				be draw_piece2 	rand_shape num1
-				be draw_piece3 	rand_shape num2
-				be draw_piece4 	rand_shape num3
-				be draw_piece5 	rand_shape num4
-				be draw_piece6 	rand_shape num5
-				be draw_piece7 	rand_shape num6
-
-// Piece1 is a red square
-draw_piece1	cp		color		num224
-			cp		vga_color	color
-			cpta	num96		piece	num0
-			cpta	num0		piece	num1
-			cpta	num120		piece	num2
-			cpta	num24		piece	num3
-			cpta	num120		piece	num4
-			cpta	num0		piece	num5
-			cpta	num144		piece	num6
-			cpta 	num24		piece	num7
-			cpta	num96		piece	num8
-			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
-			cpta	num120		piece	num12
-			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
+				be create_piece1 	rand_shape num0
+				be create_piece2 	rand_shape num1
+				be create_piece3 	rand_shape num2
+				be create_piece4 	rand_shape num3
+				be create_piece5 	rand_shape num4
+				be create_piece6 	rand_shape num5
+				be create_piece7 	rand_shape num6
+				
+create_piece1
+				call	draw_piece1			piece_factory_ret_addr
+				be		finish_generation	num1	num1
+				
+create_piece2
+				call	draw_piece2			piece_factory_ret_addr
+				be		finish_generation	num1	num1
+				
+create_piece3
+				call	draw_piece3			piece_factory_ret_addr
+				be		finish_generation	num1	num1
+				
+create_piece4
+				call	draw_piece4			piece_factory_ret_addr
+				be		finish_generation	num1	num1
+				
+create_piece5
+				call	draw_piece5			piece_factory_ret_addr
+				be		finish_generation	num1	num1
+				
+				
+create_piece6
+				call	draw_piece6			piece_factory_ret_addr
+				be		finish_generation	num1	num1
+				
+create_piece7
+				call	draw_piece7			piece_factory_ret_addr
+				be		finish_generation	num1	num1
 			
-			cpfa	cmx			cm		num0
-			cpfa	cmy			cm		num1
-			
-			be	finish_generation	num1	num1
-
-// Piece2 is a L
-draw_piece2	cp		color		num236
-			cp		vga_color	color
-			cpta	num72		piece	num0
-			cpta	num24		piece	num1
-			cpta	num96		piece	num2
-			cpta	num48		piece	num3
-			cpta	num96		piece	num4
-			cpta	num24		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num48		piece	num7
-			cpta	num120		piece	num8
-			cpta	num24		piece	num9
-			cpta	num144		piece	num10
-			cpta 	num48		piece	num11
-			cpta	num120		piece	num12
-			cpta	num0		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num24		piece	num15
-			
-			cpfa	cmx			cm		num2
-			cpfa	cmy			cm		num3
-			
-			be	finish_generation	num1	num1
-
-// Piece3 is a backwards L
-draw_piece3	cp		color		num43
-			cp		vga_color	color
-			cpta	num72		piece	num0
-			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
-			cpta	num72		piece	num4
-			cpta	num24		piece	num5
-			cpta	num96		piece	num6
-			cpta 	num48		piece	num7
-			cpta	num96		piece	num8
-			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
-			cpta	num120		piece	num12
-			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
-			
-			cpfa	cmx			cm		num4
-			cpfa	cmy			cm		num5
-			
-			be	finish_generation	num1	num1
-
-// Piece4 is a T
-draw_piece4 cp		color		num28
-			cp		vga_color	color
-			cpta	num72		piece	num0
-			cpta	num24		piece	num1
-			cpta	num96		piece	num2
-			cpta	num48		piece	num3
-			cpta	num96		piece	num4
-			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
-			cpta	num96		piece	num8
-			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
-			cpta	num120		piece	num12
-			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
-			
-			cpfa	cmx			cm		num6
-			cpfa	cmy			cm		num7
-			
-			be	finish_generation	num1	num1
-
-// Piece5 is a backwards Z
-draw_piece5 cp		color		num3
-			cp		vga_color	color
-			cpta	num72		piece	num0
-			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
-			cpta	num96		piece	num4
-			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
-			cpta	num96		piece	num8
-			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
-			cpta	num120		piece	num12
-			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
-			
-			cpfa	cmx			cm		num8
-			cpfa	cmy			cm		num9
-			
-			be	finish_generation	num1	num1
-
-// Piece6 is a Z
-draw_piece6	cp		color		num97
-			cp		vga_color	color
-			cpta	num72		piece	num0
-			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
-			cpta	num96		piece	num4
-			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
-			cpta	num96		piece	num8
-			cpta	num24		piece	num9
-			cpta	num120		piece	num10
-			cpta 	num48		piece	num11
-			cpta	num120		piece	num12
-			cpta	num24		piece	num13
-			cpta	num144		piece	num14
-			cpta 	num48		piece	num15
-			
-			cpfa	cmx			cm		num10
-			cpfa	cmy			cm		num11
-			
-			be	finish_generation	num1	num1
-
-// Piece7 is a straight line
-draw_piece7	cp		color		num252
-			cp		vga_color	color
-			cpta	num72		piece	num0
-			cpta	num0		piece	num1
-			cpta	num96		piece	num2
-			cpta	num24		piece	num3
-			cpta	num96		piece	num4
-			cpta	num0		piece	num5
-			cpta	num120		piece	num6
-			cpta 	num24		piece	num7
-			cpta	num120		piece	num8
-			cpta	num0		piece	num9
-			cpta	num144		piece	num10
-			cpta 	num24		piece	num11
-			cpta	num144		piece	num12
-			cpta	num0		piece	num13
-			cpta	num168		piece	num14
-			cpta 	num24		piece	num15
-			
-			cpfa	cmx			cm		num12
-			cpfa	cmy			cm		num13
-			
-			be	finish_generation	num1	num1
-			
-finish_generation	call	display_piece	display_piece_ret_addr
+finish_generation	cp		vga_color	color
+					call	display_piece	display_piece_ret_addr
 					ret 	generate_piece_ret_addr
 			
 // Displays the current piece on the screen
@@ -305,8 +160,6 @@ wait			in	5				current_time
 				ret	move_current_piece_ret_addr
 		
 wait_done		add	next_time	current_time	num8
-				cp	second		num1
-				out	3			current_time
 				add	counter		counter			num1
 
 // Moves current Tetris piece
@@ -546,6 +399,8 @@ shift_rows
 
 #include draw_menu.e
 
+#include piecefactory.e
+
 #include collisionlib.e
 
 // Contains:	get_mic_sample
@@ -666,14 +521,12 @@ game_width					.data 240
 color						.data 0
 rand_shape					.data 0
 rand_num					.data 0
-time						.data 0
 mod_op1						.data 0
 mod_op2						.data 7
 mod_result					.data 0
 key							.data 0
 current_time				.data 0
 next_time					.data 0
-second						.data 0
 my_y11						.data 0
 my_y12						.data 0
 my_y21						.data 0
@@ -690,13 +543,6 @@ my_x31						.data 0
 my_x32						.data 0
 my_x41						.data 0
 my_x42						.data 0
-bottom_y1					.data 0
-bottom_y2					.data 0
-bottom_y3					.data 0
-bottom_y4					.data 0
-bottom_y					.data 0
-bottom_x					.data 0
-is_bottom_bool				.data 0
 counter						.data 0
 move_amount					.data 0
 left						.data 52
@@ -704,10 +550,6 @@ right						.data 54
 space						.data 32
 tempval						.data 0
 finalval					.data 0
-test1						.data 0
-test2						.data 0
-test3						.data 0
-test4						.data 0
 rotate_var_1				.data 0	
 rotate_var_2				.data 0	
 rotate_var_3				.data 0	
@@ -728,9 +570,7 @@ check_for_input_ret_addr	.data 0
 check_for_keypress_ret_addr	.data 0
 is_move_valid_ret_addr		.data 0
 mod_ret_addr				.data 0
-wait_second_ret_addr		.data 0
 display_piece_ret_addr		.data 0
 move_current_piece_ret_addr	.data 0
 calc_rotate_coord_ret_addr	.data 0
-is_bottom_ret_addr			.data 0
 check_game_over_ret_addr	.data 0

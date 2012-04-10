@@ -164,3 +164,13 @@ bottom_reached						.data	0
 check_left_right_collision_ret_addr	.data	0
 check_bottom_collision_ret_addr		.data	0
 erase_image_ret_addr				.data	0
+test1								.data 	0
+test2								.data 	0
+test3								.data 	0
+test4								.data 	0
+bottom_y1							.data 	0
+bottom_y2							.data 	0
+bottom_y3							.data 	0
+bottom_y4							.data 	0
+bottom_y							.data 	0
+bottom_x							.data 	0
