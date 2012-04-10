@@ -21,7 +21,7 @@ check_for_bottom		be	check_bottom_return_true	bottom_y1	screen_height
 // Check to see if the current block has landed on another block.
 // If so, then the block will stop and a new one will be generated.
 
-is_bottom_move_valid		
+is_bottom_move_valid
 					// Erase piece	
 					call	erase_image	erase_image_ret_addr
 					
@@ -54,7 +54,7 @@ is_bottom_move_valid
 					bne	check_bottom_return_true	test2	num0
 					bne	check_bottom_return_true	test3	num0
 					bne	check_bottom_return_true	test4	num0
-debug	
+
 					be	check_bottom_return_false	num1	num1
 					
 check_bottom_return_true	cp		bottom_reached				num1

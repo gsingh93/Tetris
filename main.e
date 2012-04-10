@@ -45,17 +45,18 @@ game_over_true	be	start			num1	num1
 mainloop
 			// Generate a new Tetris piece
 not_over	call 	generate_piece 		generate_piece_ret_addr
-
+			cp		bottom_reached		num0
 subloop		//call	play_sound			spkr_ret_addr
 			// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr
-			call 	wait_second 		wait_second_ret_addr	
+			//call 	wait_second 		wait_second_ret_addr	
 			
 			// Move piece based on input
 			call	move_current_piece	move_current_piece_ret_addr
-debug2			
+			
 			// Check if the current piece is touching another, and generate another if true
-
+			be	subloop		bottom_reached		num0
+			
 			// Restart loop
 			be	mainloop	second	num1 
 			be 	subloop		second	num0
@@ -314,6 +315,8 @@ skip_mod			ret 	rand_num_ret_addr
 
 //***************************************************************************//
 
+move_current_piece
+
 // Check if a certain amount of time has passed before moving piece downward
 // May not be one second.
 wait_second		in	5				current_time
@@ -326,14 +329,9 @@ second_reached	add	next_time	current_time	num8
 				cp	second		num1
 				out	3			current_time
 				add	counter		counter			num1
-				ret				wait_second_ret_addr
 
 // Moves current Tetris piece
-move_current_piece
-					call	check_bottom_collision	check_bottom_collision_ret_addr
-					be		mainloop				bottom_reached			num1
-					
-					// Shift piece down
+	
 					cpfa	my_y11	piece	num1
 					cpfa	my_y12	piece	num3
 					cpfa	my_y21	piece	num5
@@ -342,6 +340,19 @@ move_current_piece
 					cpfa	my_y32	piece	num11
 					cpfa	my_y41	piece	num13
 					cpfa	my_y42	piece	num15
+					cpfa	my_x11	piece	num0
+					cpfa	my_x12	piece	num2
+					cpfa	my_x21	piece	num4
+					cpfa	my_x22	piece	num6
+					cpfa	my_x31	piece	num8
+					cpfa	my_x32	piece	num10
+					cpfa	my_x41	piece	num12
+					cpfa	my_x42	piece	num14
+					
+					call	check_bottom_collision	check_bottom_collision_ret_addr
+					be		skip_shift				bottom_reached			num1
+					
+					// Shift piece down
 					add		my_y11	my_y11	num24
 					add		my_y12	my_y12	num24
 					add		my_y21	my_y21	num24
@@ -366,6 +377,11 @@ move_current_piece
 					call	display_piece	display_piece_ret_addr
 					
 					ret		move_current_piece_ret_addr
+
+skip_shift			// Draw shifted piece
+					cp		vga_color		color
+					call	display_piece	display_piece_ret_addr
+					be		mainloop		num1	num1
 
 
 //*****************************************************************************
@@ -500,7 +516,8 @@ calc_rotate_coord		sub 	rotate_var_2	rotate_var_1	num1
 						
 						ret		calc_rotate_coord_ret_addr	
 							
-is_move_valid_return	call	display_piece	display_piece_ret_addr
+is_move_valid_return	cp		vga_color		color
+						call	display_piece	display_piece_ret_addr
 						cp		move_amount			num0
 						cp		key					num0
 						ret 	is_move_valid_ret_addr
