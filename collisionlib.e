@@ -330,15 +330,15 @@ check_rotate_collision_return
 								bne		rotate_move_failed		test3	num0
 								bne		rotate_move_failed		test4	num0
 								
-								be		rotate_move_failed		my_x11	num0
-								be		rotate_move_failed		my_x21	num0
-								be		rotate_move_failed		my_x31	num0
-								be		rotate_move_failed		my_x41	num0
+								be		rotate_move_failed		my_x11	numneg1
+								be		rotate_move_failed		my_x21	numneg1
+								be		rotate_move_failed		my_x31	numneg1
+								be		rotate_move_failed		my_x41	numneg1
 								
-								be		rotate_move_failed		my_x12	num239
-								be		rotate_move_failed		my_x22	num239
-								be		rotate_move_failed		my_x32	num239
-								be		rotate_move_failed		my_x42	num239
+								blt		rotate_move_failed		num240	my_x12
+								blt		rotate_move_failed		num240	my_x22
+								blt		rotate_move_failed		num240	my_x32
+								blt		rotate_move_failed		num240	my_x42
 								
 								cp 		rotate_move_passed		num1
 rotate_move_failed							

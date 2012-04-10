@@ -38,7 +38,7 @@ draw_piece2	cp		color		num236
 			cpta 	num47		piece	num11
 			cpta	num120		piece	num12
 			cpta	num0		piece	num13
-			cpta	num147		piece	num14
+			cpta	num143		piece	num14
 			cpta 	num23		piece	num15
 			
 			cpfa	cmx			cm		num2
