@@ -24,7 +24,7 @@
 mainloop	// Generate a new Tetris piece
 			
 			add	mainloop_counter	mainloop_counter	num1
-			out	3	mainloop_counter
+			//out	3	mainloop_counter
 			call game_over generate_piece_ret_addr
 			
 subloop		// Check for keyboard or camera input
@@ -51,7 +51,7 @@ game_over_sub	call	get_pixel_color	vga_ret_addr
 game_over_true	cp	vga_x1	num0
 		cp	vga_y1	num0
 		cp	vga_x2	num240
-		cp	vga_y2	screen_height
+		cp	vga_y2	num479
 		cp	vga_color	num224
 		call	display_rect	vga_ret_addr
 		halt
@@ -520,7 +520,7 @@ complete_row_found		//out 4 num12
 						cp	vga_x1	num0
 						cp	vga_x2	num239
 						add	vga_y1	vga_y	numneg12
-						add	vga_y2	vga_y1	num24
+						add	vga_y2	vga_y1	num23
 						call	display_rect	vga_ret_addr
 						cp	complete_found	num1
 						ret check_row_complete_ret_addr
@@ -542,7 +542,9 @@ shift_blocks			//start at y=screenheight-12 and keep checking all the way until 
 						//repeat scan
 						//if none found, then reset complete_found to 0 and branch to mainloop
 						cp	complete_found	num0
-						add	vga_y	screen_height	numneg12
+scan_from_bottom		add	vga_y	num479	numneg12
+						
+						cp	offset_value	num0
 shift_blocks_loop		cp	vga_x	numneg12
 						call	check_empty_row	check_empty_row_ret_addr
 						add	vga_y	vga_y	numneg24
@@ -566,35 +568,46 @@ empty_row_found			//start at (0, vga_y - 36), and scan across the width of the s
 						
 						//but first, check if there are 5 empty rows in a row. If so, then skip this and go to mainloop
 						//if this check is not included, then the program will loop forever and keep finding empty rows
-						cp	vga_x	numneg12
+						
+						cp	empty_row_counter	num1
 						add	vga_y	vga_y	numneg24
 						
-another_empty_row_loop	add	vga_x	vga_x	num24
-						blt	add_1	game_width		vga_x
-go_here					call 	get_pixel_color			vga_ret_addr
-						bne		not_5_empty_row		vga_color_read		num0
-						be		another_empty_row_loop		num1				num1
+check_5					cp	vga_x	numneg12
+						call	check_extra_row	check_extra_row_ret_addr
+go_here					add	vga_y	vga_y	numneg24
+						blt	pre_shift_down_loop	vga_y	num0
+						be	check_5	num1	num1
 						
-add_1					add	empty_row_counter	empty_row_counter	num1
+						
+check_extra_row			add	vga_x	vga_x	num24
+						blt	counter++	num240	vga_x
 						//out	3	empty_row_counter
+						call	get_pixel_color	vga_ret_addr
+						bne	pre_shift_down_loop	vga_color_read	num0
+						be	check_extra_row	num1	num1
+						
+counter++				add	empty_row_counter	empty_row_counter	num1
 						blt	mainloop	num4	empty_row_counter
 						be	go_here	num1	num1
 						
-not_5_empty_row			add	vga_y1	vga_y	num12
-empty_row_loop			cp	vga_x1	num0
+						
+pre_shift_down_loop		mult	offset_value	num24	empty_row_counter
+						add	vga_y	vga_y	offset_value
+						
+shift_down_loop			cp	vga_x1	num0
 						out	4	vga_y1
 						call	shift_down	shift_down_ret_addr
-						add	vga_y1	vga_y1	numneg47
-						blt	shift_blocks_loop	vga_y1	num0
+						add	vga_y1	vga_y1	numneg24
+						blt	scan_from_bottom	vga_y1	num0
 						//out	3	shift_counter
-						be	empty_row_loop	num1	num1
+						be	shift_down_loop	num1	num1
 		
 	
 shift_down				//first, get block colors. then, redraw blocks 24 pixels down
 
-get_block_colors		add	shift_counter	shift_counter	num1
+get_block_colors		//add	shift_counter	shift_counter	num1
 						//out	3	shift_counter
-						add	vga_y	vga_y1	num12
+						add	vga_y	vga_y	numneg24
 						cp	vga_x	num12
 						call 	get_pixel_color			vga_ret_addr
 						cp	vga_color_block_1	vga_color_read
@@ -626,7 +639,7 @@ get_block_colors		add	shift_counter	shift_counter	num1
 						call 	get_pixel_color			vga_ret_addr
 						cp	vga_color_block_10	vga_color_read
 
-redraw_blocks			add	vga_y1	vga_y1	num23
+redraw_blocks			add	vga_y1	vga_y	num12
 						add	vga_x2	vga_x1	num24
 						add	vga_y2	vga_y1	num24
 						cp	vga_color	vga_color_block_1
@@ -1080,6 +1093,7 @@ empty_row_counter			.data 0
 mainloop_counter			.data 0
 num510						.data 510
 num479						.data 479
+offset_value				.data 0
 
 // Return addresses
 generate_piece_ret_addr		.data 0
@@ -1099,3 +1113,4 @@ check_rotate_ret_addr		.data 0
 check_row_complete_ret_addr	.data 0
 check_empty_row_ret_addr	.data 0
 shift_down_ret_addr			.data 0
+check_extra_row_ret_addr	.data 0
