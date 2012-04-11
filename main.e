@@ -154,7 +154,7 @@ wait			in	5				current_time
 				
 				ret	move_current_piece_ret_addr
 		
-wait_done		add	next_time	current_time	num8
+wait_done		add	next_time	current_time	num18
 				add	counter		counter			num1
 
 // Moves current Tetris piece
@@ -236,6 +236,7 @@ not_over		ret			check_game_over_ret_addr
 				
 // Check for keyboard or user input
 check_for_input 		call 	check_for_keypress check_for_keypress_ret_addr
+						call	check_for_camera_gesture check_for_camera_gesture_ret_addr
 						ret 	check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key
@@ -243,7 +244,7 @@ check_for_keypress
 						// Get keypress, if any
 						call	get_keypress	ps2_ret_addr
 						cp		key				ps2_ascii
-						out 	3 				key	
+						//out 	3 				key	
 						be		check_keypress_ret	ps2_pressed		num0
 						call 	is_move_valid	is_move_valid_ret_addr
 						
@@ -251,9 +252,11 @@ check_keypress_ret		ret		check_for_keypress_ret_addr
 
 // Checks if the user has made a relevant gesture
 check_for_camera_gesture
-							// Check to see what possible move should be made
-							// Check to see if move should be made based on time
-							// Set return value
+						// Get camera gesture, if 
+						call	detect_motion	motion_ret_addr
+						cp		key 			detect_direction
+						call	is_move_valid	is_move_valid_ret_addr
+						ret		check_for_camera_gesture_ret_addr
 				
 // Checks to see what possible move should be made based on camera data				
 determine_move	
@@ -386,6 +389,16 @@ shift_rows
 #include piecefactory.e
 
 #include collisionlib.e
+
+#include hsllib.e
+
+#include binarylib.e
+
+// Contains:	detect_motion
+// Inputs:		None
+// Outputs:		detect_direction
+// Ret Addr:	motion_ret_addr
+#include motionlib.e
 
 // Contains:	get_mic_sample
 // Inputs:		None
@@ -559,3 +572,5 @@ display_piece_ret_addr		.data 0
 move_current_piece_ret_addr	.data 0
 calc_rotate_coord_ret_addr	.data 0
 check_game_over_ret_addr	.data 0
+motion_ret_addr				.data 0
+check_for_camera_gesture_ret_addr	.data 0
