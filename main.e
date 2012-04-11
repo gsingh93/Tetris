@@ -1,9 +1,9 @@
 // Application Entry Point
 
-start		call 	load_sound		soundlib_ret_addr
+start		//call 	load_sound		soundlib_ret_addr
 			call	draw_menu		draw_menu_ret_addr
 menuloop	call	get_keypress	ps2_ret_addr
-			call	play_sound		soundlib_ret_addr
+			//call	play_sound		soundlib_ret_addr
 			bne		menuloop		ps2_ascii	num10
 
 			// Make background black
@@ -25,7 +25,7 @@ menuloop	call	get_keypress	ps2_ret_addr
 			cp		fontlib_y		num20
 			call	draw_LEVEL		draw_LEVEL_ret_addr
 			add		fontlib_x		fontlib_x			num25
-			call	draw_zero		draw_zero_ret_addr
+			call	draw_one		draw_one_ret_addr
 			
 			cp		fontlib_x		num440
 			call	draw_SCORE		draw_SCORE_ret_addr
@@ -34,7 +34,7 @@ menuloop	call	get_keypress	ps2_ret_addr
 			
 			call	generate_piece		generate_piece_ret_addr
 mainloop
-			call	play_sound			soundlib_ret_addr
+			//call	play_sound			soundlib_ret_addr
 
 			// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr	
@@ -149,6 +149,7 @@ get_random_number	call 	get_mic_sample	mic_ret_addr
 					cp 		rand_num	rand1
 					blt		skip_mod	rand_num			num7
 					cp		mod_op1		rand_num
+					cp		mod_op2		num7
 					call	mod			mod_ret_addr
 					cp		rand_num	mod_result
 					
@@ -165,7 +166,7 @@ wait			in	5				current_time
 				
 				ret	move_current_piece_ret_addr
 		
-wait_done		add	next_time	current_time	num8
+wait_done		add	next_time	current_time	time_gap
 				add	counter		counter			num1
 
 // Moves current Tetris piece
@@ -248,7 +249,9 @@ add_score				mult	points					rows_cleared				num5
 						mult	points					points						multiplier	
 						add		score					score						points					
 						
-skip_shift_blocks		out		4								score
+						call	draw_score				draw_score_ret_addr
+						call	draw_level				draw_level_ret_addr
+skip_shift_blocks
 						ret		check_rows_complete_ret_addr
 					
 // Check for Game Over scenario
@@ -267,11 +270,127 @@ game_over_true	be			start			num1	num1
 not_over		ret			check_game_over_ret_addr
 
 
+draw_score		// Erase previous score
+				cp		vga_color		num0
+				cp		vga_x1			num525
+				cp		vga_y1			fontlib_y
+				add		vga_x2			vga_x1		num100
+				add		vga_y2			vga_y1		num25
+				call	display_rect	vga_ret_addr
+				
+				cp		vga_color		num252
+				cp		fontlib_x		num525
+				blt		four_digits		num999			score
+				blt		three_digits	num99			score
+				blt		two_digits		num9			score
+				be		ones_digit		num1			num1
+				
+four_digits		div		digit			score			num1000
+				call	display_digit	display_digit_ret_addr
+				add		fontlib_x		fontlib_x		num15
+				
+three_digits	div		digit			score			num100
+				cp		mod_op1			digit
+				cp		mod_op2			num10
+				call	mod				mod_ret_addr
+				cp		digit			mod_result
+				call	display_digit	display_digit_ret_addr
+				add		fontlib_x		fontlib_x		num15
+				
+two_digits		div		digit			score			num10
+				out		4				digit
+				cp		mod_op1			digit
+				cp		mod_op2			num10
+				call	mod				mod_ret_addr
+				cp		digit			mod_result
+				out		3				digit		
+				call	display_digit	display_digit_ret_addr
+				add		fontlib_x		fontlib_x		num15
+				
+ones_digit		cp		digit			score
+				cp		mod_op1			digit
+				out		4				digit
+				cp		mod_op2			num10
+				call	mod				mod_ret_addr
+				cp		digit			mod_result
+				call	display_digit	display_digit_ret_addr
+				
+				ret		draw_score_ret_addr
+				
+				
+display_digit	out 	3				digit
+				be		zero_digit		digit		num0
+				be		one_digit		digit		num1
+				be		two_digit		digit		num2
+				be		three_digit		digit		num3
+				be		four_digit		digit		num4
+				be		five_digit		digit		num5
+				be		six_digit		digit		num6
+				be		seven_digit		digit		num7
+				be		eight_digit		digit		num8
+				be		nine_digit		digit		num9
+
+zero_digit		call	draw_zero			draw_zero_ret_addr
+				be		display_digit_ret	num1				num1
+one_digit		call	draw_one			draw_one_ret_addr
+				be		display_digit_ret	num1				num1
+two_digit		call	draw_two			draw_two_ret_addr
+				be		display_digit_ret	num1				num1
+three_digit		call	draw_three			draw_three_ret_addr
+				be		display_digit_ret	num1				num1
+four_digit		call	draw_four			draw_four_ret_addr
+				be		display_digit_ret	num1				num1
+five_digit		call	draw_five			draw_five_ret_addr
+				be		display_digit_ret	num1				num1
+six_digit		call	draw_six			draw_six_ret_addr
+				be		display_digit_ret	num1				num1
+seven_digit		call	draw_seven			draw_seven_ret_addr
+				be		display_digit_ret	num1				num1
+eight_digit		call	draw_eight			draw_eight_ret_addr
+				be		display_digit_ret	num1				num1
+nine_digit		call	draw_nine			draw_nine_ret_addr
+				
+display_digit_ret	ret 	display_digit_ret_addr
+
+draw_level		// Erase previous score
+				cp		vga_color		num0
+				cp		vga_x1			num335
+				cp		vga_y1			fontlib_y
+				add		vga_x2			vga_x1		num60
+				add		vga_y2			vga_y1		num25
+				call	display_rect	vga_ret_addr
+
+				cp		fontlib_x		num335
+				cp		vga_color		num252
+				blt		level_5			num100				score
+				blt		level_4			num60				score
+				blt		level_3			num30				score
+				blt		level_2			num10				score
+				be		level_1			num1				num1
+				
+level_1			call	draw_one		draw_one_ret_addr
+				cp		time_gap		num8
+				be		draw_level_ret	num1				num1
+level_2			call	draw_two		draw_two_ret_addr
+				cp		time_gap		num6
+				be		draw_level_ret	num1				num1
+level_3			call	draw_three		draw_three_ret_addr
+				cp		time_gap		num4
+				be		draw_level_ret	num1				num1
+level_4			call	draw_four		draw_four_ret_addr
+				cp		time_gap		num2
+				be		draw_level_ret	num1				num1
+level_5			call	draw_five		draw_five_ret_addr
+				cp		time_gap		num0
+				be		draw_level_ret	num1				num1
+				
+draw_level_ret	ret		draw_level_ret_addr
+
 //*****************************************************************************
 				
 // Check for keyboard or user input
 check_for_input 		call 	check_for_keypress 					check_for_keypress_ret_addr
-						call	check_for_camera_gesture			check_for_camera_gesture_ret_addr
+						//call	check_for_camera_gesture			check_for_camera_gesture_ret_addr
 						ret 	check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key
@@ -541,7 +660,7 @@ get_block_colors		add		vga_y				vga_y			numneg24
 
 redraw_blocks			add	vga_y1	vga_y	num12
 						add	vga_x2	vga_x1	num24
-						add	vga_y2	vga_y1	num24
+						add	vga_y2	vga_y1	num25
 						cp	vga_color	vga_color_block_1
 						call	display_rect	vga_ret_addr
 						add	vga_x1	vga_x1	num24
@@ -654,10 +773,11 @@ redraw_blocks			add	vga_y1	vga_y	num12
 
 // Returns mod_result = mod_op1 % mod_op2
 mod			cp 	mod_result	mod_op1
+			blt	mod_ret		mod_op1		mod_op2
 mod_loop	sub mod_result 	mod_result mod_op2
 			blt mod_loop	mod_op2 mod_result
 
-			ret mod_ret_addr
+mod_ret		ret mod_ret_addr
 
 //***************************************************************************//
 
@@ -778,8 +898,15 @@ mult_counter				.data 0
 score						.data 0
 points						.data 0
 rows_cleared				.data 0
+digit						.data 0
+time_gap					.data 8
+num330						.data 330
+num335						.data 335
 num510						.data 510
 num440						.data 440
+num525						.data 525
+num999						.data 999
+num1000						.data 1000
 
 
 // Return addresses
@@ -802,3 +929,6 @@ check_extra_row_ret_addr	.data 0
 shift_down_ret_addr			.data 0
 redraw_function_ret_addr	.data 0
 check_for_camera_gesture_ret_addr	.data 0
+draw_score_ret_addr			.data 0
+display_digit_ret_addr		.data 0
+draw_level_ret_addr			.data 0
