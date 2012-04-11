@@ -4,7 +4,8 @@ detect_motion
 
 //Sets scale for camera image and clock
 			cp		camera_cScale			num2
-			cp		camera_x				num320
+			cp		camera_x				num285
+			cp		camera_y				num200
 			cp		detect_direction		num0
 			in		5						curr_clock
 
@@ -92,53 +93,55 @@ clock_lp	in		5						curr_clock
 			add		clock_cam				clock_cam				num1
 
 skip_rd		cp		camera_x				num640
+			cp		camera_y				num0
 			call 	display_camera_image	camera_ret_addr
-			cp		camera_x				num320
+			cp		camera_x				num285
+			cp		camera_y				num200
 
 //Draw box around zone 1 detection area
 			cp		vga_color				box_color
-z1_line1	cp		vga_y1					num105
-			cp		vga_y2					num110
-			cp		vga_x1					num320
-			cp		vga_x2					num340
+z1_line1	cp		vga_y1					num305
+			cp		vga_y2					num310
+			cp		vga_x1					num285
+			cp		vga_x2					num310
 			call	display_rect			vga_ret_addr
-z1_line2	cp		vga_y1					num130
-			cp		vga_y2					num135
+z1_line2	cp		vga_y1					num330
+			cp		vga_y2					num335
 			call	display_rect			vga_ret_addr
-z1_line3	cp		vga_y1					num105
-			cp		vga_y2					num135
-			cp		vga_x1					num340
-			cp		vga_x2					num345
+z1_line3	cp		vga_y1					num305
+			cp		vga_y2					num335
+			cp		vga_x1					num305
+			cp		vga_x2					num310
 			call	display_rect			vga_ret_addr
 
 //Draw box around zone 2 detection area
-z2_line1	cp		vga_y1					num105
-			cp		vga_y2					num110
-			cp		vga_x1					num620
-			cp		vga_x2					num640
+z2_line1	cp		vga_y1					num305
+			cp		vga_y2					num310
+			cp		vga_x1					num575
+			cp		vga_x2					num605
 			call	display_rect			vga_ret_addr
-z2_line2	cp		vga_y1					num130
-			cp		vga_y2					num135
+z2_line2	cp		vga_y1					num330
+			cp		vga_y2					num335
 			call	display_rect			vga_ret_addr
-z2_line3	cp		vga_y1					num105
-			cp		vga_y2					num135
-			cp		vga_x1					num615
-			cp		vga_x2					num620
+z2_line3	cp		vga_y1					num305
+			cp		vga_y2					num335
+			cp		vga_x1					num575
+			cp		vga_x2					num580
 			call	display_rect			vga_ret_addr
 
 //Draw box around zone 3 detection area
-z3_line1	cp		vga_y1					num20
-			cp		vga_y2					num25
-			cp		vga_x1					num465
-			cp		vga_x2					num495
+z3_line1	cp		vga_y1					num220
+			cp		vga_y2					num225
+			cp		vga_x1					num430
+			cp		vga_x2					num460
 			call	display_rect			vga_ret_addr
-z3_line2	cp		vga_y1					num0
-			cp		vga_y2					num25
-			cp		vga_x1					num465
-			cp		vga_x2					num470
+z3_line2	cp		vga_y1					num200
+			cp		vga_y2					num225
+			cp		vga_x1					num430
+			cp		vga_x2					num435
 			call	display_rect			vga_ret_addr
-z3_line3	cp		vga_x1					num495
-			cp		vga_x2					num500
+z3_line3	cp		vga_x1					num455
+			cp		vga_x2					num460
 			call	display_rect			vga_ret_addr
 
 //Checks if motion registered in last cycle
@@ -250,6 +253,8 @@ sum_blu		cp		curr_power				num1
 			call	bin_to_dec				bin_ret_addr
 			add		blu_tot					blu_tot				dec_num
 			
+//Play a sound
+			call	play_sound			soundlib_ret_addr
 			
 //Looping statements to read 20 x 20 pixel area
 			add		xpx						xpx					num2
@@ -344,13 +349,29 @@ first_repeat		.data 0
 motion_ret_addr		.data 0
 
 //Constants
+num305		.data   305
+num310		.data	310
+num315		.data   315
 num320		.data	320
+num330		.data   330
+num335		.data	335
 num340		.data	340
 num345		.data	345
+num430		.data	430
+num435		.data	435
+num445		.data	445
+num455		.data	455
+num460		.data	460
 num465		.data	465
 num470		.data	470
+num475		.data	475
 num495		.data	495
 num500		.data	500
+num575 		.data   575
+num580		.data	580
+num585		.data	585
+num590		.data   590
+num605		.data	605
 num615		.data	615
 num620		.data	620
 num660		.data	660
