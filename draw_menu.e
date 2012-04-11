@@ -1,5 +1,6 @@
 // Read a pixel from the SD card
 draw_menu
+				call	play_sound		soundlib_ret_addr
 				cp	sd_curr_addr_low	num0
 				cp	sd_curr_addr_high	num0
 				cp	counter_x			num0

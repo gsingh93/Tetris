@@ -1,7 +1,9 @@
 // Application Entry Point
 
-start		call	draw_menu		draw_menu_ret_addr
+start		call 	load_sound		soundlib_ret_addr
+			call	draw_menu		draw_menu_ret_addr
 menuloop	call	get_keypress	ps2_ret_addr
+			call	play_sound		soundlib_ret_addr
 			bne		menuloop		ps2_ascii	num10
 
 			// Make background black
@@ -20,10 +22,9 @@ menuloop	call	get_keypress	ps2_ret_addr
 			
 			cp		sd_addr_low_end		sound_file_low_end
 			cp		sd_addr_high_end	sound_file_high_end
-			//call 	load_sound			spkr_ret_addr
 			call	generate_piece		generate_piece_ret_addr
 mainloop
-			//call	play_sound			spkr_ret_addr
+			call	play_sound			spkr_ret_addr
 
 			// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr	
