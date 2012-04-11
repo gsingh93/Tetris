@@ -24,22 +24,28 @@ sdram_row_chk1		blt			sd_addr_chk			sdram_currx				sdram_thresh
 
 //Check for end of SD card, switches from low address to high address
 sd_addr_chk			blt			sd_low_chk			sd_curr_addr_low		sd_addr_low_end		
-					be			sdram_reset			sd_curr_addr_high		sd_addr_high_end
+					be			load_sound_end		sd_curr_addr_high		sd_addr_high_end
 
 sd_low_chk			blt			get_sd_sample		sd_curr_addr_low		fftn_bit_thresh
 					cp			sd_curr_addr_low	num0
 					add 		sd_curr_addr_high	sd_curr_addr_high		num1
 					be			get_sd_sample		num1					num1
 
+load_sound_end		cp			sdram_endx			sdram_currx
+					cp			sdram_endy			sdram_curry
+					cp			sdram_currx			num0
+					cp			sdram_curry			num0
+					ret			soundlib_ret_addr
+
 //****************************************************************************//
 
 play_sound
 
 //Resets SDRAM addresses
-sdram_reset			cp			sdram_endx			sdram_currx
-					cp			sdram_endy			sdram_curry
-					cp			sdram_currx			num0
-					cp			sdram_curry			num0
+//sdram_reset			cp			sdram_endx			sdram_currx
+//					cp			sdram_endy			sdram_curry
+//					cp			sdram_currx			num0
+//					cp			sdram_curry			num0
 
 
 //Grabs a sample from SDRAM
@@ -59,20 +65,20 @@ sdram_row_chk2		add 		sdram_currx			sdram_currx				num1
 					add 		sdram_curry			sdram_curry				num1
 
 //Check for end of sound samples in SDRAM
-sdram_end_chk		blt			get_sample_sdram	sdram_currx				sdram_endx
+sdram_end_chk		blt			play_sound_ret		sdram_currx				sdram_endx
 					be			play_sound_end		sdram_curry				sdram_endy
-					be			get_sample_sdram	num1					num1
+					be			play_sound_ret		num1					num1
 
-play_sound_end		cp			sd_curr_addr_low	num0
-					cp			sd_curr_addr_high	num0
-					out			4		num8
-					be			sdram_reset			num0					num0
+play_sound_end		cp			sdram_endx			num0
+					cp			sdram_endy			num0
+
+play_sound_ret		ret			soundlib_ret_addr
 
 //Declarations
-sd_curr_addr_low	.data 0
-sd_curr_addr_high	.data 0
-sd_addr_low_end		.data 0
-sd_addr_high_end	.data 0
+sd_curr_addr_low	.data 17297
+sd_curr_addr_high	.data 9
+sd_addr_low_end		.data 29800
+sd_addr_high_end	.data 46
 
 fftn_bit_thresh		.data 32767
 
@@ -82,3 +88,4 @@ sdram_endx			.data 0
 sdram_endy			.data 0
 sdram_thresh		.data 2048
 sdram_sample		.data 0
+soundlib_ret_addr	.data 0
