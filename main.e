@@ -1,6 +1,6 @@
 // Application Entry Point
 
-start		//call	draw_menu		draw_menu_ret_addr
+start		call	draw_menu		draw_menu_ret_addr
 menuloop	call	get_keypress	ps2_ret_addr
 			bne		menuloop		ps2_ascii	num10
 
