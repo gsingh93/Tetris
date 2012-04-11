@@ -660,7 +660,7 @@ get_block_colors		add		vga_y				vga_y			numneg24
 
 redraw_blocks			add	vga_y1	vga_y	num12
 						add	vga_x2	vga_x1	num24
-						add	vga_y2	vga_y1	num24
+						add	vga_y2	vga_y1	num25
 						cp	vga_color	vga_color_block_1
 						call	display_rect	vga_ret_addr
 						add	vga_x1	vga_x1	num24
