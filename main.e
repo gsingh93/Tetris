@@ -259,7 +259,8 @@ not_over		ret			check_game_over_ret_addr
 //*****************************************************************************
 				
 // Check for keyboard or user input
-check_for_input 		call 	check_for_keypress check_for_keypress_ret_addr
+check_for_input 		call 	check_for_keypress 					check_for_keypress_ret_addr
+						call	check_for_camera_gesture			check_for_camera_gesture_ret_addr
 						ret 	check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key
@@ -275,9 +276,10 @@ check_keypress_ret		ret		check_for_keypress_ret_addr
 
 // Checks if the user has made a relevant gesture
 check_for_camera_gesture
-							// Check to see what possible move should be made
-							// Check to see if move should be made based on time
-							// Set return value
+							call	detect_motion	motion_ret_addr
+							cp		key 			detect_direction
+							call	is_move_valid	is_move_valid_ret_addr
+							ret		check_for_camera_gesture_ret_addr
 				
 // Checks to see what possible move should be made based on camera data				
 determine_move	
@@ -525,36 +527,48 @@ get_block_colors		add		vga_y				vga_y			numneg24
 						call 	get_pixel_color		vga_ret_addr
 						cp		vga_color_block_10	vga_color_read
 
-redraw_blocks			add		vga_y1				vga_y			num12
-						cp		vga_color_block_1	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_2	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_3	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_4	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_5	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_6	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_7	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_8	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_9	vga_color_block
-						call	redraw_function		redraw_function_ret_addr
-						cp		vga_color_block_10	vga_color_block	
-						call	redraw_function		redraw_function_ret_addr
-						
-						ret		shift_down_ret_addr
-
-redraw_function
-						add		vga_x2	 		vga_x1				num24
-						add		vga_y2			vga_y1				num24
-						cp		vga_color		vga_color_block
+redraw_blocks			add	vga_y1	vga_y	num12
+						add	vga_x2	vga_x1	num24
+						add	vga_y2	vga_y1	num24
+						cp	vga_color	vga_color_block_1
 						call	display_rect	vga_ret_addr
-						ret		redraw_function
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_2
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_3
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_4
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_5
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_6
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_7
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_8
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_9
+						call	display_rect	vga_ret_addr
+						add	vga_x1	vga_x1	num24
+						add	vga_x2	vga_x1	num24
+						cp	vga_color	vga_color_block_10
+						call	display_rect	vga_ret_addr
+						ret		shift_down_ret_addr
 						
 //***************************************************************************//
 
@@ -571,6 +585,10 @@ redraw_function
 #include piecefactory.e
 
 #include collisionlib.e
+
+#include hsllib.e
+#include motionlib.e
+#include binarylib.e
 
 // Contains:	get_mic_sample
 // Inputs:		None
@@ -769,3 +787,4 @@ check_empty_row_ret_addr	.data 0
 check_extra_row_ret_addr	.data 0
 shift_down_ret_addr			.data 0
 redraw_function_ret_addr	.data 0
+check_for_camera_gesture_ret_addr	.data 0
