@@ -5,6 +5,7 @@ detect_motion
 //Sets scale for camera image and clock
 			cp		camera_cScale			num2
 			cp		camera_x				num320
+			cp		detect_direction		num0
 			in		5						curr_clock
 
 begin_detection
@@ -85,10 +86,10 @@ led_off3	out		3						num0			//Turns off motion event
 
 //Controls how fast the image from the camera updates
 clock_lp	in		5						curr_clock
-			blt		skip_rd					curr_clock				clock_start
+			blt		skip_rd					curr_clock				clock_cam
 
 			call 	display_camera_image	camera_ret_addr
-			add		clock_start				clock_start				num1
+			add		clock_cam				clock_cam				num1
 
 skip_rd		cp		camera_x				num640
 			call 	display_camera_image	camera_ret_addr
@@ -141,9 +142,48 @@ z3_line3	cp		vga_x1					num495
 			call	display_rect			vga_ret_addr
 
 //Checks if motion registered in last cycle
-registered	be		motion_end				curr_motion				last_motion
+registered	//be		motion_end				curr_motion				num0
+			be		check_lp				curr_motion				last_motion
 			cp		detect_direction		curr_motion
 			cp		last_motion				curr_motion
+			cp		first_repeat			num0
+			be		motion_end				0 0
+
+
+//Repeats initial move after 1 second if gesture still present, and repeats each 1/5 second after
+check_lp	be		inc_clock1				first_repeat			num0
+			blt		commit_mv1				clock_det				curr_clock
+			//be		inc_clock2				first_repeat			num2
+			//blt		commit_mv2				clock_det				curr_clock
+			be		motion_end				0 0
+			
+
+inc_clock1	add 	clock_det				curr_clock				num24
+			cp		first_repeat			num1
+			be		check_lp				0 0
+
+
+commit_mv1  bne		move_decide				first_repeat			num1
+			cp		detect_direction		curr_motion
+			cp		last_motion				curr_motion
+			cp		first_repeat			num2
+			be		motion_end				0 0
+
+
+move_decide	be		inc_clock2				first_repeat			num2
+			be		commit_mv2				first_repeat			num3
+
+
+inc_clock2	add 	clock_det				curr_clock				num5
+			cp		first_repeat			num3
+			be		check_lp				0 0
+
+
+commit_mv2  cp		detect_direction		curr_motion
+			cp		last_motion				curr_motion
+			cp		first_repeat			num2
+			be		motion_end				0 0
+
 
 //Return
 motion_end	ret		motion_ret_addr
@@ -290,13 +330,16 @@ loop_y		.data	0
 box_color	.data	224
 curr_clock	.data	0
 inc 		.data	10
-clock_start	.data	5
+clock_cam	.data	5
+clock_det	.data   0
 px			.data	255
 
 detect_direction	.data 0
 motion_valid		.data 0
 last_motion			.data 0
 curr_motion			.data 0
+
+first_repeat		.data 0
 
 //Constants
 num320		.data	320
