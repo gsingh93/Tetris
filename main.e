@@ -513,8 +513,7 @@ get_block_colors		add		vga_y				vga_y			numneg24
 						call 	get_pixel_color		vga_ret_addr
 						cp		vga_color_block_10	vga_color_read
 
-redraw_blocks			add		vga_y1			vga_y				num12
-						call	redraw_function		redraw_function_ret_addr
+redraw_blocks			add		vga_y1				vga_y			num12
 						cp		vga_color_block_1	vga_color_block
 						call	redraw_function		redraw_function_ret_addr
 						cp		vga_color_block_2	vga_color_block
@@ -534,6 +533,9 @@ redraw_blocks			add		vga_y1			vga_y				num12
 						cp		vga_color_block_9	vga_color_block
 						call	redraw_function		redraw_function_ret_addr
 						cp		vga_color_block_10	vga_color_block	
+						call	redraw_function		redraw_function_ret_addr
+						
+						ret		shift_down_ret_addr
 
 redraw_function
 						add		vga_x2			vga_x1				num24
@@ -542,9 +544,6 @@ redraw_function
 						call	display_rect	vga_ret_addr
 						ret		redraw_function
 						
-						
-						ret		shift_down_ret_addr
-
 //***************************************************************************//
 
 // Includes
@@ -721,6 +720,7 @@ prev_shape					.data 0
 complete_found				.data 0
 offset_value				.data 0
 empty_row_counter			.data 0
+vga_color_block				.data 0
 vga_color_block_1			.data 0
 vga_color_block_2			.data 0
 vga_color_block_3			.data 0
@@ -753,3 +753,4 @@ shift_blocks_ret_addr		.data 0
 check_empty_row_ret_addr	.data 0
 check_extra_row_ret_addr	.data 0
 shift_down_ret_addr			.data 0
+redraw_function_ret_addr	.data 0
