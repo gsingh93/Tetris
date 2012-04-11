@@ -1,6 +1,6 @@
 // Application Entry Point
 
-start		call	draw_menu		draw_menu_ret_addr
+start		//call	draw_menu		draw_menu_ret_addr
 menuloop	call	get_keypress	ps2_ret_addr
 			bne		menuloop		ps2_ascii	num10
 
@@ -17,6 +17,18 @@ menuloop	call	get_keypress	ps2_ret_addr
 			cp		vga_y1			num0
 			cp		vga_y2			screen_height
 			call 	display_rect 	vga_ret_addr
+			
+			cp		vga_color		num252
+			cp		fontlib_x		num250
+			cp		fontlib_y		num20
+			call	draw_LEVEL		draw_LEVEL_ret_addr
+			add		fontlib_x		fontlib_x			num25
+			call	draw_zero		draw_zero_ret_addr
+			
+			cp		fontlib_x		num440
+			call	draw_SCORE		draw_SCORE_ret_addr
+			add		fontlib_x		fontlib_x			num25
+			call	draw_zero		draw_zero_ret_addr
 			
 			cp		sd_addr_low_end		sound_file_low_end
 			cp		sd_addr_high_end	sound_file_high_end
@@ -538,7 +550,7 @@ redraw_blocks			add		vga_y1				vga_y			num12
 						ret		shift_down_ret_addr
 
 redraw_function
-						add		vga_x2			vga_x1				num24
+						add		vga_x2	 		vga_x1				num24
 						add		vga_y2			vga_y1				num24
 						cp		vga_color		vga_color_block
 						call	display_rect	vga_ret_addr
@@ -551,6 +563,8 @@ redraw_function
 // Integer constants from -100 to 100. Format: num1, numneg1.
 // Also contains numbers corresponding to binary strings (1 to 4). Format: bit1
 #include constants.e
+
+#include fontlib.e
 
 #include draw_menu.e
 
@@ -733,6 +747,7 @@ vga_color_block_9			.data 0
 vga_color_block_10			.data 0
 mainloop_counter			.data 0
 num510						.data 510
+num440						.data 440
 
 
 // Return addresses

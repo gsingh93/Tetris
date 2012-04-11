@@ -153,6 +153,76 @@ draw_nine
 			
 			ret	draw_nine_ret_addr
 
+draw_L		call	draw4	draw4_ret_addr
+			call	draw5	draw5_ret_addr
+			call	draw6	draw6_ret_addr
+			
+			ret		draw_letter_ret_addr
+			
+draw_E		call	draw1	draw1_ret_addr
+			call	draw4	draw4_ret_addr
+			call	draw5	draw5_ret_addr
+			call	draw6	draw6_ret_addr
+			call	draw7	draw7_ret_addr
+			
+			ret		draw_letter_ret_addr
+			
+draw_V		call	draw2	draw2_ret_addr
+			call	draw3	draw3_ret_addr
+			call	draw4	draw4_ret_addr
+			call	draw5	draw5_ret_addr
+			call	draw6	draw6_ret_addr
+			
+			ret		draw_letter_ret_addr
+						
+draw_S		call	draw_five	draw_five_ret_addr
+
+			ret		draw_letter_ret_addr
+			
+draw_C		call	draw1	draw1_ret_addr
+			call	draw4	draw4_ret_addr
+			call	draw5	draw5_ret_addr
+			call	draw6	draw6_ret_addr
+			
+			ret		draw_letter_ret_addr
+
+draw_O		call	draw_zero	draw_zero_ret_addr
+			
+			ret		draw_letter_ret_addr
+
+draw_R		call	draw1	draw1_ret_addr
+			call	draw2	draw2_ret_addr
+			call	draw3	draw3_ret_addr
+			call	draw5	draw5_ret_addr
+			call	draw6	draw6_ret_addr
+			call	draw7	draw7_ret_addr
+			
+			ret draw_letter_ret_addr
+			
+draw_LEVEL	call	draw_L		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_E		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_V		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_E		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_L		draw_letter_ret_addr
+
+			ret		draw_LEVEL_ret_addr
+
+draw_SCORE	call	draw_S		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_C		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_O		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_R		draw_letter_ret_addr
+			add		fontlib_x	fontlib_x				num15
+			call	draw_E		draw_letter_ret_addr
+
+			ret		draw_SCORE_ret_addr			
+			
 fontlib_x	.data 0
 fontlib_y	.data 0
 
@@ -174,3 +244,7 @@ draw_six_ret_addr   .data 0
 draw_seven_ret_addr .data 0
 draw_eight_ret_addr .data 0
 draw_nine_ret_addr  .data 0
+
+draw_letter_ret_addr	.data 0
+draw_LEVEL_ret_addr		.data 0
+draw_SCORE_ret_addr		.data 0
