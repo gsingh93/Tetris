@@ -237,7 +237,19 @@ check_rows_complete		call	check_row_complete_y1	check_row_complete_ret_addr
 						bne		skip_shift_blocks		complete_found				num1	
 						call	shift_blocks			shift_blocks_ret_addr
 						
-skip_shift_blocks		out 3	num7
+						be		add_score				rows_cleared				num1
+						cp		mult_counter			num1
+						cp		multiplier				num1
+						
+multiplier_loop			add		mult_counter			mult_counter				num1
+						mult	multiplier				multiplier					num2
+						bne		multiplier_loop			mult_counter				rows_cleared				
+						
+add_score				mult	points					rows_cleared				num5
+						mult	points					points						multiplier	
+						add		score					score						points					
+						
+skip_shift_blocks		out		4								score
 						ret		check_rows_complete_ret_addr
 					
 // Check for Game Over scenario
@@ -485,6 +497,7 @@ counter++				add		empty_row_counter	empty_row_counter	num1
 						
 pre_shift_down_loop		mult	offset_value	num24	empty_row_counter
 						add		vga_y			vga_y	offset_value
+						add		rows_cleared	rows_cleared				num1
 						
 shift_down_loop			cp		vga_x1	num0
 						call	shift_down	shift_down_ret_addr
@@ -763,7 +776,11 @@ vga_color_block_7			.data 0
 vga_color_block_8			.data 0
 vga_color_block_9			.data 0
 vga_color_block_10			.data 0
-mainloop_counter			.data 0
+multiplier					.data 1
+mult_counter				.data 0
+score						.data 0
+points						.data 0
+rows_cleared				.data 0
 num510						.data 510
 num440						.data 440
 
