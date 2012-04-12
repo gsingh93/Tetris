@@ -13,7 +13,6 @@ ps2_write_port		out	20 num1				// Send command
 // Check if response is 1, if true read input and set command to 0
 ps2_check_response1	in	21					ps2_response
 					add count1 				count1 			num1
-					//out 3 count1
 					blt ps2_check_response1 count1 			num5
 					cp 	ps2_ascii			num0
 					bne end 				ps2_response 	num1

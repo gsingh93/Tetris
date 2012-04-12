@@ -1,9 +1,9 @@
 // Application Entry Point
 
-start		//call 	load_sound		soundlib_ret_addr
+start		call 	load_sound		soundlib_ret_addr
 			call	draw_menu		draw_menu_ret_addr
 menuloop	call	get_keypress	ps2_ret_addr
-			//call	play_sound		soundlib_ret_addr
+			call	play_sound		soundlib_ret_addr
 			bne		menuloop		ps2_ascii	num10
 
 			// Make background black
@@ -32,9 +32,13 @@ menuloop	call	get_keypress	ps2_ret_addr
 			add		fontlib_x		fontlib_x			num25
 			call	draw_zero		draw_zero_ret_addr
 			
+			cp		score				num0
+			call	draw_score			draw_score_ret_addr
+			call	draw_level			draw_level_ret_addr
+			
 			call	generate_piece		generate_piece_ret_addr
 mainloop
-			//call	play_sound			soundlib_ret_addr
+			call	play_sound			soundlib_ret_addr
 
 			// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr	
@@ -158,7 +162,7 @@ skip_mod			ret 	rand_num_ret_addr
 //***************************************************************************//
 
 move_current_piece
-
+				
 // Check if a certain amount of time has passed before moving piece downward
 // May not be one second.
 wait			in	5				current_time
@@ -900,8 +904,6 @@ points						.data 0
 rows_cleared				.data 0
 digit						.data 0
 time_gap					.data 8
-num330						.data 330
-num335						.data 335
 num510						.data 510
 num440						.data 440
 num525						.data 525
