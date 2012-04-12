@@ -2,6 +2,48 @@
 
 detect_motion
 
+//Functions to control H_top and H_bot
+
+//Switch couter init
+sw_init		cp			and_lp		num0
+			cp			and_curr	num1
+			cp			sw_low		num0
+			cp			sw_high		num0
+			cp			H_bot		num0
+
+//Grabs number from switches
+			in			0			switch
+
+//Sums switches 7 through 0
+sum_low		and			sw_curr		switch			and_curr
+			div			sw_curr		sw_curr			and_curr
+			add			sw_low		sw_low			sw_curr
+			add			and_lp		and_lp			num1
+			mult		and_curr	and_curr		num2
+			blt			sum_low		and_lp			num8
+
+//Sums switches 15 through 8
+sum_high	and			sw_curr		switch			and_curr
+			div			sw_curr		sw_curr			and_curr
+			add			sw_high		sw_high			sw_curr
+			add			and_lp		and_lp			num1
+			mult		and_curr	and_curr		num2
+			blt			sum_high	and_lp			num16
+
+
+//Function multiplies number of switches 7 through 0 on by 10
+//Sets H_bot to 40 + (switches 7 through 0)*10
+			mult		switch_temp	sw_low			num10
+			cp			H_bot						num40
+			add			H_bot						H_bot			switch_temp
+
+//Function multiplies number of switches 15 through 8 on by 10
+//Sets H_top to H_bot + (switches 15 through 8)*10			
+			mult		switch_temp	sw_high			num10
+			cp			H_top						H_bot
+			add			H_top						H_top			switch_temp
+
+
 //Sets scale for camera image and clock
 			cp		camera_cScale			num2
 			cp		camera_x				num285
@@ -307,8 +349,8 @@ grn_tot   .data 0
 blu_tot	  .data 0
 
 //HSL thresholds
-H_top			.data 180
-H_bot			.data 70
+H_top			.data 0
+H_bot			.data 0
 S_top			.data 101
 S_bot			.data 20
 L_top			.data 80
@@ -347,6 +389,15 @@ curr_motion			.data 0
 first_repeat		.data 0
 
 motion_ret_addr		.data 0
+
+//Switching declarations
+switch		.data	0
+sw_low		.data	0
+sw_high		.data	0
+sw_curr		.data	0
+and_curr	.data	1
+and_lp		.data	0
+switch_temp	.data	0
 
 //Constants
 num305		.data   305
