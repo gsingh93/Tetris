@@ -2,7 +2,7 @@
 // Author: Gulshan Singh
 
 display_camera_image
-
+						call			play_sound			soundlib_ret_addr
 //	Check initial response equal to 0
 camera_check_response0	in	131						camera_response
 						bne	camera_check_response0	camera_response num0

@@ -1,7 +1,8 @@
 //Binary tools
 
 dec_to_bin
-
+			call		play_sound		soundlib_ret_addr
+			
 			cp			curr_power		num7
 			cp			curr_bit		num0
 
@@ -26,6 +27,7 @@ bin_loop	sub			curr_power		curr_power		num1
 			ret			bin_ret_addr
 
 bin_to_dec
+			call	play_sound			soundlib_ret_addr
 
 			//cp			curr_power		num7
 			//cp			curr_bit		num0

@@ -394,7 +394,7 @@ draw_level_ret	ret		draw_level_ret_addr
 				
 // Check for keyboard or user input
 check_for_input 		call 	check_for_keypress 					check_for_keypress_ret_addr
-						//call	check_for_camera_gesture			check_for_camera_gesture_ret_addr
+						call	check_for_camera_gesture			check_for_camera_gesture_ret_addr
 						ret 	check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key

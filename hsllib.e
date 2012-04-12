@@ -1,7 +1,7 @@
 //Converts an 8 bit RGB to HSL color space
 
 rgb_to_hsl
-
+			call			play_sound			soundlib_ret_addr
 
 //Convert 3/2 bit RGB from 0 to 255
 			div				red_avg				red_tot				numPxs
@@ -27,7 +27,7 @@ chk1		blt				min_end				min					B
 
 min_end
 
-
+			call			play_sound			soundlib_ret_addr
 
 //Find max
 			cp				max					R
@@ -74,7 +74,7 @@ compute_s	sub				hsl_temp			numneg14536			max
 
 end_s
 
-
+			call			play_sound			soundlib_ret_addr
 
 //Compute del_R
 			sub				hsl_temp			max 				R
@@ -105,7 +105,7 @@ end_s
 			div				hsl_temp2			del_max				num100
 			div				del_B				hsl_temp			hsl_temp2
 
-
+			call			play_sound			soundlib_ret_addr
 
 //Decide how to calculate H
 			be				red_max				R					max 
@@ -141,7 +141,8 @@ blu_max		sub				hsl_temp			R					G
 			be				H_adjust			0 0
 
 H_adjust
-rgbhsl_end	ret				rgbhsl_ret_addr
+rgbhsl_end	call			play_sound			soundlib_ret_addr
+			ret				rgbhsl_ret_addr
 
 
 

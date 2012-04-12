@@ -2,6 +2,7 @@
 
 detect_motion
 
+			
 //Sets scale for camera image and clock
 			cp		camera_cScale			num2
 			cp		camera_x				num285
@@ -10,8 +11,8 @@ detect_motion
 			in		5						curr_clock
 
 begin_detection
-
-
+				call			play_sound			soundlib_ret_addr
+				
 //BEGIN READING BOXES
 //Begin zone 1
 zone1_rd	cp		xpx						zone1_x
@@ -36,7 +37,8 @@ led_off1	out		1						num0			//Turns off motion event
 			cp		curr_motion				num0
 
 
-
+			call			play_sound			soundlib_ret_addr
+			
 //Begin zone 2
 zone2_rd	cp		xpx						zone2_x
 			cp		ypx						zone2_y
@@ -59,6 +61,7 @@ in_range2	blt		led_off2				H_top			H
 led_off2	out		2						num0			//Turns off motion event
 			cp		curr_motion				num0
 
+			call			play_sound			soundlib_ret_addr
 
 //Begin zone 3
 zone3_rd	cp		xpx						zone3_x
@@ -83,7 +86,7 @@ led_off3	out		3						num0			//Turns off motion event
 			cp		curr_motion				num0
 
 
-
+			call			play_sound			soundlib_ret_addr
 
 //Controls how fast the image from the camera updates
 clock_lp	in		5						curr_clock
@@ -144,6 +147,8 @@ z3_line3	cp		vga_x1					num455
 			cp		vga_x2					num460
 			call	display_rect			vga_ret_addr
 
+			call			play_sound			soundlib_ret_addr
+
 //Checks if motion registered in last cycle
 registered	//be		motion_end				curr_motion				num0
 			be		check_lp				curr_motion				last_motion
@@ -189,7 +194,8 @@ commit_mv2  cp		detect_direction		curr_motion
 
 
 //Return
-motion_end	ret		motion_ret_addr
+motion_end	call	play_sound			soundlib_ret_addr
+			ret		motion_ret_addr
 
 
 //Main detection loop
@@ -197,11 +203,12 @@ motion_end	ret		motion_ret_addr
 set_rd_px	cp		vga_x					xpx
 			cp		vga_y					ypx
 			
-
+			call	play_sound			soundlib_ret_addr
 //Gets 8 bit color at pixel xpx, ypx	
 rd_pixel	call	get_pixel_color			vga_ret_addr
 			cp		px						vga_color_read
-
+			
+			call	play_sound				soundlib_ret_addr
 
 //Converts 8 bit color to binary and copies binary number to clr_array
 			cp		dec_num					px
@@ -211,7 +218,6 @@ clr_loop	cpfa 	bd_temp					binary_num			curr_bit
 			cpta	bd_temp					clr_array			curr_bit
 			add		curr_bit				curr_bit			num1
 			blt		clr_loop				curr_bit			num8
-
 
 //Converts decimal RGB number to binary, then to RGB color weights
 			cp		curr_bit				num0
@@ -230,6 +236,8 @@ sum_red		cp		curr_power				num2
 			cp		curr_bit				num5
 			call	bin_to_dec				bin_ret_addr
 			add		red_tot					red_tot				dec_num
+			
+			call	play_sound			soundlib_ret_addr
 	
 			cp		curr_bit				num5
 fill_grn	cpfa	bd_temp					clr_array			clr_curr
