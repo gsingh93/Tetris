@@ -69,8 +69,8 @@ sdram_end_chk		blt			play_sound_ret		sdram_currx				sdram_endx
 					be			play_sound_end		sdram_curry				sdram_endy
 					be			play_sound_ret		num1					num1
 
-play_sound_end		cp			sdram_endx			num0
-					cp			sdram_endy			num0
+play_sound_end		cp			sdram_currx			num0
+					cp			sdram_curry			num0
 
 play_sound_ret		ret			soundlib_ret_addr
 
