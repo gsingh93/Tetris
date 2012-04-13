@@ -253,9 +253,6 @@ sum_blu		cp		curr_power				num1
 			call	bin_to_dec				bin_ret_addr
 			add		blu_tot					blu_tot				dec_num
 			
-//Play a sound
-			call	play_sound			soundlib_ret_addr
-			
 //Looping statements to read 20 x 20 pixel area
 			add		xpx						xpx					num2
 			add		loop_x					loop_x				num2

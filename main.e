@@ -1,7 +1,7 @@
 // Application Entry Point
 
-start		call 	load_sound		soundlib_ret_addr
-			call	draw_menu		draw_menu_ret_addr
+		call 	load_sound		soundlib_ret_addr
+start	call	draw_menu		draw_menu_ret_addr
 menuloop	call	get_keypress	ps2_ret_addr
 			call	play_sound		soundlib_ret_addr
 			bne		menuloop		ps2_ascii	num10
@@ -38,8 +38,12 @@ menuloop	call	get_keypress	ps2_ret_addr
 			
 			call	generate_piece		generate_piece_ret_addr
 mainloop
+			in		0					sound_on
+			bne		no_sound			sound_on				num0
 			call	play_sound			soundlib_ret_addr
 
+no_sound
+		
 			// Check for keyboard or camera input
 			call 	check_for_input 	check_for_input_ret_addr	
 			
@@ -240,10 +244,8 @@ check_rows_complete		call	check_row_complete_y1	check_row_complete_ret_addr
 						call	check_row_complete_y4	check_row_complete_ret_addr
 						bne		skip_shift_blocks		complete_found				num1	
 						call	shift_blocks			shift_blocks_ret_addr
-						
+
 						be		add_score				rows_cleared				num1
-						cp		mult_counter			num1
-						cp		multiplier				num1
 						
 multiplier_loop			add		mult_counter			mult_counter				num1
 						mult	multiplier				multiplier					num2
@@ -251,7 +253,11 @@ multiplier_loop			add		mult_counter			mult_counter				num1
 						
 add_score				mult	points					rows_cleared				num5
 						mult	points					points						multiplier	
-						add		score					score						points					
+						add		score					score						points	
+
+						cp		mult_counter			num1
+						cp		multiplier				num1
+						cp		rows_cleared			num0
 						
 						call	draw_score				draw_score_ret_addr
 						call	draw_level				draw_level_ret_addr
@@ -260,7 +266,7 @@ skip_shift_blocks
 					
 // Check for Game Over scenario
 check_game_over		cp	vga_x	num2
-					cp	vga_y	num12 // TODO: IS THIS THE RIGHT VALUE? IF SO DRAW LINE
+					cp	vga_y	num50
 
 game_over_sub		call	get_pixel_color		vga_ret_addr
 					bne		game_over_true		vga_color_read	num0
@@ -366,9 +372,9 @@ draw_level		// Erase previous score
 
 				cp		fontlib_x		num335
 				cp		vga_color		num252
-				blt		level_5			num100				score
-				blt		level_4			num60				score
-				blt		level_3			num30				score
+				blt		level_5			num120				score
+				blt		level_4			num80				score
+				blt		level_3			num40				score
 				blt		level_2			num10				score
 				be		level_1			num1				num1
 				
@@ -385,7 +391,7 @@ level_4			call	draw_four		draw_four_ret_addr
 				cp		time_gap		num2
 				be		draw_level_ret	num1				num1
 level_5			call	draw_five		draw_five_ret_addr
-				cp		time_gap		num0
+				cp		time_gap		num1
 				be		draw_level_ret	num1				num1
 				
 draw_level_ret	ret		draw_level_ret_addr
@@ -394,8 +400,9 @@ draw_level_ret	ret		draw_level_ret_addr
 				
 // Check for keyboard or user input
 check_for_input 		call 	check_for_keypress 					check_for_keypress_ret_addr
-						//call	check_for_camera_gesture			check_for_camera_gesture_ret_addr
-						ret 	check_for_input_ret_addr
+						bne		no_camera							sound_on							num1
+						call	check_for_camera_gesture			check_for_camera_gesture_ret_addr
+no_camera				ret 	check_for_input_ret_addr
 
 // Checks if the user has pressed a relevant key
 check_for_keypress		
@@ -904,6 +911,7 @@ points						.data 0
 rows_cleared				.data 0
 digit						.data 0
 time_gap					.data 8
+sound_on					.data 0
 num510						.data 510
 num440						.data 440
 num525						.data 525
